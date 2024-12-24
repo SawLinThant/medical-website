@@ -1,3 +1,5 @@
+import { GET_PRODUCTS } from "@/lib/apolloClient/query/productQuery";
+import serverApolloClient from "@/lib/apolloClient/serverApolloClient";
 import { ImageCarousel } from "@/modules/common/carousel";
 import CategoryFilter from "@/modules/common/category-filter";
 import Footer from "@/modules/common/components/footer";
@@ -8,7 +10,9 @@ import { TopSaver } from "@/modules/filters/top-saver";
 import Image from "next/image";
 import React from "react";
 
-const HomePage: React.FC = () => {
+
+const HomePage: React.FC = async() => {
+    const {data} = await serverApolloClient.query({query:GET_PRODUCTS});
   return (
     <div className="w-full flex flex-col items-center gap-4">
       <div className="w-full max-w-[1300px] lg:block md:block hidden">
@@ -42,7 +46,7 @@ const HomePage: React.FC = () => {
         <div className="lg:w-[1/4] md:w-2/4 w-full"></div>
       </div>
       <div className="w-full max-w-[1300px] mt-10 ">
-        <BestSeller/>
+        <BestSeller products={data?.products}/>
       </div>
       <div className="w-full">
         <Footer/>

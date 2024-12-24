@@ -2,13 +2,25 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Star from "../icons/star";
 import { Heart } from "lucide-react";
+import { Product, ProductImage } from "@/lib/types/global";
+import { useEffect, useState } from "react";
 
-const ProductCard: React.FC = () => {
+interface ProductCardprops {
+    product: Product
+}
+
+const ProductCard: React.FC<ProductCardprops> = (product:ProductCardprops) => {
+    const [images,setImages] = useState<ProductImage[] | null>(null)
+    useEffect(() => {
+        if(product && product.product.images){
+            setImages(product.product.images)
+        }
+    },[setImages])
   return (
     <div className="w-full p-4 border bg-white rounded-md group h-[21.25rem] scale-95 hover:scale-100 hover:h-full hover:shadow-lg transition-all overflow-hidden">
       <div className="w-full h-full flex flex-col gap-3 group">
         <div className="relative w-full min-h-[10rem]">
-          <Image layout="fill" alt="product.img" src="/images/category.jpg" className="object-contain"/>
+          <Image layout="fill" alt="product.img" src={images?.[0].image_url || "/image_placeholder.jpg"} className="object-contain"/>
           <div className="absolute top-0 right-0 opacity-0 group-hover:opacity-100 transition-all">
             <Heart/>
           </div>
@@ -17,7 +29,7 @@ const ProductCard: React.FC = () => {
           </div>
         </div>
         <div className="flex flex-col gap-2">
-          <h2 className="font-bold">Product Name</h2>
+          <h2 className="font-bold">{product.product.name}</h2>
           <div className="flex flex-row gap-3">
             <div className="flex flex-row items-center gap-1 min-w-[7rem]">
               <Star height="20px" width="20px" color="#cfda31"/>
@@ -30,12 +42,12 @@ const ProductCard: React.FC = () => {
         </div>
         <div className="flex flex-col gap-3">
           <h1 className="text-secondary_color">
-            MMK 4,500
+            MMK {product.product.price.toLocaleString()}
           </h1>
           <div className="w-full h-1 border border-gray-300">
             <div className="h-full w-2/3 bg-yellow-300"></div>
           </div>
-          <span className="text-sm text-muted-foreground">24 left</span>
+          <span className="text-sm text-muted-foreground">{product.product.quantity} left</span>
         </div>
         <div className="flex-row h-5 gap-3 items-center mt-3 flex">
           <div className="flex flex-row border items-center border-gray-400 rounded">

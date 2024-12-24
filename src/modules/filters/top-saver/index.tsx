@@ -47,7 +47,7 @@ export function TopSaver() {
         {Array.from({ length: 14 }).map((_, index) => (
           <CarouselItem key={index} className="md:basis-1/3 lg:basis-[25%]">
             <div className="p-1">
-              <ProductCard />
+              {/* <ProductCard product={pr} /> */}
             </div>
           </CarouselItem>
         ))}
