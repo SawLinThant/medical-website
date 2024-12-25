@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import ApolloProviderWrapper from "@/lib/apolloClient/apolloWrapper";
-import { AccountProvider } from "@/lib/context/account-context";
+//import { AccountProvider } from "@/lib/context/account-context";
 import StoreProvider from "./StoreProvider";
 
 const geistSans = localFont({

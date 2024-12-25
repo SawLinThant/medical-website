@@ -1,6 +1,5 @@
 import * as React from "react";
 
-import { Card, CardContent } from "@/components/ui/card";
 import {
   Carousel,
   CarouselContent,
@@ -11,7 +10,7 @@ import {
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { ChevronRight } from "lucide-react";
-import { CategoryImage, ProductCategory } from "@/lib/types/global";
+import { CategoryImage } from "@/lib/types/global";
 
 interface CategoryProps {
   category: CategoryImage[]

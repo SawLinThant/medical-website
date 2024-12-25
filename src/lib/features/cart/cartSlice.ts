@@ -5,13 +5,13 @@ interface CartItem extends Product {
   quantity: number;
 }
 
-interface CartState {
-  cartItems: CartItem[];
-}
+// interface CartState {
+//   cartItems: CartItem[];
+// }
 
-const initialState: CartState = {
-  cartItems: [],
-};
+// const initialState: CartState = {
+//   cartItems: [],
+// };
 
 const loadCartFromLocalStorage = (): CartItem[] => {
   if (typeof window !== 'undefined') {

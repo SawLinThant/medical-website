@@ -57,6 +57,7 @@ const OPTIONS_FIVE = [
 
 const CategoryFilter: React.FC = () => {
   const [options, setOptions] = useState<string>("");
+  console.log(options)
   return (
     <div className="w-full h-20 flex lg:flex-row md:flex-col flex-col items-start lg:items-center justify-start gap-4 lg:gap-8">
       <Button className="rounded-md bg-secondary_color text-white">

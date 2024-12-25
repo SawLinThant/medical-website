@@ -1,5 +1,5 @@
 import { GET_BRANDS } from "@/lib/apolloClient/query/brandQuery";
-import { GET_CATEGORY, GET_CATEGORY_IMAGE } from "@/lib/apolloClient/query/categoryQuery";
+import {  GET_CATEGORY_IMAGE } from "@/lib/apolloClient/query/categoryQuery";
 import { GET_PRODUCTS, GET_TOP_SAVER_PRODUCTS } from "@/lib/apolloClient/query/productQuery";
 import serverApolloClient from "@/lib/apolloClient/serverApolloClient";
 import { ImageCarousel } from "@/modules/common/carousel";
@@ -17,7 +17,7 @@ const HomePage: React.FC = async () => {
   try {
     const { data: productsData } = await serverApolloClient.query({ query: GET_PRODUCTS });
     const { data: topSaverData } = await serverApolloClient.query({ query: GET_TOP_SAVER_PRODUCTS });
-    const { data: categoryData } = await serverApolloClient.query({ query: GET_CATEGORY });
+   // const { data: categoryData } = await serverApolloClient.query({ query: GET_CATEGORY });
     const { data: categoryImageData } = await serverApolloClient.query({ query: GET_CATEGORY_IMAGE });
     const { data: brandData } = await serverApolloClient.query({ query: GET_BRANDS });
 

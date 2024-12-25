@@ -2,7 +2,6 @@
 
 import * as React from "react";
 
-import { Card, CardContent } from "@/components/ui/card";
 import {
   Carousel,
   CarouselContent,
@@ -10,7 +9,6 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import Image from "next/image";
 import { cn } from "@/lib/utils";
 import ProductCard from "@/modules/common/product-card";
 import { ChevronRight, Hourglass } from "lucide-react";
