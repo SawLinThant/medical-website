@@ -9,6 +9,16 @@ export const GET_CATEGORY= gql`
   }
 `;
 
+export const GET_CATEGORY_IMAGE= gql`
+  query getCategory {
+    categories {
+      id
+      name
+      image_url
+    }
+  }
+`;
+
 export const GET_SHOP_CATEGORY= gql`
   query getTags {
     shop_categories {

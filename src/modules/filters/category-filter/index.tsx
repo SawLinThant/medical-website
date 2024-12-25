@@ -11,10 +11,10 @@ import {
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { ChevronRight } from "lucide-react";
-import { ProductCategory } from "@/lib/types/global";
+import { CategoryImage, ProductCategory } from "@/lib/types/global";
 
 interface CategoryProps {
-  category: ProductCategory[]
+  category: CategoryImage[]
 }
 
 export function BrowseByCategory(category:CategoryProps) {
@@ -31,8 +31,7 @@ export function BrowseByCategory(category:CategoryProps) {
             </CarouselPrevious>
           </div>
           <div className="">
-            <CarouselNext className={cn(" bg-gray-300 rounded-md hover:bg-gray-400 transition",{
-            
+            <CarouselNext className={cn(" bg-gray-300 rounded-md hover:bg-gray-400 transition",{         
             })} />
           </div>
         </div>
@@ -41,16 +40,16 @@ export function BrowseByCategory(category:CategoryProps) {
         {category.category.map((category, index) => (
           <CarouselItem key={index} className="md:basis-[20%] lg:basis-[12.5%] basis-1/2">
             <div className="p-3">
-              <div className=" h-[13rem] hover:scale-105 hover:shadow-md hover:bg-white transition-all border rounded-md bg-slate-200 p-3 flex flex-col items-center justify-center gap-3">
+              <div className=" h-[13rem] hover:scale-105 hover:shadow-md hover:bg-white transition-all border rounded-md bg-slate-200 p-3 hover:cursor-pointer flex flex-col items-center justify-center gap-3">
                 <div className="w-full relative h-[7rem]">
                   <Image
                     layout="fill"
-                    src="/images/category.png"
+                    src={category.image_url}
                     alt="category"
                     className="object-cover"
                   />
                 </div>
-                <span className="text-sm">{category.name}</span>
+                <span className="text-sm w-full text-center">{category.name}</span>
               </div>
             </div>
           </CarouselItem>

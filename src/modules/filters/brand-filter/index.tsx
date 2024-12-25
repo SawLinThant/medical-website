@@ -11,8 +11,13 @@ import {
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { ChevronRight } from "lucide-react";
+import { Brand } from "@/lib/types/global";
 
-export function BrowseByBrand() {
+interface BrowseByBrandProps {
+  brands: Brand[]
+}
+
+export function BrowseByBrand({brands}:BrowseByBrandProps) {
   return (
     <Carousel className="w-full h-full flex flex-col gap-4">
       <div className="w-full min-h-16 flex flex-row items-center justify-between">
@@ -35,23 +40,23 @@ export function BrowseByBrand() {
         </div>
       </div>
       <CarouselContent className="w-full h-full">
-        {Array.from({ length: 14 }).map((_, index) => (
+        {brands.map((brand, index) => (
           <CarouselItem key={index} className="md:basis-1/3 lg:basis-[25%]">
-            <div className="p-3">
-              <div className=" min-h-[13rem] hover:scale-105 bg-white hover:shadow-md transition-all flex flex-col items-start justify-start gap-2 p-2">
+            <div className="p-0">
+              <div className=" min-h-[13rem] hover:scale-105 rounded hover:shadow-md hover:bg-white transition-all flex flex-col items-start justify-start gap-3 p-4">
                 <div className="w-full relative h-[13rem]">
                   <Image
                     layout="fill"
-                    src="/images/medical.jpg"
+                    src={brand.image_url}
                     alt="category"
-                    className="object-contain border"
+                    className="object-contain border hover:border-none border-gray-300 rounded bg-white"
                   />
                 </div>
                 <div className="flex flex-col text-left items-start">
                   <span className="text-sm text-muted-foreground">
-                    www.brand.com
+                    {brand.website_link}
                   </span>
-                  <span>Brand Compnay.Ltd</span>
+                  <span className="font-semibold">{brand.name} Compnay.Ltd</span>
                 </div>
               </div>
             </div>

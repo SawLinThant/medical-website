@@ -7,11 +7,51 @@ import { useState } from "react";
 const OPTIONS = [
   {
     id: "1",
-    name: "liver",
+    name: "Brand 1",
   },
   {
     id: "2",
-    name: "stomach",
+    name: "Brand 2",
+  },
+];
+const OPTIONS_TWO = [
+  {
+    id: "1",
+    name: "lowest to higest",
+  },
+  {
+    id: "2",
+    name: "higest to lowest",
+  },
+];
+const OPTIONS_THREE = [
+  {
+    id: "1",
+    name: "company 1",
+  },
+  {
+    id: "2",
+    name: "company 2",
+  },
+];
+const OPTIONS_FOUR = [
+  {
+    id: "1",
+    name: "In stock",
+  },
+  {
+    id: "2",
+    name: "Out of stock",
+  },
+];
+const OPTIONS_FIVE = [
+  {
+    id: "1",
+    name: "30% off",
+  },
+  {
+    id: "2",
+    name: "20% off",
   },
 ];
 
@@ -25,14 +65,14 @@ const CategoryFilter: React.FC = () => {
       <div className="flex flex-row items-center gap-4">
         <div className="min-w-[110px]">
           <SelectDropdown
-            options={OPTIONS}
+            options={OPTIONS_FIVE}
             setOption={setOptions}
             label="Special Prices"
           />
         </div>
         <div className="min-w-[110px]">
           <SelectDropdown
-            options={OPTIONS}
+            options={OPTIONS_THREE}
             setOption={setOptions}
             label="By Company"
           />
@@ -46,14 +86,14 @@ const CategoryFilter: React.FC = () => {
         </div>
         <div className="min-w-[110px]">
           <SelectDropdown
-            options={OPTIONS}
+            options={OPTIONS_TWO}
             setOption={setOptions}
             label="By Price"
           />
         </div>
         <div className="min-w-[110px]">
           <SelectDropdown
-            options={OPTIONS}
+            options={OPTIONS_FOUR}
             setOption={setOptions}
             label="By Availability"
           />

@@ -30,3 +30,16 @@ export interface Product {
     category?: ProductCategory
     images?: ProductImage[]
 }
+
+export interface Brand {
+    id: string
+    name: string
+    image_url: string
+    website_link: string
+}
+
+export interface CategoryImage{
+    id:string
+    name:string
+    image_url:string
+}
