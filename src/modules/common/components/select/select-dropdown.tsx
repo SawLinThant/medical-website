@@ -32,8 +32,8 @@ export function SelectDropdown({
       setOption(value); 
     }}
   >
-    <SelectTrigger className="w-full h-6 border-none bg-transparent">
-      <SelectValue placeholder={label} />
+    <SelectTrigger className="w-full h-6 border-none bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0">
+      <SelectValue className="" placeholder={label} />
     </SelectTrigger>
     <SelectContent>
       <SelectGroup>

@@ -1,3 +1,5 @@
+"use client"
+
 import * as React from "react";
 
 import { Card, CardContent } from "@/components/ui/card";
@@ -12,8 +14,19 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 import ProductCard from "@/modules/common/product-card";
 import { ChevronRight, Hourglass } from "lucide-react";
+import { Product } from "@/lib/types/global";
 
-export function TopSaver() {
+interface TopSaverProps {
+    products: Product[] | null
+}
+
+export function TopSaver({products}:TopSaverProps) {
+   const [productList,setProductList] = React.useState<Product[] | null>(null)
+      React.useEffect(() => {
+          if(products){
+              setProductList(products)
+          }
+      },[setProductList])
   return (
     <Carousel className="w-full h-full flex flex-col gap-4">
       <div className="w-full min-h-16 flex flex-row items-center justify-between">
@@ -44,10 +57,10 @@ export function TopSaver() {
         </div>
       </div>
       <CarouselContent className="w-full h-full">
-        {Array.from({ length: 14 }).map((_, index) => (
+        {productList && productList.map((product, index) => (
           <CarouselItem key={index} className="md:basis-1/3 lg:basis-[25%]">
-            <div className="p-1">
-              {/* <ProductCard product={pr} /> */}
+            <div className="p-0">
+              <ProductCard product={product} />
             </div>
           </CarouselItem>
         ))}

@@ -28,7 +28,7 @@ const SearchForm: React.FC = () => {
         </div>
         <form action="" className="w-full h-full">
           <div className="relative w-full h-full">
-            <Input placeholder="Search in shop" className="rounded-r-md pb-1 rounded-l-none h-5 bg-transparent border-none min-w-[17rem]" />
+            <Input placeholder="Search in shop" className="rounded-r-md pb-1 rounded-l-none h-5 bg-transparent border-none min-w-[17rem] focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-none" />
             <div className="absolute top-0 right-3">
               <Search />
             </div>

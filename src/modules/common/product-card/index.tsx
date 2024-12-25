@@ -4,20 +4,45 @@ import Star from "../icons/star";
 import { Heart } from "lucide-react";
 import { Product, ProductImage } from "@/lib/types/global";
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { addToCart } from "@/lib/features/cart/cartSlice";
 
 interface ProductCardprops {
     product: Product
 }
 
 const ProductCard: React.FC<ProductCardprops> = (product:ProductCardprops) => {
-    const [images,setImages] = useState<ProductImage[] | null>(null)
+    const [images,setImages] = useState<ProductImage[] | null>(null);
+    const [quantity,setQuantity] = useState<number>(1);
+    const [totalPrice, setTotalPrice] = useState<number>(product.product.price);
+    const dispatch = useDispatch();
+
     useEffect(() => {
         if(product && product.product.images){
             setImages(product.product.images)
         }
     },[setImages])
+   
+    const handleIncrease = () => {
+      setQuantity(quantity+1)
+      const newQunatity = quantity+1
+      setTotalPrice(newQunatity*product.product.price)
+    }
+    const handleDecrease = () => {
+      setQuantity(quantity-1)
+      const newQunatity = quantity-1
+      setTotalPrice(newQunatity*product.product.price)
+    }
+    useEffect(() => {
+
+    },[setQuantity,setTotalPrice])
+
+    const handleAddToCart = () => {
+      dispatch(addToCart({...product.product,quantity}))
+    }
+
   return (
-    <div className="w-full p-4 border bg-white rounded-md group h-[21.25rem] scale-95 hover:scale-100 hover:h-full hover:shadow-lg transition-all overflow-hidden">
+    <div className="w-full p-4 border bg-white rounded-md group h-[21.8rem] scale-95 hover:scale-100 hover:h-full hover:shadow-lg transition-all overflow-hidden">
       <div className="w-full h-full flex flex-col gap-3 group">
         <div className="relative w-full min-h-[10rem]">
           <Image layout="fill" alt="product.img" src={images?.[0].image_url || "/image_placeholder.jpg"} className="object-contain"/>
@@ -49,18 +74,18 @@ const ProductCard: React.FC<ProductCardprops> = (product:ProductCardprops) => {
           </div>
           <span className="text-sm text-muted-foreground">{product.product.quantity} left</span>
         </div>
-        <div className="flex-row h-5 gap-3 items-center mt-3 flex">
+        <div className="flex-row h-5 gap-3 items-center mt-5 flex">
           <div className="flex flex-row border items-center border-gray-400 rounded">
-            <Button className="w-7 h-full rounded-none bg-transparent border-r hover:bg-secondary_color hover:text-white text-black">+</Button>
-            <div className="min-w-9 h-full text-center flex items-center justify-center"><span>1</span></div>
-            <Button className="w-7 h-full bg-transparent rounded-none border-l text-black hover:bg-secondary_color hover:text-white">-</Button>
+            <Button onClick={handleDecrease} disabled={quantity === 1} className="w-7 h-full rounded-none bg-transparent border-r hover:bg-secondary_color hover:text-white text-black">-</Button>
+            <div className="min-w-9 h-full text-center flex items-center justify-center"><span>{quantity}</span></div>
+            <Button onClick={handleIncrease} disabled={quantity >= product.product.quantity} className="w-7 h-full bg-transparent rounded-none border-l text-black hover:bg-secondary_color hover:text-white">+</Button>
           </div>
           <div className="flex flex-row items-center gap-2">
             <span className="font-semibold text-gray-600 text-sm">Total - </span>
-            <span className="text-sm text-secondary_color"> 4,500 MMK</span>
+            <span className="text-sm text-secondary_color"> {totalPrice} MMK</span>
           </div>
         </div>
-        <Button className="w-full transition-all min-h-8 rounded-md mt-4 bg-secondary_color text-white">Add to cart</Button>
+        <Button onClick={handleAddToCart} className="w-full transition-all min-h-8 rounded-md mt-4 bg-secondary_color text-white">Add to cart</Button>
       </div>
     </div>
   );
