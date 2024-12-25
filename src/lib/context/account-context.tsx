@@ -14,7 +14,7 @@ interface AccountProviderProps {
 
 export const AccountProvider = ({ children }: AccountProviderProps) => {
   const token = localStorage.getItem("token");
-  const [isLogin, setIsLogin] = useState<boolean>(token ? true : false);
+  const [isLogin] = useState<boolean>(token ? true : false);
 
   return (
     <AccountContext.Provider
