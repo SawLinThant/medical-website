@@ -10,21 +10,21 @@ import Slider from "react-slick";
 const IMAGES = [
   {
     id: 1,
-    url: "/images/slide1.png",
+    url: "/images/slide.jpg",
   },
   {
     id: 2,
-    url: "/images/slide2.png",
+    url: "/images/slide.jpg",
   },
   {
     id: 3,
-    url: "/images/slide3.png",
+    url: "/images/slide.jpg",
   },
 ];
 
 export function ImageCarousel() {
   const settings = {
-    dots: true,
+    dots: false,
     infinite: true,
     speed: 500,
     slidesToShow: 1,
@@ -40,7 +40,7 @@ export function ImageCarousel() {
           <div key={image.id} className="w-full h-full">
             <div className="relative w-full lg:h-[20rem] md:h-[15rem] h-[13rem]">
               <Image
-                className="object-cover"
+                className="object-cover rounded-md"
                 layout="fill"
                 alt={`carousel-image-${image.id}`}
                 src={image.url}
