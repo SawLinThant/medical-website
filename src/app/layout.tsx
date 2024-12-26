@@ -4,6 +4,7 @@ import "./globals.css";
 import ApolloProviderWrapper from "@/lib/apolloClient/apolloWrapper";
 //import { AccountProvider } from "@/lib/context/account-context";
 import StoreProvider from "./StoreProvider";
+import { Toaster } from "@/components/ui/toaster";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -31,6 +32,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <Toaster/>
         <ApolloProviderWrapper>
           <StoreProvider>{children}</StoreProvider>
         </ApolloProviderWrapper>

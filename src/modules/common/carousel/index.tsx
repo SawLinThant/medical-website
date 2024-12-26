@@ -1,12 +1,6 @@
 "use client";
 
 import * as React from "react";
-import Autoplay from "embla-carousel-autoplay";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-} from "@/components/ui/carousel";
 import Image from "next/image";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -29,7 +23,7 @@ const IMAGES = [
 ];
 
 export function ImageCarousel() {
-  var settings = {
+  const settings = {
     dots: true,
     infinite: true,
     speed: 500,
