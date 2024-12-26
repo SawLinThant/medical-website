@@ -7,7 +7,7 @@ const Layout: LayoutWithChildren = ({ children }) => {
     <div className="w-full flex flex-col overflow-hidden">
       <NavBar />
       <MobileNav/>
-      <main className="w-full flex items-center justify-center p-4 pb-0 bg-slate-100">
+      <main className="w-full flex items-center justify-center px-4 pb-0 bg-slate-100">
         <div className="w-full flex flex-col min-h-32 ">
           {children}
         </div>
