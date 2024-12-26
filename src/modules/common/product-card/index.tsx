@@ -6,6 +6,7 @@ import { Product, ProductImage } from "@/lib/types/global";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { addToCart } from "@/lib/features/cart/cartSlice";
+import { toast } from "@/hooks/use-toast";
 
 interface ProductCardprops {
     product: Product
@@ -39,6 +40,9 @@ const ProductCard: React.FC<ProductCardprops> = (product:ProductCardprops) => {
 
     const handleAddToCart = () => {
       dispatch(addToCart({...product.product,quantity}))
+      toast({
+        description:"Item added to the cart"
+      })
     }
 
   return (

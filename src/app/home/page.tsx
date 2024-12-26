@@ -3,7 +3,7 @@ import {  GET_CATEGORY_IMAGE } from "@/lib/apolloClient/query/categoryQuery";
 import { GET_PRODUCTS, GET_TOP_SAVER_PRODUCTS } from "@/lib/apolloClient/query/productQuery";
 import serverApolloClient from "@/lib/apolloClient/serverApolloClient";
 import { ImageCarousel } from "@/modules/common/carousel";
-import CategoryFilter from "@/modules/common/category-filter";
+//import CategoryFilter from "@/modules/common/category-filter";
 import Footer from "@/modules/common/components/footer";
 import Subscribe from "@/modules/common/subscribe";
 import { BestSeller } from "@/modules/filters/best-seller";
@@ -23,9 +23,9 @@ const HomePage: React.FC = async () => {
 
     return (
       <div className="w-full flex flex-col items-center gap-4">
-        <div className="w-full max-w-[1300px] lg:block md:block hidden">
+        {/* <div className="w-full max-w-[1300px] lg:block md:block hidden">
           <CategoryFilter />
-        </div>
+        </div> */}
         <div className="w-full min-h-40 bg-slate-100 flex items-center justify-center p-4">
           <div className="w-full max-w-[1300px] grid lg:grid-cols-5 md:grid-cols-5 grid-cols-1 gap-6 py-6">
             <div className="lg:col-span-3 md:col-span-3 col-span-1 min-h-[10rem] rounded-md overflow-hidden border">
