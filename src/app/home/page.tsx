@@ -22,13 +22,13 @@ const HomePage: React.FC = async () => {
     const { data: brandData } = await serverApolloClient.query({ query: GET_BRANDS });
 
     return (
-      <div className="w-full flex flex-col items-center gap-4">
+      <div className="w-full flex flex-col items-center">
         {/* <div className="w-full max-w-[1300px] lg:block md:block hidden">
           <CategoryFilter />
         </div> */}
-        <div className="w-full min-h-40 bg-slate-100 flex items-center justify-center p-4">
+        <div className="w-full min-h-40 bg-slate-100 flex items-center justify-center p-4 bg-[url('/images/banner-background.jpg')] bg-cover bg-center">
           <div className="w-full max-w-[1300px] grid lg:grid-cols-5 md:grid-cols-5 grid-cols-1 gap-6 py-6">
-            <div className="lg:col-span-3 md:col-span-3 col-span-1 min-h-[10rem] rounded-md overflow-hidden border">
+            <div className="lg:col-span-3 md:col-span-3 col-span-1 min-h-[10rem] rounded-md overflow-hidden">
               <ImageCarousel />
             </div>
             <div className="relative lg:col-span-2 md:col-span-2 col-span-1 w-full lg:h-[20rem] md:h-[15rem] h-[13rem]">
@@ -36,7 +36,7 @@ const HomePage: React.FC = async () => {
                 className="object-cover"
                 layout="fill"
                 alt="ad"
-                src="/images/banner3.jpg"
+                src="/images/ad.jpg"
               />
             </div>
           </div>
@@ -44,19 +44,19 @@ const HomePage: React.FC = async () => {
         <div className="w-full mt-16 max-w-[1300px]">
           <BrowseByCategory category={categoryImageData?.categories} />
         </div>
-        <div className="w-full max-w-[1300px] mt-10">
+        <div className="w-full max-w-[1300px] mt-16">
           <BrowseByBrand brands={brandData?.brands}/>
         </div>
-        <div className="w-full max-w-[1300px] mt-10 flex lg:flex-row md:flex-col flex-col gap-4">
+        <div className="w-full max-w-[1300px] mt-20 flex lg:flex-row md:flex-col flex-col gap-4">
           <div className="lg:w-[75%] md:w-full w-full">
             <TopSaver products={topSaverData?.products} />
           </div>
-          <div className="lg:w-[1/4] w-full md:flex md:items-center md:justify-center">
+          <div className="lg:w-[1/4] lg:flex w-full md:flex md:items-center lg:justify-start md:justify-center">
             <Subscribe/>
           </div>
         </div>
 
-        <div className="w-full max-w-[1300px] mt-10">
+        <div className="w-full max-w-[1300px] mt-16">
           <BestSeller products={productsData?.products} />
         </div>
         <div className="w-full mt-6">
