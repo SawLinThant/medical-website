@@ -1,6 +1,9 @@
 import { GET_BRANDS } from "@/lib/apolloClient/query/brandQuery";
-import {  GET_CATEGORY_IMAGE } from "@/lib/apolloClient/query/categoryQuery";
-import { GET_PRODUCTS, GET_TOP_SAVER_PRODUCTS } from "@/lib/apolloClient/query/productQuery";
+import { GET_CATEGORY_IMAGE } from "@/lib/apolloClient/query/categoryQuery";
+import {
+  GET_PRODUCTS,
+  GET_TOP_SAVER_PRODUCTS,
+} from "@/lib/apolloClient/query/productQuery";
 import serverApolloClient from "@/lib/apolloClient/serverApolloClient";
 import { ImageCarousel } from "@/modules/common/carousel";
 //import CategoryFilter from "@/modules/common/category-filter";
@@ -13,13 +16,37 @@ import { TopSaver } from "@/modules/filters/top-saver";
 import Image from "next/image";
 import React from "react";
 
+export async function generateMetadata() {
+  return {
+    title: "Nat Say Myanmar - Home",
+    description:
+      "Explore our wide range of products and brands. Find great deals and save big!",
+    openGraph: {
+      title: "Nat Say Myanmar - Home",
+      description: "Find great deals on top products and brands.",
+      url: `${
+        process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
+      }/home`,
+      images: "/images/logo.png",
+    },
+  };
+}
+
 const HomePage: React.FC = async () => {
   try {
-    const { data: productsData } = await serverApolloClient.query({ query: GET_PRODUCTS });
-    const { data: topSaverData } = await serverApolloClient.query({ query: GET_TOP_SAVER_PRODUCTS });
-   // const { data: categoryData } = await serverApolloClient.query({ query: GET_CATEGORY });
-    const { data: categoryImageData } = await serverApolloClient.query({ query: GET_CATEGORY_IMAGE });
-    const { data: brandData } = await serverApolloClient.query({ query: GET_BRANDS });
+    const { data: productsData } = await serverApolloClient.query({
+      query: GET_PRODUCTS,
+    });
+    const { data: topSaverData } = await serverApolloClient.query({
+      query: GET_TOP_SAVER_PRODUCTS,
+    });
+    // const { data: categoryData } = await serverApolloClient.query({ query: GET_CATEGORY });
+    const { data: categoryImageData } = await serverApolloClient.query({
+      query: GET_CATEGORY_IMAGE,
+    });
+    const { data: brandData } = await serverApolloClient.query({
+      query: GET_BRANDS,
+    });
 
     return (
       <div className="w-full flex flex-col items-center">
@@ -41,18 +68,18 @@ const HomePage: React.FC = async () => {
             </div>
           </div>
         </div>
-        <div className="w-full mt-16 max-w-[1300px]">
+        <div className="w-full mt-16 max-w-[1300px] flex items-center justify-center">
           <BrowseByCategory category={categoryImageData?.categories} />
         </div>
         <div className="w-full max-w-[1300px] mt-16">
-          <BrowseByBrand brands={brandData?.brands}/>
+          <BrowseByBrand brands={brandData?.brands} />
         </div>
-        <div className="w-full max-w-[1300px] mt-20 flex lg:flex-row md:flex-col flex-col gap-4">
+        <div className="w-full max-w-[1300px] mt-20 flex lg:flex-row md:flex-col flex-col gap-4 lg:justify-between">
           <div className="lg:w-[75%] md:w-full w-full">
             <TopSaver products={topSaverData?.products} />
           </div>
-          <div className="lg:w-[1/4] lg:flex w-full md:flex md:items-center lg:justify-start md:justify-center">
-            <Subscribe/>
+          <div className="lg:w-[1/4] lg:max-w-[21rem] lg:flex w-full md:flex md:items-center lg:justify-start md:justify-center">
+            <Subscribe />
           </div>
         </div>
 

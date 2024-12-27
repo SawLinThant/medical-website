@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import * as React from "react";
 
@@ -13,18 +13,19 @@ import { cn } from "@/lib/utils";
 import ProductCard from "@/modules/common/product-card";
 import { ChevronRight, Hourglass } from "lucide-react";
 import { Product } from "@/lib/types/global";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface TopSaverProps {
-    products: Product[] | null
+  products: Product[] | null;
 }
 
-export function TopSaver({products}:TopSaverProps) {
-   const [productList,setProductList] = React.useState<Product[] | null>(null)
-      React.useEffect(() => {
-          if(products){
-              setProductList(products)
-          }
-      },[setProductList])
+export function TopSaver({ products }: TopSaverProps) {
+  const [productList, setProductList] = React.useState<Product[] | null>(null);
+  React.useEffect(() => {
+    if (products) {
+      setProductList(products);
+    }
+  }, [setProductList]);
   return (
     <Carousel className="w-full h-full flex flex-col gap-4">
       <div className="w-full min-h-16 flex flex-row lg:items-center md:items-center items-start justify-between">
@@ -54,15 +55,27 @@ export function TopSaver({products}:TopSaverProps) {
           </div>
         </div>
       </div>
-      <CarouselContent className="w-full h-full">
-        {productList && productList.map((product, index) => (
-          <CarouselItem key={index} className="md:basis-1/3 lg:basis-[25%]">
-            <div className="">
-              <ProductCard product={product} />
-            </div>
-          </CarouselItem>
-        ))}
-      </CarouselContent>
+      {productList ? (
+        <CarouselContent className="w-full h-full">
+          {productList.map((product, index) => (
+            <CarouselItem key={index} className="md:basis-1/3 lg:basis-[25%]">
+              <div className="">
+                <ProductCard product={product} />
+              </div>
+            </CarouselItem>
+          ))}
+        </CarouselContent>
+      ) : (
+        <CarouselContent>
+          {Array.from({ length: 5 }).map((_, index) => (
+            <CarouselItem key={index} className="md:basis-1/3 lg:basis-[25%]">
+              <div className="p-2">
+                <Skeleton className="bg-secondary_color/35 h-[21.8rem] w-full" />
+              </div>
+            </CarouselItem>
+          ))}
+        </CarouselContent>
+      )}
     </Carousel>
   );
 }

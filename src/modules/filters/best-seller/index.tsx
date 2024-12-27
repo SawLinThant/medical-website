@@ -12,6 +12,7 @@ import { cn } from "@/lib/utils";
 import ProductCard from "@/modules/common/product-card";
 import { ChevronRight } from "lucide-react";
 import { Product } from "@/lib/types/global";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface BestSellerProps {
     products: Product[] | null
@@ -45,7 +46,7 @@ export function BestSeller({products}:BestSellerProps) {
           </div>
         </div>
       </div>
-      <CarouselContent className="w-full h-full">
+      {/* <CarouselContent className="w-full h-full">
         {productList && productList.map((product, index) => (
           <CarouselItem key={index} className="md:basis-1/3 lg:basis-[20%]">
             <div className="p-1">
@@ -53,7 +54,28 @@ export function BestSeller({products}:BestSellerProps) {
             </div>
           </CarouselItem>
         ))}
-      </CarouselContent>
+      </CarouselContent> */}
+         {productList ? (
+        <CarouselContent className="w-full h-full">
+          {productList.map((product, index) => (
+            <CarouselItem key={index} className="md:basis-1/3 lg:basis-[20%]">
+              <div className="">
+                <ProductCard product={product} />
+              </div>
+            </CarouselItem>
+          ))}
+        </CarouselContent>
+      ) : (
+        <CarouselContent>
+          {Array.from({ length: 5 }).map((_, index) => (
+            <CarouselItem key={index} className="md:basis-1/3 lg:basis-[20%]">
+              <div className="p-2">
+                <Skeleton className="bg-secondary_color/35 h-[21.8rem] w-full" />
+              </div>
+            </CarouselItem>
+          ))}
+        </CarouselContent>
+      )}
     </Carousel>
   );
 }
