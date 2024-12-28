@@ -48,16 +48,10 @@ const ProductCard: React.FC<ProductCardprops> = (product:ProductCardprops) => {
     }
 
   return (
-    <div className="w-full p-4 border bg-white rounded-md group lg:h-[21.8rem] scale-95 hover:h-full hover:shadow-lg transition-all overflow-hidden">
+    <div className="w-full p-4 border bg-white rounded-md group h-[21.8rem] scale-95 hover:h-full hover:shadow-lg transition-all overflow-hidden">
       <div className="w-full h-full flex flex-col gap-3 group">
         <div onClick={() => router.push(`/product/detail/${product.product.id}`)} className="relative w-full min-h-[10rem] hover:cursor-pointer">
           <Image layout="fill" alt="product.img" src={images?.[0].image_url || "/image_placeholder.jpg"} className="object-contain"/>
-          <div className="absolute top-0 right-0 opacity-0 group-hover:opacity-100 transition-all">
-            <Heart/>
-          </div>
-          <div className="absolute top-0 left-0 opacity-0 group-hover:opacity-100 transition-all min-w-16 bg-secondary_color text-white rounded flex items-center justify-center text-center py-1">
-            <span className="w-full h-full text-sm font-extralight">30% off</span>
-          </div>
         </div>
         <div className="flex flex-col gap-2">
           <h2 className="font-bold">{product.product.name}</h2>

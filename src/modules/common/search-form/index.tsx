@@ -18,7 +18,7 @@ const SearchForm: React.FC = () => {
   const [options, setOptions] = useState<string>("");
   console.log(options)
   return (
-    <div className="w-full h-full rounded-md border bg-slate-100 py-2">
+    <div className="w-full h-full rounded-md border border-gray-300 bg-slate-100 py-2">
       <div className="w-full h-full flex flex-row gap-2">
         <div className="h-full w-[130px] border-r border-gray-500">
           <SelectDropdown
