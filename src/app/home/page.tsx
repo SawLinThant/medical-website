@@ -86,9 +86,7 @@ const HomePage: React.FC = async () => {
         <div className="w-full max-w-[1300px] mt-16">
           <BestSeller products={productsData?.products} />
         </div>
-        <div className="w-full mt-6">
-          <Footer />
-        </div>
+
       </div>
     );
   } catch (error) {
