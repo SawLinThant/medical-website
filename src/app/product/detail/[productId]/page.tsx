@@ -11,29 +11,16 @@ import Rating from "@/modules/common/rating";
 import { ScrollText, ShoppingCart } from "lucide-react";
 import Image from "next/image";
 
-const DUMMY_DATA = [
-  {
-    id: "1",
-    name: "related 1",
-    price: 3000,
-    bulk_price: 2900,
-    quantity: 3,
-    description: "description",
-    category: {
-      id: "1",
-      name: "category1",
-    },
-    images: [
-      {
-        id: "1",
-        image_url: "/images/slide4.jpg",
-      },
-    ],
-  },
-];
 
-const ProductDetail = async ({ params }: { params: { productId: string } }) => {
-  const productId = params.productId;
+
+// interface ProductDetailProps {
+//   {params}: { productId: string }; 
+// }
+
+type paramsType = Promise<{ productId: string }>;
+
+const ProductDetail = async (props: { params: paramsType }) => {
+  const { productId } = await props.params;
   console.log(productId);
   try {
     const { data } = await serverApolloClient.query({

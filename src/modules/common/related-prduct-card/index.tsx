@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { addToCart } from "@/lib/features/cart/cartSlice";
 import { toast } from "@/hooks/use-toast";
+import { useRouter } from "next/navigation";
 
 interface ProductCardprops {
     product: Product
@@ -17,6 +18,7 @@ const ProductCard: React.FC<ProductCardprops> = (product:ProductCardprops) => {
     const [quantity,setQuantity] = useState<number>(1);
     const [totalPrice, setTotalPrice] = useState<number>(product.product.price);
     const dispatch = useDispatch();
+    const router = useRouter()
 
     useEffect(() => {
         if(product && product.product.images){
@@ -48,7 +50,7 @@ const ProductCard: React.FC<ProductCardprops> = (product:ProductCardprops) => {
   return (
     <div className="w-full p-4 border bg-white rounded-md group h-[21.8rem] scale-95 hover:h-full hover:shadow-lg transition-all overflow-hidden">
       <div className="w-full h-full flex flex-col gap-3 group">
-        <div className="relative w-full min-h-[10rem]">
+        <div onClick={() => router.push(`/product/detail/${product.product.id}`)} className="relative w-full min-h-[10rem] hover:cursor-pointer">
           <Image layout="fill" alt="product.img" src={images?.[0].image_url || "/image_placeholder.jpg"} className="object-contain"/>
         </div>
         <div className="flex flex-col gap-2">
