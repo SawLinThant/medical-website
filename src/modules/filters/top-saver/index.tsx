@@ -58,7 +58,7 @@ export function TopSaver({ products }: TopSaverProps) {
       {productList ? (
         <CarouselContent className="w-full h-full">
           {productList.map((product, index) => (
-            <CarouselItem key={index} className="md:basis-1/3 lg:basis-[25%]">
+            <CarouselItem key={index} className="md:basis-1/3 lg:basis-[25%] basis-1/2">
               <div className="">
                 <ProductCard product={product} />
               </div>
