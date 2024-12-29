@@ -49,7 +49,7 @@ export function ProductReel({products}:BestSellerProps) {
          {productList ? (
         <CarouselContent className="w-full h-full">
           {productList.map((product, index) => (
-            <CarouselItem key={index} className="md:basis-1/3 lg:basis-[20%]">
+            <CarouselItem key={index} className="md:basis-1/3 lg:basis-[20%] basis-1/2">
               <div className="">
                 <ProductCard product={product} />
               </div>

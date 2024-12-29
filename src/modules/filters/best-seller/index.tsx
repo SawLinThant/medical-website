@@ -46,19 +46,10 @@ export function BestSeller({products}:BestSellerProps) {
           </div>
         </div>
       </div>
-      {/* <CarouselContent className="w-full h-full">
-        {productList && productList.map((product, index) => (
-          <CarouselItem key={index} className="md:basis-1/3 lg:basis-[20%]">
-            <div className="p-1">
-                <ProductCard product={product}/>
-            </div>
-          </CarouselItem>
-        ))}
-      </CarouselContent> */}
          {productList ? (
         <CarouselContent className="w-full h-full">
           {productList.map((product, index) => (
-            <CarouselItem key={index} className="md:basis-1/3 lg:basis-[20%]">
+            <CarouselItem key={index} className="md:basis-1/3 lg:basis-[20%] basis-1/2">
               <div className="">
                 <ProductCard product={product} />
               </div>

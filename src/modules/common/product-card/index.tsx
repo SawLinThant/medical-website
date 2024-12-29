@@ -48,7 +48,7 @@ const ProductCard: React.FC<ProductCardprops> = (product:ProductCardprops) => {
     }
 
   return (
-    <div className="w-full p-4 border bg-white rounded-md group lg:h-[21.8rem] scale-95 hover:h-full hover:shadow-lg transition-all overflow-hidden">
+    <div className="w-full p-4 border bg-white rounded-md group lg:h-[21.8rem] h-full scale-95 hover:h-full hover:shadow-lg transition-all overflow-hidden">
       <div className="w-full h-full flex flex-col gap-3 group">
         <div onClick={() => router.push(`/product/detail/${product.product.id}`)} className="relative w-full min-h-[10rem] hover:cursor-pointer">
           <Image layout="fill" alt="product.img" src={images?.[0].image_url || "/image_placeholder.jpg"} className="object-contain"/>
@@ -61,7 +61,7 @@ const ProductCard: React.FC<ProductCardprops> = (product:ProductCardprops) => {
         </div>
         <div className="flex flex-col gap-2">
           <h2 className="font-bold">{product.product.name}</h2>
-          <div className="flex flex-row gap-3">
+          <div className="flex lg:flex-row md:flex-row flex-col gap-3">
             <div className="flex flex-row items-center gap-1 min-w-[7rem]">
               <Star height="20px" width="20px" color="#cfda31"/>
               <Star height="20px" width="20px" color="#cfda31"/>
@@ -80,7 +80,7 @@ const ProductCard: React.FC<ProductCardprops> = (product:ProductCardprops) => {
           </div>
           <span className="text-sm text-muted-foreground">{product.product.quantity} left</span>
         </div>
-        <div className="flex-row h-5 gap-3 items-center mt-5 flex">
+        <div className="lg:flex lg:flex-row hidden h-5 gap-3 items-center mt-5">
           <div className="flex flex-row border items-center border-gray-400 rounded">
             <Button onClick={handleDecrease} disabled={quantity === 1} className="w-7 h-full rounded-none bg-transparent border-r hover:bg-secondary_color hover:text-white text-black">-</Button>
             <div className="min-w-9 h-full text-center flex items-center justify-center"><span>{quantity}</span></div>
@@ -91,7 +91,7 @@ const ProductCard: React.FC<ProductCardprops> = (product:ProductCardprops) => {
             <span className="text-sm text-secondary_color"> {totalPrice} MMK</span>
           </div>
         </div>
-        <Button onClick={handleAddToCart} className="w-full transition-all min-h-8 rounded-md mt-4 bg-secondary_color text-white">Add to cart</Button>
+        <Button onClick={handleAddToCart} className="w-full lg:block hidden transition-all min-h-8 rounded-md mt-4 bg-secondary_color text-white">Add to cart</Button>
       </div>
     </div>
   );
