@@ -1,7 +1,7 @@
 import { Product } from '@/lib/types/global';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-interface CartItem extends Product {
+export interface CartItem extends Product {
   quantity: number;
 }
 
@@ -51,6 +51,21 @@ const cartSlice = createSlice({
 
       saveCartToLocalStorage(state.cartItems);
     },
+    removeItemByOne: (state, action: PayloadAction<string>) => {
+      const id = action.payload;
+      const existingItemIndex = state.cartItems.findIndex(item => item.id === id);
+  
+      if (existingItemIndex >= 0) {
+        const item = state.cartItems[existingItemIndex];
+        if (item.quantity > 1) {
+          item.quantity -= 1; 
+        } else {
+          state.cartItems.splice(existingItemIndex, 1);
+        }
+      }
+  
+      saveCartToLocalStorage(state.cartItems);
+    },
     clearCart: (state) => {
       state.cartItems = [];
       
@@ -59,6 +74,6 @@ const cartSlice = createSlice({
   },
 });
 
-export const { addToCart, removeFromCart, clearCart } = cartSlice.actions;
+export const { addToCart, removeFromCart, removeItemByOne, clearCart } = cartSlice.actions;
 
 export default cartSlice.reducer;

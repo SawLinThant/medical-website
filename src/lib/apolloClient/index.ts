@@ -3,7 +3,7 @@ import { onError } from "@apollo/client/link/error";
 import { setContext } from "@apollo/client/link/context";
 
 const httpLink = new HttpLink({
-  uri: "", //add hasura cloud url
+  uri: process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT || 'https://uat.medical.axra.app/v1/graphql',
 });
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {

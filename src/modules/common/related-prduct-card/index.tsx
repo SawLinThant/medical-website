@@ -4,7 +4,7 @@ import Star from "../icons/star";
 import { Heart } from "lucide-react";
 import { Product, ProductImage } from "@/lib/types/global";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "@/lib/features/cart/cartSlice";
 import { toast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
@@ -18,7 +18,7 @@ const ProductCard: React.FC<ProductCardprops> = (product:ProductCardprops) => {
     const [quantity,setQuantity] = useState<number>(1);
     const [totalPrice, setTotalPrice] = useState<number>(product.product.price);
     const dispatch = useDispatch();
-    const router = useRouter()
+    const router = useRouter();
 
     useEffect(() => {
         if(product && product.product.images){

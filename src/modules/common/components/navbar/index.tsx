@@ -4,9 +4,18 @@ import { Heart, ShoppingCart, User } from "lucide-react";
 import SearchForm from "../../search-form";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useSelector } from "react-redux";
+import { RootState } from "@/lib/store";
+import { useEffect, useState } from "react";
 
 const NavBar: React.FC = () => {
+  const [isClient, setIsClient] = useState(false);
   const router = useRouter();
+  const cartItems = useSelector((state:RootState) => state.cart.cartItems);
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+  const cartItemCount = cartItems.length
   return (
     <header className="w-full h-[6rem] border-b border-gray-300 md:hidden hidden lg:flex items-center justify-center px-4 py-6">
       <div className="w-full min-h-[4rem] max-w-[1300px] md:hidden hidden lg:flex flex-row items-center justify-between">
@@ -29,8 +38,13 @@ const NavBar: React.FC = () => {
             <Heart size={20} />
             <div className="text-sm h-full mt-1">Favourites</div>
           </div>
-          <div className="flex flex-row gap-2 items-center min-w-[5rem] h-full justify-end">
+          <div onClick={() => router.push("/cart")} className="relative flex flex-row gap-2 items-center min-w-[5rem] h-full justify-end hover:cursor-pointer">
             <ShoppingCart size={20} />
+            {isClient && cartItemCount > 0 && (
+              <span className="absolute top-0 right-0 -translate-y-4 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                {cartItemCount}
+              </span>
+            )}
             <div className="text-sm h-full mt-1">My Cart</div>
           </div>
         </div>
