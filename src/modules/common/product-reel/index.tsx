@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import * as React from "react";
 import {
@@ -14,16 +14,17 @@ import { Skeleton } from "@/components/ui/skeleton";
 import ProductCard from "../related-prduct-card";
 
 interface BestSellerProps {
-    products: Product[] | null
+  products: Product[] | null;
 }
 
-export function ProductReel({products}:BestSellerProps) {
-    const [productList,setProductList] = React.useState<Product[] | null>(null)
-    React.useEffect(() => {
-        if(products){
-            setProductList(products)
-        }
-    },[setProductList])
+export function ProductReel({ products }: BestSellerProps) {
+  const [productList, setProductList] = React.useState<Product[] | null>(null);
+  React.useEffect(() => {
+    if (products) {
+      setProductList(products);
+    }
+  }, [setProductList,products]);
+  console.log("related products:", productList);
   return (
     <Carousel className="w-full h-full flex flex-col gap-4">
       <div className="w-full min-h-16 flex flex-row items-center justify-between">
@@ -45,10 +46,13 @@ export function ProductReel({products}:BestSellerProps) {
           </div>
         </div>
       </div>
-         {productList ? (
+      {productList ? (
         <CarouselContent className="w-full h-full">
           {productList.map((product, index) => (
-            <CarouselItem key={index} className="md:basis-1/3 lg:basis-[20%] basis-1/2">
+            <CarouselItem
+              key={index}
+              className="md:basis-1/3 lg:basis-[20%] basis-1/2"
+            >
               <div className="">
                 <ProductCard product={product} />
               </div>

@@ -123,3 +123,34 @@ export const GET_PRODUCT_BY_CATEGORY_ID = gql`
     }
   }
 `;
+
+export const GET_FILTERED_PRODUCTS = gql`
+  query getFilteredProducts($where: products_bool_exp, $offset: Int, $limit: Int) {
+    products(where: $where, order_by: { created_at: desc }, offset: $offset, limit: $limit) {
+      id
+      name
+      price
+      bulk_price
+      quantity
+      description
+      shop {
+        id
+        name
+        logo
+        description
+        address
+        phone
+        remark
+        shop_admin_name
+      }
+      category {
+        id
+        name
+      }
+      images {
+        id
+        image_url
+      }
+    }
+  }
+`;
