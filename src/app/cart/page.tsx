@@ -20,7 +20,7 @@ const Cart: React.FC = async () => {
     try{
       return(
         <div className="w-full flex flex-col items-center lg:min-h-72">
-            <div className="w-full max-w-[1300px] mt-16">
+            <div className="w-full max-w-[1300px] lg:mt-16 md:mt-16 mt-4">
              <CartItems/>
             </div>
         </div>

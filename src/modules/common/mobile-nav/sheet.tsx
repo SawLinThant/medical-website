@@ -14,9 +14,7 @@ export function MobileNavSheet() {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant="outline">
-          <Menu />
-        </Button>
+      <Menu size={25} color="white"/>
       </SheetTrigger>
       <SheetContent>
         <SheetHeader>

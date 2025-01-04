@@ -12,10 +12,12 @@ import IndividualCartItem from "../cart-item";
 import { useGetProducts } from "@/lib/hooks/getQuery/useGetproduct";
 import { ProductReel } from "@/modules/common/product-reel";
 import { Checkbox } from "@/components/ui/checkbox";
+import { useRouter } from "next/navigation";
 
 const CartItems: React.FC = () => {
   const [isClient, setIsClient] = useState(false);
   const dispatch = useDispatch();
+  const router = useRouter();
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const cartItems = useSelector((state: RootState) => state.cart.cartItems);
   const allSelected =
@@ -72,8 +74,8 @@ const CartItems: React.FC = () => {
 
   return (
     <section className="w-full flex flex-col items-center">
-      <div className="lg:w-4/5 md:w-full flex flex-col">
-        <div className="w-full flex flex-row items-center justify-between p-2">
+      <div className="lg:w-4/5 md:w-full w-full flex flex-col">
+        <div className="w-full lg:flex md:flex hidden flex-row items-center justify-between p-2">
           <div className="w-12 min-h-14 flex items-center justify-center">
             <Checkbox
               checked={allSelected}
@@ -89,6 +91,18 @@ const CartItems: React.FC = () => {
             <span className="min-w-28 text-muted-foreground">Total</span>
           </div>
         </div>
+        <div className="w-full flex lg:hidden md:hidden flex-row items-center justify-start px-3">
+        <div className="min-w-12 min-h-14 flex flex-row items-center justify-center">
+            <Checkbox
+              checked={allSelected}
+              onCheckedChange={(checked) => handleSelectAll(checked as boolean)}
+              id="select-all"
+            />
+            
+          </div>
+          <span>All</span>
+        </div>
+        
         <div className="w-full mt-4 flex flex-col border shadow-lg rounded-md lg:h-[70vh] overflow-auto scrollbar-thin">
           {isClient &&
             cartItems.length > 0 &&
@@ -102,12 +116,20 @@ const CartItems: React.FC = () => {
                 />
               );
             })}
+            {isClient &&
+            cartItems.length < 1 ? (
+            <div className="w-full lg:h-full md:h-full h-20 flex lg:flex-row md:flex-row flex-col items-center justify-center lg:gap-3 md:gap-3">
+               <h2 className="text-secondary_color">No item in the cart!</h2>
+               <span onClick={() => router.push("/home")} className="underline text-blue-500 hover:cursor-pointer">Shop Now</span>
+            </div>
+            ):(null)
+         }
         </div>
         <div className="h-6"></div>
         <Separator className="my-4 border-t border-gray-400" />
-        <div className="min-h-16 flex flex-row items-center justify-between">
-          <div className="flex flex-row gap-4">
-            <Button className="flex flex-row h-8 gap-2 items-center bg-secondary_color text-white rounded-md">
+        <div className="min-h-16 flex lg:flex-row md:flex-row flex-col items-center justify-between lg:gap-0 md:gap-0 gap-6">
+          <div className="flex lg:flex-row md:flex-row flex-col lg:gap-4 md:gap-4 gap-2">
+            <Button onClick={() => router.push("/home")} className="flex flex-row h-8 gap-2 items-center bg-secondary_color text-white rounded-md">
               <ArrowLeft />
               continue shopping
             </Button>
@@ -121,10 +143,10 @@ const CartItems: React.FC = () => {
             </Button>
           </div>
           <div className="flex flex-row gap-4 items-center lg:mr-12">
-            <span className="text-secondary_color text-sm:">Subtotal</span>
+            <span className="text-secondary_color text-sm">Subtotal:</span>
             {isClient && (
               <span className="font-semibold">
-                MMK
+                MMK{" "}
                 {totalPrice.toLocaleString()}
               </span>
             )}
