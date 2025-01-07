@@ -5,7 +5,7 @@ const Login: React.FC = async () => {
   try {
     return (
       <section>
-        <LoginForm/>
+        {/* <LoginForm/> */}
       </section>
     );
   } catch (error) {

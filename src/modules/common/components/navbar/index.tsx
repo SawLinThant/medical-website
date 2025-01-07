@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
 import { RootState } from "@/lib/store";
 import { useEffect, useState } from "react";
+import { AuthPopUp } from "../../auth-popup";
 
 const NavBar: React.FC = () => {
   const [isClient, setIsClient] = useState(false);
@@ -32,7 +33,8 @@ const NavBar: React.FC = () => {
         <div className="flex flex-row items-center gap-4">
           <div className="flex flex-row gap-2 items-center min-w-[7rem] h-full justify-end">
             <User size={20} />
-            <div className="text-sm h-full mt-1">SighUp/Login</div>
+            {/* <div className="text-sm h-full mt-1">SighUp/Login</div> */}
+            <AuthPopUp/>
           </div>
           <div className="flex flex-row gap-2 items-center min-w-[7rem] h-full justify-end">
             <Heart size={20} />
