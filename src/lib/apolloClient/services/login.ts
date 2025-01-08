@@ -3,19 +3,21 @@ import serverApolloClient from "../serverApolloClient";
 
 
 export interface LoginCredentials {
-   email: string
+   phone: string
    password: string
 }
 
-export async function handleLogin({email, password}:LoginCredentials) {
+export async function handleLogin({phone, password}:LoginCredentials) {
   try {
     const { data } = await serverApolloClient.mutate({
       mutation: SIGN_IN_MUTATION,
-      variables: { email, password },
+      variables: { phone, password },
+      fetchPolicy: "no-cache",
     });
-
-    if (data?.userLogin) {
-      return { success: true, message: data.userLogin.message, token: data.userLogin.token };
+     const response = data?.customerLogin || null
+     console.log("login server response:",response)
+    if (response) {
+      return { success: true, message: response.message, token: response.token };
     } else {
       return { success: false, message: "Login failed." };
     }

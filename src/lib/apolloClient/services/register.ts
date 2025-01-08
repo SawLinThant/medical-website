@@ -3,10 +3,10 @@ import { REGISTER_USER_MUTATION } from "../mutation/register";
 
 
 interface RegisterUserInput {
-  email: string;
+  email: string | null;
   password: string;
   username: string;
-  role: string;
+  role: string | null;
   phone?: string;
   shop_id: string | null; 
 }
@@ -34,11 +34,11 @@ export const registerUser = async (
       },
     });
 
-    if (data?.userRegister) {
+    if (data?.customerRegister) {
       return {
         success: true,
-        message: data.userRegister.message,
-        user_id: data.userRegister.user_id,
+        message: data.customerRegister.message,
+        user_id: data.customerRegister.user_id,
       };
     }
 
