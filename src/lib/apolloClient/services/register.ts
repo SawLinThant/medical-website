@@ -2,7 +2,7 @@ import { ApolloClient, NormalizedCacheObject } from "@apollo/client";
 import { REGISTER_USER_MUTATION } from "../mutation/register";
 
 
-interface RegisterUserInput {
+export interface RegisterUserInput {
   email: string | null;
   password: string;
   username: string;

@@ -6,6 +6,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { RegisterUserInput } from "@/lib/apolloClient/services/register";
 import { cn } from "@/lib/utils";
 import LoginForm from "@/modules/auth/login-form";
 import NewPasswordForm from "@/modules/auth/new-password-form";
@@ -13,25 +14,41 @@ import OTPForm from "@/modules/auth/otp-form";
 import RegisterForm from "@/modules/auth/register-form";
 import ResetPasswordForm from "@/modules/auth/reset-password-form";
 import Success from "@/modules/auth/success";
+import { X } from "lucide-react";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export function AuthPopUp() {
   const [isLoginPage, setIsloginPage] = useState<boolean>(true);
+  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [isForgotPassword, setIsForgotPassword] = useState<boolean>(false);
   const [currentResetPasswordPage, setCurrentResetPasswordpage] =
     useState<string>("Enter Phone");
   const [currentSuccessPage, setCurrentSuccessPage] = useState<string>("");
+  useEffect(() => {
+
+  })
   return (
-    <Dialog>
+    <Dialog
+    open={isDialogOpen}
+      onOpenChange={(isOpen) => {
+        if (!isOpen) {
+          // Reset the state when the dialog is closed
+          setCurrentSuccessPage("");
+        }
+      }}
+    >
       <DialogTrigger asChild>
-        <div className="border-none bg-transparent hover:cursor-pointer">
+        <div onClick={() => setIsDialogOpen(true)} className="border-none bg-transparent hover:cursor-pointer">
           Login/Sign Up
         </div>
       </DialogTrigger>
       {currentSuccessPage === "" && (
         <DialogContent className="sm:max-w-[65vw] lg:min-h-[20rem] px-4 lg:py-12 md:py-12 py-10 flex flex-col">
           <DialogTitle></DialogTitle>
+          <div onClick={() => setIsDialogOpen(false)} className="absolute top-4 right-6 p-1 border hover:cursor-pointer hover:border-gray-600 border-gray-300 rounded-full">
+            <X size={20}/>
+          </div>
           <div className=" w-full h-full grid lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-4">
             <div className="flex flex-col items-center justify-center lg:border-r md:border-r sm:border-0">
               <div className="w-[150px] h-[60px] relative">
@@ -106,9 +123,9 @@ export function AuthPopUp() {
                   </DialogHeader>
                   <div className="min-h-[15rem] w-full mt-6">
                     {isLoginPage ? (
-                      <LoginForm setIsForgotPasword={setIsForgotPassword} />
+                      <LoginForm closeDialog={() => setIsDialogOpen(false)} setIsForgotPasword={setIsForgotPassword} />
                     ) : (
-                      <RegisterForm />
+                      <RegisterForm setCurrentSuccessPage={setCurrentSuccessPage} />
                     )}
                   </div>
                 </div>
@@ -121,13 +138,13 @@ export function AuthPopUp() {
         <DialogContent className="px-4 lg:py-12 md:py-12 py-10">
           <DialogTitle></DialogTitle>
           <Success label="Your account has been successfully created" />
-        </DialogContent>      
+        </DialogContent>
       )}
-       {currentSuccessPage === "Reset Success" && (
+      {currentSuccessPage === "Reset Success" && (
         <DialogContent className="px-4 lg:py-12 md:py-12 py-10">
           <DialogTitle></DialogTitle>
           <Success label="Your password is successfully updated" />
-        </DialogContent>      
+        </DialogContent>
       )}
     </Dialog>
   );

@@ -4,14 +4,34 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/hooks/use-toast";
 import serverApolloClient from "@/lib/apolloClient/serverApolloClient";
-import { registerUser } from "@/lib/apolloClient/services/register";
+import {
+  registerUser,
+  RegisterUserInput,
+} from "@/lib/apolloClient/services/register";
 import { CircleAlert, Loader } from "lucide-react";
 import { useState } from "react";
+import RegisterOTPForm from "./register-otp";
+import { FindAccount } from "@/lib/apolloClient/services/users";
 
-const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/;
+const passwordRegex =
+  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/;
 
-const RegisterForm: React.FC = () => {
+interface RegisterFormProps {
+  setCurrentSuccessPage:(value:string) => void
+}
+
+const RegisterForm: React.FC<RegisterFormProps> = ({setCurrentSuccessPage}) => {
   const [registerLoading, setRegisterLoading] = useState<boolean>(false);
+  const [registerPage,setRegsiterPage] = useState<string>("Register Form");
+  const [registerCredentials, setRegisterCredentials] =
+    useState<RegisterUserInput>({
+      email: null,
+      password: "",
+      username: "",
+      role: "",
+      phone: "",
+      shop_id: null,
+    });
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
@@ -19,16 +39,17 @@ const RegisterForm: React.FC = () => {
     const phone = formData.get("phone") as string;
     const password = formData.get("password") as string;
     const confirmPassword = formData.get("confirm_password") as string;
-    if(password !== confirmPassword){
+    if (password !== confirmPassword) {
       toast({
-        description:"Please confirm password"
-      })
-      return
+        description: "Please confirm password",
+      });
+      return;
     }
-    if(password == confirmPassword){
-      if(!passwordRegex.test(password)){
+    if (password == confirmPassword) {
+      if (!passwordRegex.test(password)) {
         toast({
-          description: "Password must include at least 8 characters, one uppercase letter, one lowercase letter, one number, and one special character.",
+          description:
+            "Password must include at least 8 characters, one uppercase letter, one lowercase letter, one number, and one special character.",
           variant: "destructive",
         });
         return;
@@ -36,20 +57,52 @@ const RegisterForm: React.FC = () => {
     }
     try {
       setRegisterLoading(true);
-     
+      const result = await FindAccount(serverApolloClient, {
+        phone: phone,
+      });
+      console.log(result);
+      if (result.success && !result.isExist) {
+        setRegisterCredentials({
+          email: null,
+          password: password,
+          username: username,
+          phone: phone,
+          role: "customer",
+          shop_id: null,
+        });
+        setRegsiterPage("Register OTP Form")
+      } else {
+        toast({
+          variant: "destructive",
+          description: "Phone number already used",
+        });
+      }
+    } catch (error) {
+      console.log("Error registering:", error);
+      setRegisterLoading(false);
+      toast({
+        variant: "destructive",
+        description: "Register Failed",
+      });
+    } finally {
+      setRegisterLoading(false);
+    }
+  };
+  const handleRegister = async() => {
+     try {
+      setRegisterLoading(true);
+
       const result = await registerUser(serverApolloClient, {
         email: null,
-        password: password,
-        username: username,
-        phone: phone,
+        password: registerCredentials.password,
+        username: registerCredentials.username,
+        phone: registerCredentials.phone,
         role: "customer",
         shop_id: null
       });
       console.log(result);
       if (result.success) {
-        toast({
-          description:"Register successful"
-        })
+        setCurrentSuccessPage("Register Success")
       } else {
         toast({
           variant: "destructive",
@@ -60,15 +113,17 @@ const RegisterForm: React.FC = () => {
       console.log("Error registering:", error);
       setRegisterLoading(false);
       toast({
-        variant:"destructive",
+        variant: "destructive",
         description: "Register Failed",
       });
     } finally {
       setRegisterLoading(false);
     }
-  };
+  }
   return (
-    <div>
+    <>
+    {registerPage === "Register Form"?(
+      <div>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <div className="flex flex-col gap-1">
           <label
@@ -137,11 +192,20 @@ const RegisterForm: React.FC = () => {
             className="h-9 focus-visible:ring-offset-0 placeholder:opacity-[0.6] placeholder:text-[12px] focus-visible:ring-0"
           />
         </div>
-        <Button disabled={registerLoading} type="submit" className="mt-3 h-9 flex items-center justify-center">
-         {registerLoading?(<Loader className="animate-spin"/>):"Register"} 
+        <Button
+          disabled={registerLoading}
+          type="submit"
+          className="mt-3 h-9 flex items-center justify-center"
+        >
+          {registerLoading ? <Loader className="animate-spin" /> : "Register"}
         </Button>
       </form>
     </div>
+    ):(
+      <RegisterOTPForm handleRegister={handleRegister} registerLoading={registerLoading} setIsCurrentPage={setRegsiterPage}/>
+    )}
+      
+    </>
   );
 };
 export default RegisterForm;

@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { OTPInput } from "@/modules/common/otp-input";
+import OTPInput from "@/modules/common/otp-input";
 import { MoveLeft } from "lucide-react";
 
 interface OTPFormProps {
@@ -29,7 +29,7 @@ const OTPForm: React.FC<OTPFormProps> = ({ setIsForgotPasword,setIsCurrentPage }
         onSubmit={handleSubmit}
         className="flex flex-col gap-2 items-center mt-4"
       >
-        <OTPInput />
+        {/* <OTPInput /> */}
         <Button type="submit" className="mt-5 h-9 w-full">
           Reset Password
         </Button>

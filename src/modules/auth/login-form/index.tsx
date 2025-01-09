@@ -11,9 +11,10 @@ import { useDispatch } from "react-redux";
 
 interface LoginFormProps {
   setIsForgotPasword: (value: boolean) => void;
+  closeDialog: () => void;
 }
 
-const LoginForm: React.FC<LoginFormProps> = ({ setIsForgotPasword }) => {
+const LoginForm: React.FC<LoginFormProps> = ({ setIsForgotPasword,closeDialog }) => {
   const dispatch = useDispatch();
   const [loginLoading, setLoginLoading] = useState<boolean>(false);
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -34,6 +35,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ setIsForgotPasword }) => {
         });
         dispatch(setToken(result.token));
         localStorage.setItem("token", result.token);
+        closeDialog();
       }
       if(!result.success){
         toast({
@@ -90,7 +92,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ setIsForgotPasword }) => {
           </span>
         </div>
         <Button disabled={loginLoading} type="submit" className="mt-3 h-9">
-        {loginLoading?(<Loader className="animate-spin"/>):"Register"} 
+        {loginLoading?(<Loader className="animate-spin"/>):"Login"} 
         </Button>
       </form>
     </div>

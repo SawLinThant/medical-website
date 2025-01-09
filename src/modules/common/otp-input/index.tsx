@@ -1,26 +1,42 @@
+"use client";
+
 import {
-    InputOTP,
-    InputOTPGroup,
-    InputOTPSeparator,
-    InputOTPSlot,
-  } from "@/components/ui/input-otp"
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSeparator,
+  InputOTPSlot,
+} from "@/components/ui/input-otp";
+import React, { useState } from "react";
+
+interface OTPInputProps {
+ setValue: any
+}
+
+const OTPInput: React.FC<OTPInputProps> = ({ setValue }) => {
   
-  export function OTPInput() {
-    return (
-      <InputOTP className="gap-7" maxLength={4}>
-        <InputOTPGroup>
-          <InputOTPSlot index={0} />
+  return (
+    <InputOTP onChange={setValue} className="gap-7" maxLength={4}>
+       <InputOTPGroup>
+          <InputOTPSlot
+            index={0}
+          />
         </InputOTPGroup>
         <InputOTPGroup>
-          <InputOTPSlot index={1} />
+          <InputOTPSlot
+            index={1}
+          />
         </InputOTPGroup>
         <InputOTPGroup>
-          <InputOTPSlot index={2} />
+          <InputOTPSlot
+            index={2}
+          />
         </InputOTPGroup>
         <InputOTPGroup>
-          <InputOTPSlot index={3} />
+          <InputOTPSlot
+            index={3}
+          />
         </InputOTPGroup>
-      </InputOTP>
-    )
-  }
-  
+    </InputOTP>
+  );
+};
+export default OTPInput;
