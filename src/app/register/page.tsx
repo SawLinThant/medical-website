@@ -6,7 +6,7 @@ const Login: React.FC = async () => {
   try {
     return (
       <section>
-        <RegisterForm/>
+        
       </section>
     );
   } catch (error) {

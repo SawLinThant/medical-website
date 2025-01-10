@@ -43,7 +43,7 @@ const RegisterOTPForm: React.FC<OTPFormProps> = ({
       </div>
       <div className="flex flex-col">
         <span className="text-xs text-muted-foreground">
-          To verify your phone number, we've sent an one time password(OTP) to
+          To verify your phone number, we&apos;ve sent an one time password(OTP) to
           your phone number
         </span>
       </div>
