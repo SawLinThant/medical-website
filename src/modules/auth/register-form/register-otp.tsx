@@ -17,10 +17,9 @@ const RegisterOTPForm: React.FC<OTPFormProps> = ({
 }) => {
   const [value, setValue] = useState<any>();
   const handleSubmit = () => {
-    //e.preventDefault();
     const otpValue = value.toString();
-    if (otpValue.length === 4) {
-      if (otpValue === "1234") {
+    if (otpValue.length === 6) {
+      if (otpValue === "239827") {
         handleRegister();
       } else {
         toast({

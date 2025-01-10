@@ -1,19 +1,53 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { MoveLeft } from "lucide-react";
+import { toast } from "@/hooks/use-toast";
+import serverApolloClient from "@/lib/apolloClient/serverApolloClient";
+import { FindAccount } from "@/lib/apolloClient/services/users";
+import { Loader, MoveLeft } from "lucide-react";
+import { useState } from "react";
 
 interface ResetFormProps {
   setIsForgotPasword: (value: boolean) => void;
-  setIsCurrentPage: (value: string) => void;
+  setCurrentPage: (value: string) => void;
+  setResetPhone: (value:string) => void
 }
 
 const ResetPasswordForm: React.FC<ResetFormProps> = ({
   setIsForgotPasword,
-  setIsCurrentPage
+  setCurrentPage,
+  setResetPhone
 }) => {
-    const handleSubmit = () => {
-        setIsCurrentPage("Enter OTP")
-     }
+  const [laoding, setLoading] = useState<boolean>(false);
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const phone = formData.get("phone") as string;
+    try {
+      setLoading(true);
+      const result = await FindAccount(serverApolloClient, {
+        phone: phone,
+      });
+      console.log(result);
+      if (result.success && !result.isExist) {
+        toast({
+          variant: "destructive",
+          description: "Invalid Phone Number",
+        });
+      } else {
+        setResetPhone(phone)
+        setCurrentPage("Enter OTP")
+      }
+    } catch (error) {
+      console.log("Error registering:", error);
+      setLoading(false);
+      toast({
+        variant: "destructive",
+        description: "Failed to valid the phone number",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <div className="flex flex-col w-full h-full gap-4">
       <div>
@@ -31,10 +65,7 @@ const ResetPasswordForm: React.FC<ResetFormProps> = ({
           We will send an OTP to it
         </span>
       </div>
-      <form
-        onSubmit={handleSubmit}
-        className="flex flex-col gap-2 mt-4"
-      >
+      <form onSubmit={handleSubmit} className="flex flex-col gap-2 mt-4">
         <div className="flex flex-col gap-1">
           <label htmlFor="phone" className="text-xs font-semibold text-black">
             Phone Number
@@ -48,15 +79,18 @@ const ResetPasswordForm: React.FC<ResetFormProps> = ({
             className="h-9 focus-visible:ring-offset-0 focus-visible:ring-0 placeholder:opacity-[0.6] placeholder:text-[12px]"
           />
         </div>
-        <Button type="submit" className="mt-5 h-9">
-          Send OTP
+        <Button type="submit" className="mt-5 h-9 flex items-center justify-center">
+        {laoding ? (
+            <Loader className="animate-spin" />
+          ) : "Send OTP"}
         </Button>
         <div
           onClick={() => setIsForgotPasword(false)}
           className="w-full flex flex-row items-center justify-center text-secondary_color gap-2 hover:cursor-pointer"
         >
-          <MoveLeft size={20} strokeWidth={2} />
-          <span className="text-xs">Back to login</span>
+         
+           <MoveLeft size={20} strokeWidth={2} />
+           <span className="text-xs">Back to login</span>
         </div>
       </form>
     </div>

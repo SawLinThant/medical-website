@@ -38,6 +38,13 @@ const accountSlice = createSlice({
       state.token = null;
       state.userId = null;
       state.email = null;
+      state.isLoggedIn = false
+    },
+    LogOut(state) {
+      state.token = null;
+      state.userId = null;
+      state.email = null;
+      state.isLoggedIn = false;
     },
     initializeFromLocalStorage(state) {
       const token = localStorage.getItem("token");
@@ -47,12 +54,16 @@ const accountSlice = createSlice({
           const decodedToken: { userId: string; email: string } = jwtDecode(token);
           state.userId = decodedToken.userId;
           state.email = decodedToken.email;
+          state.isLoggedIn = true; 
         } catch (error) {
           console.error("Invalid token:", error);
           state.token = null;
           state.userId = null;
           state.email = null;
+          state.isLoggedIn = false;
         }
+      } else {
+        state.isLoggedIn = false; 
       }
     },
   },

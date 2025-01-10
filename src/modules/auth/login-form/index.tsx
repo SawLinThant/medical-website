@@ -39,7 +39,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ setIsForgotPasword,closeDialog })
       }
       if(!result.success){
         toast({
-          description: "failed message"
+          description: "login failed"
         })
       }
     } catch (err) {

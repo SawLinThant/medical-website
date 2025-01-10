@@ -15,7 +15,7 @@ interface OTPInputProps {
 const OTPInput: React.FC<OTPInputProps> = ({ setValue }) => {
   
   return (
-    <InputOTP onChange={setValue} className="gap-7" maxLength={4}>
+    <InputOTP onChange={setValue} className="gap-7" maxLength={6}>
        <InputOTPGroup>
           <InputOTPSlot
             index={0}
@@ -34,6 +34,16 @@ const OTPInput: React.FC<OTPInputProps> = ({ setValue }) => {
         <InputOTPGroup>
           <InputOTPSlot
             index={3}
+          />
+        </InputOTPGroup>
+        <InputOTPGroup>
+          <InputOTPSlot
+            index={4}
+          />
+        </InputOTPGroup>
+        <InputOTPGroup>
+          <InputOTPSlot
+            index={5}
           />
         </InputOTPGroup>
     </InputOTP>
