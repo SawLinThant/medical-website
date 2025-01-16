@@ -1,12 +1,4 @@
-import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { RegisterUserInput } from "@/lib/apolloClient/services/register";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 import LoginForm from "@/modules/auth/login-form";
 import NewPasswordForm from "@/modules/auth/new-password-form";
@@ -18,7 +10,9 @@ import { X } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
-export function AuthPopUp() {
+
+
+const AuthPopUp =() => {
   const [isLoginPage, setIsloginPage] = useState<boolean>(true);
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [isForgotPassword, setIsForgotPassword] = useState<boolean>(false);
@@ -183,3 +177,4 @@ export function AuthPopUp() {
     </Dialog>
   );
 }
+export default AuthPopUp

@@ -1,15 +1,26 @@
 "use client";
 
-import { ZONE } from "@/lib/constant/options";
+import { OptionType, ZONE } from "@/lib/constant/options";
 import Dropdown from "@/modules/common/dropdown/zone-dropdown";
-import { useState } from "react";
-import { CheckoutAddress } from "@/lib/types/global";
+import { useEffect, useState } from "react";
 import CustomUpdateTextArea from "@/modules/common/text-area/custom-update-textarea";
 import CustomUpdateInput from "@/modules/common/input/custom-update-input";
+import { DeliveryAddress } from "@/lib/apolloClient/services/address";
 
-const BillingAddressForm: React.FC = () => {
+interface BillingAddressFormProps {
+  address: DeliveryAddress;
+  setAddress: (address: DeliveryAddress) => void;
+}
+
+const BillingAddressForm: React.FC<BillingAddressFormProps> = ({
+  address,
+  setAddress,
+}) => {
   const [zone, setZone] = useState<string>("");
-  const [billingAddress, setBillingAddress] = useState<CheckoutAddress>({
+  const [provinces, setProvinces] = useState<OptionType[]>([]);
+  const [provincesValue, setProvincesValue] = useState<string>("");
+  const [billingAddress, setBillingAddress] = useState<DeliveryAddress>({
+    id: "",
     firstname: "",
     lastname: "",
     province: "",
@@ -17,8 +28,14 @@ const BillingAddressForm: React.FC = () => {
     address: "",
     phone: "",
     email: "",
+    user_id: "",
+    label: "",
   });
-  console.log(billingAddress);
+  useEffect(() => {
+    if (address) {
+      setBillingAddress(address);
+    }
+  }, [address]);
   return (
     <div className="w-full flex flex-col gap-4 items-start">
       <h2 className="font-semibold text-xl">Billing Address</h2>
@@ -30,12 +47,16 @@ const BillingAddressForm: React.FC = () => {
             name="firstname"
             placeHolder="Enter your first name"
             type="text"
-            onChange={(e) =>
+            onChange={(e) => {
               setBillingAddress((prev) => ({
                 ...prev,
                 [e.target.name]: e.target.value,
-              }))
-            }
+              }));
+              setAddress({
+                ...address,
+                [e.target.name]: e.target.value,
+              });
+            }}
           />
           <CustomUpdateInput
             label="Last name *"
@@ -43,12 +64,16 @@ const BillingAddressForm: React.FC = () => {
             value={billingAddress.lastname}
             placeHolder="Enter your last name"
             type="text"
-            onChange={(e) =>
+            onChange={(e) => {
               setBillingAddress((prev) => ({
                 ...prev,
                 [e.target.name]: e.target.value,
-              }))
-            }
+              }));
+              setAddress({
+                ...address,
+                [e.target.name]: e.target.value,
+              });
+            }}
           />
         </div>
         <div className="w-full grid lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-4">
@@ -57,9 +82,13 @@ const BillingAddressForm: React.FC = () => {
               Select Province
             </label>
             <Dropdown
-              options={ZONE}
-              label="Select Zone"
-              setCategory={setZone}
+              options={provinces}
+              label={
+                billingAddress.zone === ""
+                  ? "Select Province"
+                  : billingAddress.province
+              }
+              setCategory={setProvincesValue}
             />
           </div>
           <div className="w-full flex flex-col gap-1">
@@ -68,7 +97,9 @@ const BillingAddressForm: React.FC = () => {
             </label>
             <Dropdown
               options={ZONE}
-              label="Select Zone"
+              label={
+                billingAddress.zone === "" ? "Select Zone" : billingAddress.zone
+              }
               setCategory={setZone}
             />
           </div>
@@ -78,12 +109,16 @@ const BillingAddressForm: React.FC = () => {
           label="Address"
           name="address"
           placeHolder="Enter your address"
-          onChange={(e) =>
+          onChange={(e) => {
             setBillingAddress((prev) => ({
               ...prev,
               [e.target.name]: e.target.value,
-            }))
-          }
+            }));
+            setAddress({
+              ...address,
+              [e.target.name]: e.target.value,
+            });
+          }}
         />
         <div className="w-full grid lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-4">
           <CustomUpdateInput
@@ -92,12 +127,16 @@ const BillingAddressForm: React.FC = () => {
             name="phone"
             placeHolder="Enter your phone"
             type="text"
-            onChange={(e) =>
+            onChange={(e) => {
               setBillingAddress((prev) => ({
                 ...prev,
                 [e.target.name]: e.target.value,
-              }))
-            }
+              }));
+              setAddress({
+                ...address,
+                [e.target.name]: e.target.value,
+              });
+            }}
           />
           <CustomUpdateInput
             label="Email *"
@@ -105,12 +144,16 @@ const BillingAddressForm: React.FC = () => {
             value={billingAddress.email}
             placeHolder="Enter your email"
             type="email"
-            onChange={(e) =>
+            onChange={(e) => {
               setBillingAddress((prev) => ({
                 ...prev,
                 [e.target.name]: e.target.value,
-              }))
-            }
+              }));
+              setAddress({
+                ...address,
+                [e.target.name]: e.target.value,
+              });
+            }}
           />
         </div>
       </div>

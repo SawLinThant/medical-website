@@ -1,6 +1,10 @@
 import { PaymentChoice } from "@/modules/common/radio-group/payment-choice";
 
-const PaymentForm: React.FC = () => {
+interface PaymentFormProps {
+  setPayment:(paymentId:string) => void
+}
+
+const PaymentForm: React.FC<PaymentFormProps> = ({setPayment}) => {
   return (
     <div className="w-full flex flex-col gap-4 pb-4">
       <h2 className="font-semibold text-xl">Payment Method</h2>
@@ -9,7 +13,7 @@ const PaymentForm: React.FC = () => {
         Incorrect information may delay your order. And be aware that all
         transactions are final once completed.
       </p>
-      <PaymentChoice/>
+      <PaymentChoice setPayment={setPayment}/>
     </div>
   );
 };

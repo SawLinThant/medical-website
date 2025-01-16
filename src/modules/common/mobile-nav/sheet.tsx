@@ -17,32 +17,58 @@ import {
   User,
   X,
 } from "lucide-react";
-import { AuthPopUp } from "../auth-popup";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import {
-  clearToken,
-  initializeFromLocalStorage,
-} from "@/lib/features/account/accountSlice";
 import { RootState } from "@/lib/store";
+import AuthPopUp from "../auth-popup";
 
 export function MobileNavSheet() {
   const dispatch = useDispatch();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isClient, setIsClient] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const handleLogout = () => {
-    dispatch(clearToken());
-    localStorage.removeItem("token");
-    window.location.reload();
+  const handleLogout = async () => {
+    try {
+      const response = await fetch("/api/auth/session", {
+        method: "DELETE",
+        credentials: "include",
+      });
+
+      if (response.ok) {
+        console.log("Logout successful");
+        window.location.reload();
+      } else {
+        const data = await response.json();
+        console.error("Logout failed:", data.message);
+      }
+    } catch (error) {
+      console.error("Error logging out:", error);
+    }
   };
-  const isLoggedIn = useSelector(
-    (state: RootState) => state.account.isLoggedIn
-  );
   useEffect(() => {
     setIsClient(true);
+    const fetchSession = async () => {
+      try {
+        const response = await fetch("/api/auth/session", {
+          method: "GET",
+          credentials: "include",
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setIsLoggedIn(data.isLoggedIn || false);
+        } else {
+          setIsLoggedIn(false);
+        }
+      } catch (error) {
+        console.error("Error fetching session:", error);
+        setIsLoggedIn(false);
+      }
+    };
+
+    fetchSession();
   }, []);
   useEffect(() => {
-    dispatch(initializeFromLocalStorage());
   }, [dispatch]);
   const handleSheetClose = () => {
     setIsOpen(false);

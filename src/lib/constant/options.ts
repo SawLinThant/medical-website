@@ -42,5 +42,27 @@ export const PROVINCE:ProvinceType[] = [
                 name:"Hlaing"
             },
         ]
-    }
+    },
+    {
+        id:"2",
+        zone: "Mandalay",
+        province:[
+            {
+                id:"1",
+                name:"Chan Aye Tharzan"
+            },
+            {
+                id:"2",
+                name:"29x24 Street"
+            },
+            {
+                id:"3",
+                name:"Kan Daw Mon"
+            },
+            {
+                id:"4",
+                name:"30th Street"
+            },
+        ]
+    },
 ]

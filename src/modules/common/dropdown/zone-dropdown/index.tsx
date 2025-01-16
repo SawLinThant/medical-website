@@ -22,7 +22,7 @@ import { OptionType } from "@/lib/constant/options"
 
 interface ComboboxDemoProps {
    options: OptionType[]
-   setCategory: (id:string) => void
+   setCategory: (name:string) => void
    label: string
 }
 
@@ -64,7 +64,7 @@ const Dropdown =({options,setCategory,label}:ComboboxDemoProps) => {
                   onSelect={() => {
                     setid(option.id)
                     setOpen(false)
-                    setCategory(option.id)
+                    setCategory(option.name)
                   }}
                 >
                   <Check

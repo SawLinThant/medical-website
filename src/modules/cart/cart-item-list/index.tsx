@@ -14,6 +14,16 @@ import { ProductReel } from "@/modules/common/product-reel";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useRouter } from "next/navigation";
 
+export const calculateTotalPrice = (cartItems: CartItem[]) => {
+  return cartItems.reduce((total, item) => {
+    const applicablePrice =
+      item && item.bulk_price && item.bulk_price > 0
+        ? item.bulk_price
+        : item.price;
+    return total + applicablePrice * item.quantity;
+  }, 0);
+};
+
 const CartItems: React.FC = () => {
   const [isClient, setIsClient] = useState(false);
   const dispatch = useDispatch();
@@ -22,15 +32,7 @@ const CartItems: React.FC = () => {
   const cartItems = useSelector((state: RootState) => state.cart.cartItems);
   const allSelected =
     cartItems.length > 0 && selectedItems.length === cartItems.length;
-  const calculateTotalPrice = (cartItems: CartItem[]) => {
-    return cartItems.reduce((total, item) => {
-      const applicablePrice =
-        item && item.bulk_price && item.bulk_price > 0
-          ? item.bulk_price
-          : item.price;
-      return total + applicablePrice * item.quantity;
-    }, 0);
-  };
+  
   const handleSelectAll = (checked: boolean) => {
     if (checked) {
       // Select all items
@@ -182,7 +184,7 @@ const CartItems: React.FC = () => {
         </div>
         <Separator className="my-4 border-t border-gray-400" />
         <div className="flex items-center justify-center mt-8">
-          <Button className="rounded-md min-h-6 min-w-10 bg-secondary_color text-white">
+          <Button onClick={() => router.push("/checkout")} className="rounded-md min-h-6 min-w-10 bg-secondary_color text-white">
             Proceed to checkout (
             {isClient && cartItems.length > 0 ? cartItems.length : 0})
           </Button>

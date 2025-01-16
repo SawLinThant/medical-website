@@ -1,24 +1,113 @@
 "use client";
 
-import { ZONE } from "@/lib/constant/options";
+import { OptionType, PROVINCE, ZONE } from "@/lib/constant/options";
 import Dropdown from "@/modules/common/dropdown/zone-dropdown";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CheckoutAddress } from "@/lib/types/global";
 import CustomUpdateTextArea from "@/modules/common/text-area/custom-update-textarea";
 import CustomUpdateInput from "@/modules/common/input/custom-update-input";
+import { Checkbox } from "@/components/ui/checkbox";
+import { DeliveryAddress, FindDeliveryAddress } from "@/lib/apolloClient/services/address";
+import serverApolloClient from "@/lib/apolloClient/serverApolloClient";
+import { getSessionData } from "@/lib/utils";
+import AddressPopUp from "./pop-up";
 
-const DelliveryAddressForm: React.FC = () => {
+interface SessionData {
+  userId: string
+  role: string
+  token: string
+  isLoggedIn: boolean
+}
+
+interface DelliveryAddressFormProps {
+  setSameAddress: (address:DeliveryAddress) => void
+}
+
+const DelliveryAddressForm: React.FC<DelliveryAddressFormProps> = ({setSameAddress}) => {
   const [zone, setZone] = useState<string>("");
-  const [deliveryAddress, setDeliveryAddress] = useState<CheckoutAddress>({
-    firstname: "",
-    lastname: "",
-    province: "",
-    zone: "",
-    address: "",
-    phone: "",
-    email: "",
+  const [provinces, setProvinces] = useState<OptionType[]>([]);
+  const [provincesValue, setProvincesValue] = useState<string>("");
+  const [isAddressExist,setIsAddressExist] = useState<boolean>(false);
+  const [sessionData, setSessionData] = useState<SessionData | null>(null);
+  const [deliveryAddress, setDeliveryAddress] = useState<DeliveryAddress>({
+      id:"",
+      firstname: "",
+      lastname: "",
+      province: "",
+      zone: "",
+      address: "",
+      phone: "",
+      email: "",
+      user_id: "",
+      label: ""
   });
-  console.log(deliveryAddress);
+    useEffect(() => {
+      if (zone) {
+        setDeliveryAddress((prev) => ({
+          ...prev,
+          zone: zone
+        }))
+        const selectedZone = PROVINCE.find((province) => province.zone === zone);
+        console.log("selected zone:",selectedZone)
+        if (selectedZone) {
+          setProvinces(selectedZone.province);
+        }
+      } else {
+        setProvinces([]);
+      }
+    }, [zone]);
+    useEffect(() => {
+      if (provincesValue) {
+        setDeliveryAddress((prev) => ({
+          ...prev,
+          province: provincesValue
+        }))
+      }
+    }, [provincesValue]);
+  useEffect(() => {
+    const fetchSessionData = async () => {
+      const data = await getSessionData();
+      if (data) {
+        setSessionData(data); 
+      }
+    };
+
+    fetchSessionData();
+  }, []);
+  useEffect(() => {
+      if (provincesValue) {
+        setDeliveryAddress((prev) => ({
+          ...prev,
+          province:provincesValue
+        }))
+      }
+    }, [provincesValue]);
+  useEffect(() => {
+    if (sessionData?.userId) {
+      setDeliveryAddress((prev) => ({
+        ...prev,
+        user_id: sessionData?.userId, 
+      }));
+      const fetchDeliveryAddress = async () => {
+        try {
+          const addresses = await FindDeliveryAddress(serverApolloClient, {
+            user_id: sessionData?.userId || "",
+          });
+          if (addresses && addresses.length > 0) {
+            setIsAddressExist(true)
+            setDeliveryAddress(addresses[0]);
+          } else {
+            console.log("No delivery address found for this user.");
+          }
+        } catch (error) {
+          console.error("Error fetching delivery address:", error);
+        }
+      };
+
+      fetchDeliveryAddress();
+    }
+  }, [sessionData]);
+ 
   return (
     <div className="w-full flex flex-col gap-4 items-start">
       <h2 className="font-semibold text-xl">Delivery Address</h2>
@@ -57,9 +146,9 @@ const DelliveryAddressForm: React.FC = () => {
               Select Province
             </label>
             <Dropdown
-              options={ZONE}
-              label="Select Zone"
-              setCategory={setZone}
+              options={provinces}
+              label={deliveryAddress.zone === ""?"Select Province":deliveryAddress.province}
+              setCategory={setProvincesValue}
             />
           </div>
           <div className="w-full flex flex-col gap-1">
@@ -68,7 +157,7 @@ const DelliveryAddressForm: React.FC = () => {
             </label>
             <Dropdown
               options={ZONE}
-              label="Select Zone"
+              label={deliveryAddress.zone === ""?"Select Zone":deliveryAddress.zone}
               setCategory={setZone}
             />
           </div>
@@ -112,6 +201,13 @@ const DelliveryAddressForm: React.FC = () => {
               }))
             }
           />
+        </div>
+        <div className="w-full flex flex-row items-center justify-between">
+          <div className="min-w-12 min-h-14 flex flex-row items-center justify-center gap-2">
+            <Checkbox onCheckedChange={()=>setSameAddress(deliveryAddress)} id="same address" />
+            <span className="text-sm">Bill to same address</span>
+          </div>
+          <AddressPopUp addressData={deliveryAddress} isAddressExist={isAddressExist}/>
         </div>
       </div>
     </div>

@@ -2,15 +2,21 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import Image from "next/image";
 
-export function PaymentChoice() {
+interface PaymentChoiceProps {
+  setPayment:(paymentId:string) => void
+}
+
+export function PaymentChoice({setPayment}:PaymentChoiceProps) {
   return (
-    <RadioGroup defaultValue="comfortable">
+    <RadioGroup
+    onValueChange={(value) => setPayment(value)}
+    defaultValue="abfa998a-8e84-4ca0-887e-79f572127bdd">
       <div className="flex items-center space-x-2">
-        <RadioGroupItem value="default" id="r1" />
+        <RadioGroupItem value="abfa998a-8e84-4ca0-887e-79f572127bdd" id="abfa998a-8e84-4ca0-887e-79f572127bdd" />
         <Label htmlFor="r1" className="text-muted-foreground">Cash on delivery</Label>
       </div>
       <div className="flex flex-row items-center space-x-2">
-        <RadioGroupItem value="KBZ Pay" id="r2" />
+        <RadioGroupItem value="5af460bc-bb4c-4183-b655-22d8dcc18d36" id="5af460bc-bb4c-4183-b655-22d8dcc18d36" />
         <div className="flex flex-row gap-2">
           <div className="h-12 w-12 relative">
             <Image
@@ -32,7 +38,7 @@ export function PaymentChoice() {
         </div>
       </div>
       <div className="flex flex-row items-center space-x-2">
-        <RadioGroupItem value="Wave Pay" id="r3" />
+        <RadioGroupItem value="b6447a68-7a77-4365-a23f-6d9232a4ee27" id="b6447a68-7a77-4365-a23f-6d9232a4ee27" />
         <div className="flex flex-row gap-2">
           <div className="h-12 w-12 relative">
             <Image
@@ -55,7 +61,7 @@ export function PaymentChoice() {
         </div>
       </div>
       <div className="flex flex-row items-center space-x-2">
-        <RadioGroupItem value="Aya Pay" id="r4" />
+        <RadioGroupItem value="d776755c-0120-4831-91fb-a8f8a7e5f233" id="d776755c-0120-4831-91fb-a8f8a7e5f233" />
         <div className="flex flex-row gap-2">
           <div className="h-12 w-12 relative">
             <Image

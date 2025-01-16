@@ -15,7 +15,7 @@ export async function handleLogin({phone, password}:LoginCredentials) {
       fetchPolicy: "no-cache",
     });
      const response = data?.customerLogin || null
-     console.log("login server response:",response)
+     //console.log("login server response:",response)
     if (response) {
       return { success: true, message: response.message, token: response.token };
     } else {

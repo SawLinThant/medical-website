@@ -5,16 +5,30 @@ import { Separator } from "@/components/ui/separator";
 import { CartItem } from "@/lib/features/cart/cartSlice";
 import { RootState } from "@/lib/store";
 import FileuploadField from "@/modules/common/fileupload-field";
+import { Loader, X } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-const CheckoutItems: React.FC = () => {
+interface CheckoutItemsProps {
+  placeOrder: () => void;
+  orderLoading: boolean;
+  setTotalPrice: (price: number) => void;
+  setImage: (file:File) => void
+}
+
+const CheckoutItems: React.FC<CheckoutItemsProps> = ({
+  placeOrder,
+  orderLoading,
+  setTotalPrice,
+  setImage
+}) => {
   const [isClient, setIsClient] = useState(false);
   const [file, setFile] = useState<File[]>([]);
   const dispatch = useDispatch();
   const cartItems = useSelector((state: RootState) => state.cart.cartItems);
   const totalItems = cartItems.length;
+
   const calculateTotalPrice = (cartItems: CartItem[]) => {
     return cartItems.reduce((total, item) => {
       const applicablePrice =
@@ -24,14 +38,23 @@ const CheckoutItems: React.FC = () => {
       return total + applicablePrice * item.quantity;
     }, 0);
   };
-  const totalPrice = calculateTotalPrice(cartItems);
+  const subTotalPrice = calculateTotalPrice(cartItems);
   const discount = 100;
   useEffect(() => {
     setIsClient(true);
+    setTotalPrice(subTotalPrice - discount);
   }, [cartItems]);
   const handleFileUpload = (files: FileList) => {
     setFile((prev) => [...prev, ...Array.from(files)]);
   };
+  const handleRemoveImage = (id: number) => {
+    setFile((prev) => prev.filter((image, index) => index !== id));
+  };
+  useEffect(() => {
+    if(file.length>0){
+      setImage(file[0])
+    }
+  },[file])
   return (
     <div className="w-full min-h-36 py-4 px-8 bg-white  border rounded-md flex flex-col gap-4">
       <div className="w-full flex flex-col gap-2">
@@ -80,7 +103,7 @@ const CheckoutItems: React.FC = () => {
             </span>
           </div>
           <span className="text-sm text-muted-foreground">
-            MMK {isClient? totalPrice.toLocaleString() : 0}
+            MMK {isClient ? subTotalPrice.toLocaleString() : 0}
           </span>
         </div>
         <div className="w-full flex flex-row items-center justify-between">
@@ -112,17 +135,39 @@ const CheckoutItems: React.FC = () => {
         <div className="flex flex-row gap-2 items-center">
           <span className="">Total:</span>
         </div>
-        <span className="text-muted-foreground font-bold">MMK 0,000</span>
+        <span className="text-muted-foreground font-bold">
+          MMK {isClient ? (subTotalPrice - discount).toLocaleString() : "0,000"}
+        </span>
       </div>
       <div className="h-6"></div>
-      <div className="w-full h-28">
-        <FileuploadField
-          className="w-full h-full"
-          onFileSelect={handleFileUpload}
-          multiple={false}
-        />
-      </div>
-      <Button className="mt-3">Place Order</Button>
+      {file.length < 1?(
+         <div className="w-full h-28">
+         <FileuploadField
+           className="w-full h-full"
+           onFileSelect={handleFileUpload}
+           multiple={false}
+         />
+       </div>
+      ):null}
+     
+      {file.map((image, index) => (
+        <div key={index} className="w-full h-28 border rounded-md relative">
+          <Image objectFit="contain" layout="fill" src={URL.createObjectURL(image)} alt="payment" />
+          <div
+            onClick={() => handleRemoveImage(index)}
+            className="absolute top-1 right-2 hover:cursor-pointer"
+          >
+            <X size={30} color="black" />
+          </div>
+        </div>
+      ))}
+
+      <Button
+        onClick={placeOrder}
+        className="mt-3 flex items-center justify-center"
+      >
+        {orderLoading ? <Loader className="animate-spin" /> : "Place Order"}
+      </Button>
     </div>
   );
 };
