@@ -40,7 +40,7 @@ const AuthPopUp =() => {
         </div>
       </DialogTrigger>
       {currentSuccessPage === "" && (
-        <DialogContent className="sm:max-w-[65vw] lg:min-h-[20rem] px-4 lg:py-12 md:py-12 py-10 flex flex-col">
+        <DialogContent className="sm:max-w-[80vw] lg:min-h-[20rem] px-4 lg:py-12 md:py-12 py-10 flex flex-col">
           <DialogTitle></DialogTitle>
           <div
             onClick={() => {
