@@ -1,3 +1,9 @@
+export type Payment = {
+    id: string;
+    name: string;
+    logo: string
+}
+
 export type OptionType = {
     id: string
     name: string
@@ -64,5 +70,28 @@ export const PROVINCE:ProvinceType[] = [
                 name:"30th Street"
             },
         ]
+    },
+]
+
+export const PAYMENT:Payment[] = [
+    {
+        id:"abfa998a-8e84-4ca0-887e-79f572127bdd",
+        name: "Cash On Delivery",
+        logo:"/images/payment/kpay.png"
+    },
+    {
+        id:"5af460bc-bb4c-4183-b655-22d8dcc18d36",
+        name: "KBZ Pay",
+        logo:"/images/payment/kpay.png"
+    },
+    {
+        id:"b6447a68-7a77-4365-a23f-6d9232a4ee27",
+        name: "Wave Pay",
+        logo:"/images/payment/wave.jpg"
+    },
+    {
+        id:"d776755c-0120-4831-91fb-a8f8a7e5f233",
+        name: "Aya Pay",
+        logo:"/images/payment/aya.jpg"
     },
 ]

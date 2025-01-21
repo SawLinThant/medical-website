@@ -3,12 +3,8 @@
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { CartItem } from "@/lib/features/cart/cartSlice";
-import { RootState } from "@/lib/store";
-import FileuploadField from "@/modules/common/fileupload-field";
-import { Loader, X } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 
 interface CheckoutItemsProps {
   downloadInvoice: () => void;
@@ -18,8 +14,9 @@ const SuccessItems: React.FC<CheckoutItemsProps> = ({
     downloadInvoice,
 }) => {
   const [isClient, setIsClient] = useState(false);
-  const cartItems = useSelector((state: RootState) => state.cart.cartItems);
-  const totalItems = cartItems.length;
+  const orderItems = localStorage.getItem("ordered items")
+  const [orderedItems,setOrderItems] = useState<CartItem[]>() 
+  const totalItems = JSON.parse(orderItems || "").length;
 
   const calculateTotalPrice = (cartItems: CartItem[]) => {
     return cartItems.reduce((total, item) => {
@@ -30,18 +27,22 @@ const SuccessItems: React.FC<CheckoutItemsProps> = ({
       return total + applicablePrice * item.quantity;
     }, 0);
   };
-  const subTotalPrice = calculateTotalPrice(cartItems);
+  const subTotalPrice = calculateTotalPrice(JSON.parse(orderItems || ""));
   const discount = 100;
   useEffect(() => {
     setIsClient(true);
-  }, [cartItems]);
+    if(orderItems){
+      const modifiedItems = JSON.parse(orderItems || "")
+      setOrderItems(modifiedItems)
+    }
+  }, [orderItems]);
 
   return (
     <div className="w-full min-h-36 py-4 px-8 bg-white  border rounded-md flex flex-col gap-4">
       <div className="w-full flex flex-col gap-2">
-        {isClient &&
-          cartItems.length > 0 &&
-          cartItems.map((item) => (
+        {isClient && orderedItems &&
+          orderedItems.length > 0 &&
+          orderedItems.map((item) => (
             <div
               key={item.id}
               className="w-full grid grid-cols-4 gap-3 min-h-16"

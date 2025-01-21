@@ -1,9 +1,20 @@
+"use client"
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
+import { Payment } from "@/lib/constant/options";
 import { CircleCheck } from "lucide-react";
 import Image from "next/image";
+import React from "react";
 
-const OrderDetail = () => {
+interface OrderDetailProps {
+  paymentMethod: Payment
+}
+
+const OrderDetail:React.FC<OrderDetailProps> = ({paymentMethod}) => {
+  const deliveryAddress = JSON.parse(localStorage.getItem("DeliveryAddress")|| "")
+  const billingAddress = JSON.parse(localStorage.getItem("BillingAddress")|| "")
+  const orderId = JSON.parse(localStorage.getItem("orderID") || "")
+  console.log("payment method success:",paymentMethod)
   return (
     <div className="flex flex-col gap-8">
       <div className="w-full flex flex-col px-8 rounded-lg border border-gray-300 min-h-32 py-6 gap-6 bg-white">
@@ -16,7 +27,7 @@ const OrderDetail = () => {
         <div className="flex flex-col gap-2">
           <div className="text-sm text-muted-foreground">
             <span className="font-semibold text-black">Order Number:</span>{" "}
-            #1234
+            #{orderId}
           </div>
           <div className="text-sm text-muted-foreground">
             Estimated Delivery:{" "}
@@ -41,39 +52,40 @@ const OrderDetail = () => {
         <h2 className="font-semibold text-subheading">Delivery Details</h2>
         <div className="flex flex-col gap-2 text-muted-foreground text-sm">
           <span className="font-semibold text-black">Swam Htet Aung</span>
-          <span className="">Zone</span>
-          <span className="">Swam Htet Aung</span>
-          <span className="">Province</span>
-          <span className="">Address</span>
-          <span className="">Phone</span>
+          <span className="">{deliveryAddress.zone}</span>
+          <span className="">{deliveryAddress.province}</span>
+          <span className="">{deliveryAddress.address}</span>
+          <span className="">{deliveryAddress.phone}</span>
         </div>
         <Separator className="my-4" />
         <h2 className="font-semibold text-subheading">Billing Details</h2>
         <div className="flex flex-col gap-2 text-muted-foreground text-sm">
           <span className="font-semibold text-black">Swam Htet Aung</span>
-          <span className="">Zone</span>
-          <span className="">Swam Htet Aung</span>
-          <span className="">Province</span>
-          <span className="">Address</span>
-          <span className="">Phone</span>
+          <span className="">{billingAddress.zone}</span>
+          <span className="">{billingAddress.province}</span>
+          <span className="">{billingAddress.address}</span>
+          <span className="">{billingAddress.phone}</span>
         </div>
         <Separator className="my-4" />
         <h2 className="font-semibold text-subheading">Payment Method</h2>
         <div className="flex flex-row gap-2">
-          <div className="h-12 w-12 relative">
-            <Image
-              alt="kpay"
-              src="/images/payment/kpay.png"
-              layout="fill"
-              objectFit="cover"
-            />
-          </div>
+          {paymentMethod && paymentMethod.name === "Cash On Delivery"?(null):(
+             <div className="h-12 w-12 relative">
+             <Image
+               alt="kpay"
+               src={paymentMethod?.logo || "/image_placeholder.jpg"}
+               layout="fill"
+               objectFit="cover"
+             />
+           </div>
+          )}
+         
           <div className="flex flex-col h-12 justify-between pb-4">
             <Label htmlFor="r2" className="font-semibold text-sm">
-              KBZ Pay
+              {paymentMethod?.name || ""}
             </Label>
             <div className="flex flow-row items-center gap-1 text-sm text-muted-foreground">
-              <span>09973854868</span>
+              <span>{billingAddress.phone}</span>
               <span>(Natsay.com.mm)</span>
             </div>
           </div>

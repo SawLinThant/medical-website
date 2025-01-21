@@ -13,6 +13,7 @@ import { useGetProducts } from "@/lib/hooks/getQuery/useGetproduct";
 import { ProductReel } from "@/modules/common/product-reel";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useRouter } from "next/navigation";
+import { removeOrderSuccessData } from "@/lib/utils";
 
 export const calculateTotalPrice = (cartItems: CartItem[]) => {
   return cartItems.reduce((total, item) => {
@@ -72,6 +73,7 @@ const CartItems: React.FC = () => {
 
   useEffect(() => {
     setIsClient(true);
+    removeOrderSuccessData()
   }, [cartItems]);
 
   return (

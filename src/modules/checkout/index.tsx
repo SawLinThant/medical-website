@@ -20,6 +20,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { clearCart } from "@/lib/features/cart/cartSlice";
 import { useUploadToS3 } from "@/lib/hooks/useFileUpload";
 import { toast } from "@/hooks/use-toast";
+import { useRouter } from "next/navigation";
 
 interface SessionData {
   userId: string;
@@ -48,7 +49,9 @@ const CheckoutForm: React.FC = () => {
   const [sessionData, setSessionData] = useState<SessionData | null>(null);
   const [isAddressExist, setIsAddressExist] = useState<boolean>(false);
   const { uploadToS3 } = useUploadToS3();
+  const router = useRouter();
   const [paymentId,setPaymentId] = useState<string>("abfa998a-8e84-4ca0-887e-79f572127bdd");
+  const [shippingAddress,setShippingAddress] = useState<string>("");
 
   useEffect(() => {
     const fetchSessionData = async () => {
@@ -155,6 +158,7 @@ const CheckoutForm: React.FC = () => {
           total_price: totalPrice,
           payment_id: paymentId,
           payment_proof: paymentProofUrl,
+          shipping_address: shippingAddress
         },
       });
   
@@ -177,9 +181,14 @@ const CheckoutForm: React.FC = () => {
           })
         )
       );
-  
-      // Clear cart
+      localStorage.setItem("success","success-order")
+      localStorage.setItem("orderID",JSON.stringify(orderId))
+      localStorage.setItem("paymentID",JSON.stringify(paymentId))
+      localStorage.setItem("paymentID",JSON.stringify(paymentId))
+      localStorage.setItem("BillingAddress",JSON.stringify(billingAddress))
+      localStorage.setItem("ordered items",JSON.stringify(cartItems))
       dispatch(clearCart());
+      router.push("/order-success")
     } catch (error) {
       console.log("Error creating order:", error);
       toast({
@@ -205,7 +214,7 @@ const CheckoutForm: React.FC = () => {
     <div className="w-full grid lg:grid-cols-5 md:grid-cols-5 grid-cols-1 gap-4">
       <div className="lg:col-span-3 md:col-span-3 col-span-1 min-h-32 border rounded-md py-4 px-8 flex flex-col gap-4 bg-white">
         <div className="w-full min-h-52">
-          <DelliveryAddressForm setSameAddress={setBillingAddress} />
+          <DelliveryAddressForm setShippingAddress={setShippingAddress} setSameAddress={setBillingAddress} />
         </div>
         <Separator className="my-4 border-t border-gray-300" />
         <div className="w-full min-h-52">

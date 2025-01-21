@@ -103,6 +103,7 @@ const AddressPopUp: React.FC<AddressPopUpProps> = ({
       });
       if (response) {
         setCurrentSuccessPage("Address Success");
+        localStorage.setItem("DeliveryAddress",JSON.stringify(deliveryAddress))
       }
     } catch (error) {
       setSaveLoading(false);

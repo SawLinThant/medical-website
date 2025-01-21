@@ -96,6 +96,7 @@ const DelliveryAddressForm: React.FC<DelliveryAddressFormProps> = ({setSameAddre
           if (addresses && addresses.length > 0) {
             setIsAddressExist(true)
             setDeliveryAddress(addresses[0]);
+            localStorage.setItem("DeliveryAddress",JSON.stringify(addresses[0]))
           } else {
             console.log("No delivery address found for this user.");
           }
