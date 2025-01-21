@@ -9,6 +9,7 @@ export const INSERT_ORDERS = gql`
       total_price
       payment_id
       payment_proof
+      shipping_address
     }
   }
 `;

@@ -6,6 +6,7 @@ interface Order {
   user_id: string;
   status: string;
   total_price: number;
+  shipping_address: string;
   payment_id: string;
   payment_proof: string
 }

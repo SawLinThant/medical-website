@@ -51,7 +51,7 @@ const OrderDetail:React.FC<OrderDetailProps> = ({paymentMethod}) => {
       <div className="w-full flex flex-col px-8 rounded-lg border border-gray-300 min-h-32 py-6 gap-6 bg-white">
         <h2 className="font-semibold text-subheading">Delivery Details</h2>
         <div className="flex flex-col gap-2 text-muted-foreground text-sm">
-          <span className="font-semibold text-black">Swam Htet Aung</span>
+          <span className="font-semibold text-black">{`${deliveryAddress.firstname} ${deliveryAddress.lastname}`}</span>
           <span className="">{deliveryAddress.zone}</span>
           <span className="">{deliveryAddress.province}</span>
           <span className="">{deliveryAddress.address}</span>
@@ -60,7 +60,7 @@ const OrderDetail:React.FC<OrderDetailProps> = ({paymentMethod}) => {
         <Separator className="my-4" />
         <h2 className="font-semibold text-subheading">Billing Details</h2>
         <div className="flex flex-col gap-2 text-muted-foreground text-sm">
-          <span className="font-semibold text-black">Swam Htet Aung</span>
+          <span className="font-semibold text-black">{`${billingAddress.firstname} ${billingAddress.lastname}`}</span>
           <span className="">{billingAddress.zone}</span>
           <span className="">{billingAddress.province}</span>
           <span className="">{billingAddress.address}</span>

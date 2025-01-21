@@ -21,9 +21,10 @@ interface SessionData {
 
 interface DelliveryAddressFormProps {
   setSameAddress: (address:DeliveryAddress) => void
+  setShippingAddress:(address:string) => void
 }
 
-const DelliveryAddressForm: React.FC<DelliveryAddressFormProps> = ({setSameAddress}) => {
+const DelliveryAddressForm: React.FC<DelliveryAddressFormProps> = ({setSameAddress,setShippingAddress}) => {
   const [zone, setZone] = useState<string>("");
   const [provinces, setProvinces] = useState<OptionType[]>([]);
   const [provincesValue, setProvincesValue] = useState<string>("");
@@ -96,6 +97,7 @@ const DelliveryAddressForm: React.FC<DelliveryAddressFormProps> = ({setSameAddre
           if (addresses && addresses.length > 0) {
             setIsAddressExist(true)
             setDeliveryAddress(addresses[0]);
+            setShippingAddress(addresses[0].address)
             localStorage.setItem("DeliveryAddress",JSON.stringify(addresses[0]))
           } else {
             console.log("No delivery address found for this user.");
@@ -168,11 +170,14 @@ const DelliveryAddressForm: React.FC<DelliveryAddressFormProps> = ({setSameAddre
           label="Address"
           name="address"
           placeHolder="Enter your address"
-          onChange={(e) =>
+          onChange={(e) =>{
             setDeliveryAddress((prev) => ({
               ...prev,
               [e.target.name]: e.target.value,
-            }))
+            }));
+
+          }
+           
           }
         />
         <div className="w-full grid lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-4">
