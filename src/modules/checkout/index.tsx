@@ -22,7 +22,7 @@ import { useUploadToS3 } from "@/lib/hooks/useFileUpload";
 import { toast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 
-interface SessionData {
+export interface SessionData {
   userId: string;
   role: string;
   token: string;

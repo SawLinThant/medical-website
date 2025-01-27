@@ -15,6 +15,12 @@ export type ProvinceType = {
     province:OptionType[]
 }
 
+export type OrderStatus = {
+    id: string;
+    name: string | null;
+    value: string | null
+}
+
 export const ZONE:OptionType[] = [
     {
        id: "1",
@@ -93,5 +99,33 @@ export const PAYMENT:Payment[] = [
         id:"d776755c-0120-4831-91fb-a8f8a7e5f233",
         name: "Aya Pay",
         logo:"/images/payment/aya.jpg"
+    },
+]
+
+export const ORDER_STATUS:OrderStatus[] = [
+    {
+        id:"1",
+        name: "All",
+        value: null
+    },
+    {
+        id:"2",
+        name: "Pending",
+        value: "Pending"
+    },
+    {
+        id:"3",
+        name: "Processing",
+        value: "Processing"
+    },
+    {
+        id:"4",
+        name: "Shipped",
+        value: "Shipped"
+    },
+    {
+        id:"5",
+        name: "Delivered",
+        value: "Delivered"
     },
 ]
