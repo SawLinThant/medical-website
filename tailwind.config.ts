@@ -57,7 +57,12 @@ export default {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
   			sm: 'calc(var(--radius) - 4px)'
-  		}
+  		},
+		fontSize: {
+			mainheading: "32px",
+			subheading: "24px",
+			bodytext: "16px"
+		}
   	}
   },
   plugins: [require("tailwindcss-animate")],
