@@ -43,3 +43,13 @@ export interface CategoryImage{
     name:string
     image_url:string
 }
+
+export interface CheckoutAddress {
+    firstname: string 
+    lastname: string 
+    province: string 
+    zone: string 
+    address: string 
+    phone: string 
+    email: string 
+}

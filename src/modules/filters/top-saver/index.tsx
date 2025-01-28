@@ -9,7 +9,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { cn } from "@/lib/utils";
+import { cn, removeOrderSuccessData } from "@/lib/utils";
 import ProductCard from "@/modules/common/product-card";
 import { ChevronRight, Hourglass } from "lucide-react";
 import { Product } from "@/lib/types/global";
@@ -26,6 +26,9 @@ export function TopSaver({ products }: TopSaverProps) {
       setProductList(products);
     }
   }, [setProductList]);
+    React.useEffect(() => {
+      removeOrderSuccessData()
+    },[])
   return (
     <Carousel className="w-full h-full flex flex-col gap-4">
       <div className="w-full min-h-16 flex flex-row lg:items-center md:items-center items-start justify-between">

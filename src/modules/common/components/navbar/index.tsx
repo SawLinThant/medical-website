@@ -7,28 +7,56 @@ import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/lib/store";
 import { useEffect, useState } from "react";
-import { AuthPopUp } from "../../auth-popup";
-import { clearToken, initializeFromLocalStorage } from "@/lib/features/account/accountSlice";
+import AuthPopUp from "../../auth-popup";
+//import { clearToken, initializeFromLocalStorage} from "@/lib/features/account/accountSlice";
 
 const NavBar: React.FC = () => {
   const [isClient, setIsClient] = useState(false);
   const router = useRouter();
   const dispatch = useDispatch();
-  const handleLogout = () => {
-    dispatch(clearToken());
-    localStorage.removeItem("token");
-    window.location.reload()
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const handleLogout = async () => {
+    try {
+      const response = await fetch("/api/auth/session", {
+        method: "DELETE",
+        credentials: "include",
+      });
+
+      if (response.ok) {
+        console.log("Logout successful");
+        window.location.reload();
+      } else {
+        const data = await response.json();
+        console.error("Logout failed:", data.message);
+      }
+    } catch (error) {
+      console.error("Error logging out:", error);
+    }
   };
-  const isLoggedIn = useSelector(
-    (state: RootState) => state.account.isLoggedIn
-  );
-  useEffect(() => {
-    dispatch(initializeFromLocalStorage());
-  }, [dispatch]);
 
   const cartItems = useSelector((state: RootState) => state.cart.cartItems);
   useEffect(() => {
     setIsClient(true);
+    const fetchSession = async () => {
+      try {
+        const response = await fetch("/api/auth/session", {
+          method: "GET",
+          credentials: "include",
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setIsLoggedIn(data.isLoggedIn || false);
+        } else {
+          setIsLoggedIn(false);
+        }
+      } catch (error) {
+        console.error("Error fetching session:", error);
+        setIsLoggedIn(false);
+      }
+    };
+
+    fetchSession();
   }, []);
   const cartItemCount = cartItems.length;
   return (
