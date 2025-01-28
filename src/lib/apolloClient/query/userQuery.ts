@@ -10,3 +10,14 @@ export const GET_USER_BY_PHONE = gql`
     }
   }
 `;
+
+export const GET_USER_BY_ID = gql`
+  query getUserById($id: uuid!) {
+    users(where: { id: { _eq: $id } }) {
+      id
+      username
+      email
+      phone
+    }
+  }
+`;

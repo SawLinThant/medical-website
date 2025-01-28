@@ -4,35 +4,17 @@ import { Heart, LogOut, ShoppingCart, User } from "lucide-react";
 import SearchForm from "../../search-form";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { RootState } from "@/lib/store";
 import { useEffect, useState } from "react";
 import AuthPopUp from "../../auth-popup";
+import { ProfileHoverCard } from "../../hover/profile";
 //import { clearToken, initializeFromLocalStorage} from "@/lib/features/account/accountSlice";
 
 const NavBar: React.FC = () => {
   const [isClient, setIsClient] = useState(false);
   const router = useRouter();
-  const dispatch = useDispatch();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const handleLogout = async () => {
-    try {
-      const response = await fetch("/api/auth/session", {
-        method: "DELETE",
-        credentials: "include",
-      });
-
-      if (response.ok) {
-        console.log("Logout successful");
-        window.location.reload();
-      } else {
-        const data = await response.json();
-        console.error("Logout failed:", data.message);
-      }
-    } catch (error) {
-      console.error("Error logging out:", error);
-    }
-  };
 
   const cartItems = useSelector((state: RootState) => state.cart.cartItems);
   useEffect(() => {
@@ -82,13 +64,7 @@ const NavBar: React.FC = () => {
         </div>
         <div className="flex flex-row items-center gap-4">
           {isClient && isLoggedIn ? (
-            <div
-              onClick={handleLogout}
-              className="flex flex-row gap-2 items-center min-w-[7rem] h-full justify-end hover:cursor-pointer"
-            >
-              <LogOut size={20} />
-              Logout
-            </div>
+            <ProfileHoverCard/>
           ) : (
             <div className="flex flex-row gap-2 items-center min-w-[7rem] h-full justify-end">
               <User size={20} />
