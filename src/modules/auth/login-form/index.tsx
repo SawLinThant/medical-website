@@ -3,8 +3,9 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/hooks/use-toast";
-import { handleLogin } from "@/lib/apolloClient/services/login";
-import { setToken } from "@/lib/features/account/accountSlice";
+import { setSession } from "@/lib/features/account/accountSlice";
+import { getCookie } from "cookies-next";
+import { jwtDecode } from "jwt-decode";
 import { Loader } from "lucide-react";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
@@ -22,35 +23,47 @@ const LoginForm: React.FC<LoginFormProps> = ({ setIsForgotPasword,closeDialog })
     const formData = new FormData(e.currentTarget);
     const phone = formData.get("phone") as string;
     const password = formData.get("password") as string;
+  
+    setLoginLoading(true);
     try {
-      setLoginLoading(true);
-      const result = await handleLogin({
-        phone: phone,
-        password: password,
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ phone, password }),
       });
-      console.log(result);
+  
+      const result = await response.json();
       if (result.success) {
-        toast({
-          description: "Login Success",
+        const sessionResponse = await fetch("/api/auth/session", {
+          method: "GET",
+          credentials: "include",
         });
-        dispatch(setToken(result.token));
-        localStorage.setItem("token", result.token);
-        closeDialog();
+        console.log("sessionresponse",sessionResponse)
+        if (sessionResponse.ok) {
+          const session = await sessionResponse.json();
+          if (session.userId && session.role) {
+            dispatch(setSession({ userId: session.userId, role: session.role }));
+            toast({ description: "Login Success" });
+            closeDialog();
+            window.location.reload();
+          } else {
+            toast({ description: "Failed to fetch session data" });
+          }
+        } else {
+          toast({ description: "Failed to fetch session data" });
+        }
+      } else {
+        toast({ description: "Login failed" });
       }
-      if(!result.success){
-        toast({
-          description: "login failed"
-        })
-      }
-    } catch (err) {
-      setLoginLoading(false)
-      toast({
-        description: "Failed to login",
-      });
+    } catch (error) {
+      console.error("Login error:", error);
+      toast({ description: "Failed to login" });
     } finally {
-      setLoginLoading(false)
+      setLoginLoading(false);
     }
   };
+  
+  
   return (
     <div>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
