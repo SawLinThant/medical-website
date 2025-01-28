@@ -1,6 +1,6 @@
 "use client";
 
-import { Heart, LogOut, ShoppingCart, User } from "lucide-react";
+import { Heart, ShoppingCart, User } from "lucide-react";
 import SearchForm from "../../search-form";
 import Image from "next/image";
 import { useRouter } from "next/navigation";

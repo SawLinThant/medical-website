@@ -3,6 +3,7 @@ import {
   GET_PRODUCT_BY_ID,
 } from "@/lib/apolloClient/query/productQuery";
 import serverApolloClient from "@/lib/apolloClient/serverApolloClient";
+import { getOrders } from "@/lib/apolloClient/services/order";
 import AddToCart from "@/modules/common/add-to-cart";
 import Star from "@/modules/common/icons/star";
 import ImageShowcase from "@/modules/common/image-showcase";
@@ -16,7 +17,6 @@ type paramsType = Promise<{ productId: string }>;
 
 const ProductDetail = async (props: { params: paramsType }) => {
   const { productId } = await props.params;
-  console.log(productId);
   try {
     const { data } = await serverApolloClient.query({
       query: GET_PRODUCT_BY_ID,
@@ -24,14 +24,19 @@ const ProductDetail = async (props: { params: paramsType }) => {
     });
 
     const product = data?.products?.[0];
-    console.log(product);
 
     const { data: productsByCategory } = await serverApolloClient.query({
       query: GET_PRODUCT_BY_CATEGORY_ID,
       variables: { category_id: product.category.id || "" },
     });
+    const { orders, count } = await getOrders(serverApolloClient, {
+      where: { order_items: { product_id: { _eq: productId } } },
+      offset: 0,
+      limit: 10,
+    });
+    console.log(orders)
     const relatedProducts = productsByCategory.products.filter((relatedProducts:{id: string}) => relatedProducts.id !== productId)
-    if(!product)return<ProductDetailSkeleton/>
+    if(!product || !orders)return<ProductDetailSkeleton/>
 
     return (
       <section className="w-full h-full flex flex-col items-center">
@@ -65,7 +70,7 @@ const ProductDetail = async (props: { params: paramsType }) => {
                 <div className="flex flex-row gap-2 items-center">
                   <ScrollText color="#796f6f" size={20} />
                   <span className="text-xs text-muted-foreground">
-                    1k + orders
+                    {count} orders
                   </span>
                 </div>
               </div>
@@ -80,10 +85,7 @@ const ProductDetail = async (props: { params: paramsType }) => {
               </div>
               <div className="text-muted-foreground text-sm">
                 <p>
-                  Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                  Veniam tempore odit eaque tempora numquam sed sapiente
-                  consequatur dolorum porro dignissimos, voluptates, reiciendis
-                  beatae magnam doloribus ex, perferendis iste animi ipsa?
+                {product.description || "N/A"}
                 </p>
               </div>
               <div className="flex flex-col gap-3 mt-3">
@@ -93,10 +95,7 @@ const ProductDetail = async (props: { params: paramsType }) => {
                   </div>
                   <div className="w-full h-full">
                     <span className="text-sm">
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      Aut, veniam consequuntur? Quis nisi magnam repellendus!
-                      Voluptates amet est autem dolor, tempore nemo eaque
-                      dolore, quas reiciendis non debitis, natus in.
+                    {product.dosage || "No Instruction"}
                     </span>
                   </div>
                 </div>
@@ -106,7 +105,7 @@ const ProductDetail = async (props: { params: paramsType }) => {
                   </div>
                   <div className="w-full h-full">
                     <span className="text-sm">
-                      Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+                    {product.usage || "No Instruction"}
                     </span>
                   </div>
                 </div>
@@ -116,7 +115,7 @@ const ProductDetail = async (props: { params: paramsType }) => {
                   </div>
                   <div className="w-full h-full">
                     <span className="text-sm">
-                      Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+                    {product.storage || "No Instruction"}
                     </span>
                   </div>
                 </div>
@@ -124,16 +123,10 @@ const ProductDetail = async (props: { params: paramsType }) => {
               <AddToCart product={product}/>
             </div>
           </div>
-          <div className="flex flex-col gap-3 mt-6">
+          <div className="flex flex-col gap-3 mt-6 w-full">
             <h2 className="text-xl font-semibold">Product Details</h2>
             <p className="text-muted-foreground text-sm leading-8">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi,
-              obcaecati quod dolore quas repudiandae accusamus suscipit ratione
-              asperiores eius neque voluptatum sint nobis alias, autem in eaque
-              est impedit excepturi. Lorem ipsum dolor sit amet consectetur
-              adipisicing elit. Eligendi, obcaecati quod dolore quas repudiandae
-              accusamus suscipit ratione asperiores eius neque voluptatum sint
-              nobis alias, autem in eaque est impedit excepturi.
+            {product.description || "N/A"}
             </p>
           </div>
           <div className="flex flex-col gap-4 mt-6 items-start w-full">

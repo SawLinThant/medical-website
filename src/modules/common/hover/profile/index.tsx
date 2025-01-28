@@ -21,7 +21,6 @@ import { getSessionData } from "@/lib/utils";
 import { SessionData } from "@/modules/checkout";
 import { FindAccountById, UserType } from "@/lib/apolloClient/services/users";
 import serverApolloClient from "@/lib/apolloClient/serverApolloClient";
-import { escape } from "querystring";
 
 export function ProfileHoverCard() {
   const router = useRouter();
@@ -42,16 +41,13 @@ export function ProfileHoverCard() {
 
     useEffect (() => {
         if(sessionData && sessionData.userId){
-            console.log("useEffect userid",sessionData.userId)
             const fetchUserInfo = async() => {
                 const response = await FindAccountById(serverApolloClient, {
                     id: sessionData.userId
                 })
                 if(response && response.user){
-                    console.log(response)
                     setUser(response.user)
                 }else{
-                    console.log("fail ersponse",response) 
                 }
             }
             fetchUserInfo();
@@ -76,7 +72,6 @@ export function ProfileHoverCard() {
       console.error("Error logging out:", error);
     }
   };
-  console.log(user)
   return (
     <HoverCard>
       <HoverCardTrigger asChild>

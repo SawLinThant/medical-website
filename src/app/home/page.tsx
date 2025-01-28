@@ -25,7 +25,7 @@ export async function generateMetadata() {
       title: "Nat Say Myanmar - Home",
       description: "Find great deals on top products and brands.",
       url: `${
-        process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
+        process.env.NEXT_PUBLIC_BASE_URL || "http://192.168.91.70:3000"
       }/home`,
       images: "/images/logo.png",
     },

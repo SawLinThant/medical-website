@@ -73,7 +73,6 @@ export const FindAccountById = async (
       },
     });
 
-    console.log("response user:",data?.users)
 
     if (data?.users.length>0) {
       return {

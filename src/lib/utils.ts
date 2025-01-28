@@ -7,7 +7,12 @@ export function cn(...inputs: ClassValue[]) {
 
 export const getSessionData = async () => {
   try {
-    const res = await fetch("/api/auth/session");
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://192.168.91.70:3000';
+    const res = await fetch(`${baseUrl}/api/auth/session`, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
     if (res.ok) {
       const data = await res.json();
       return data;

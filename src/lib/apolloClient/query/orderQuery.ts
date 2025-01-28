@@ -24,7 +24,12 @@ import { gql } from "@apollo/client";
 // `;
 export const GET_ORDERS = gql`
   query GetOrders($where: orders_bool_exp, $offset: Int, $limit: Int) {
-    orders(where: $where, offset: $offset, limit: $limit, order_by: { created_date: desc }) {
+    orders(
+      where: $where
+      offset: $offset
+      limit: $limit
+      order_by: { created_date: desc }
+    ) {
       id
       user_id
       status
@@ -40,6 +45,7 @@ export const GET_ORDERS = gql`
         price
         shop_id
         product {
+          id
           name
           images {
             id

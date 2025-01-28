@@ -5,6 +5,7 @@ import { toast } from "@/hooks/use-toast";
 import { addToCart } from "@/lib/features/cart/cartSlice";
 import { Product } from "@/lib/types/global";
 import { ShoppingCart } from "lucide-react"
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
@@ -15,6 +16,7 @@ interface AddToCartProps {
 const AddToCart = ({product}:AddToCartProps) => {
     const dispatch = useDispatch();
     const [quantity,setQuantity] = useState<number>(1);
+    const router = useRouter();
     const [totalPrice, setTotalPrice] = useState<number>(product.price);
     const handleIncrease = () => {
         setQuantity(quantity+1)
@@ -35,6 +37,11 @@ const AddToCart = ({product}:AddToCartProps) => {
         toast({
           description:"Item added to the cart"
         })
+      }
+
+      const handleBuy = () => {
+        dispatch(addToCart({...product,quantity}))
+        router.push("/cart")
       }
     return(
         <div className="flex flex-col gap-6">
@@ -61,7 +68,7 @@ const AddToCart = ({product}:AddToCartProps) => {
                 </div>
               </div>
               <div className="flex flex-row gap-3">
-                <Button className="min-h-3 min-w-[7.5rem] rounded-md bg-transparent text-muted-foreground border border-secondary_color hover:bg-transparent hover:border-black hover:text-black">
+                <Button onClick={handleBuy} className="min-h-3 min-w-[7.5rem] rounded-md bg-transparent text-muted-foreground border border-secondary_color hover:bg-transparent hover:border-black hover:text-black">
                   Buy Now
                 </Button>
                 <Button onClick={handleAddToCart} className="min-h-3 rounded-md bg-secondary_color text-white border border-secondary_color flex flex-row items-center">
