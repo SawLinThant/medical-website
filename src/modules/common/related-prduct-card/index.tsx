@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "@/lib/features/cart/cartSlice";
 import { toast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
+import clsx from "clsx";
 
 interface ProductCardprops {
     product: Product
@@ -48,7 +49,9 @@ const ProductCard: React.FC<ProductCardprops> = (product:ProductCardprops) => {
     }
 
   return (
-    <div className="w-full p-4 border bg-white rounded-md group h-full lg:h-[21.8rem] scale-95 hover:h-full hover:shadow-lg transition-all overflow-hidden">
+    <div className={clsx("w-full p-4 border bg-white rounded-md group h-full lg:h-[21.5rem] scale-95 hover:h-full hover:shadow-lg transition-all overflow-hidden",{
+      "brightness-90 hover:cursor-not-allowed": product.product.quantity < 1
+    })}>
       <div className="w-full h-full flex flex-col gap-3 group">
         <div onClick={() => router.push(`/product/detail/${product.product.id}`)} className="relative w-full min-h-[10rem] hover:cursor-pointer">
           <Image layout="fill" alt="product.img" src={images?.[0].image_url || "/image_placeholder.jpg"} className="object-contain"/>
@@ -72,7 +75,7 @@ const ProductCard: React.FC<ProductCardprops> = (product:ProductCardprops) => {
           <div className="w-full h-1 border border-gray-300">
             <div className="h-full w-2/3 bg-yellow-300"></div>
           </div>
-          <span className="text-sm text-muted-foreground">{product.product.quantity} left</span>
+          <span className="text-sm text-muted-foreground">{product.product.quantity<1?(<span className="text-red-500 font-semibold">Out of stock</span>):`${product.product.quantity} left`}</span>
         </div>
         <div className="lg:flex lg:flex-row hidden h-5 gap-3 items-center mt-5">
           <div className="flex flex-row border items-center border-gray-400 rounded">
@@ -85,7 +88,9 @@ const ProductCard: React.FC<ProductCardprops> = (product:ProductCardprops) => {
             <span className="text-sm text-secondary_color"> {totalPrice} MMK</span>
           </div>
         </div>
-        <Button onClick={handleAddToCart} className="w-full lg:block hidden transition-all min-h-8 rounded-md mt-4 bg-secondary_color text-white">Add to cart</Button>
+        <Button disabled={product.product.quantity<1} onClick={handleAddToCart} className={clsx("w-full lg:block hidden transition-all min-h-8 rounded-md mt-4 bg-secondary_color text-white",{
+          "hover:cursor-not-allowed": product.product.quantity < 1
+        })}>Add to cart</Button>
       </div>
     </div>
   );

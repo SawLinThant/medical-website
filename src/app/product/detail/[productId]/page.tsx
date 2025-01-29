@@ -27,6 +27,7 @@ const ProductDetail = async (props: { params: paramsType }) => {
 
     const { data: productsByCategory } = await serverApolloClient.query({
       query: GET_PRODUCT_BY_CATEGORY_ID,
+      "fetchPolicy":"no-cache",
       variables: { category_id: product.category.id || "" },
     });
     const { orders, count } = await getOrders(serverApolloClient, {
@@ -34,7 +35,6 @@ const ProductDetail = async (props: { params: paramsType }) => {
       offset: 0,
       limit: 10,
     });
-    console.log(orders)
     const relatedProducts = productsByCategory.products.filter((relatedProducts:{id: string}) => relatedProducts.id !== productId)
     if(!product || !orders)return<ProductDetailSkeleton/>
 
@@ -120,7 +120,8 @@ const ProductDetail = async (props: { params: paramsType }) => {
                   </div>
                 </div>
               </div>
-              <AddToCart product={product}/>
+              {product.quantity < 1 ? (<span className="text-red-500 font-semibold">Out of stock</span>):<AddToCart product={product}/>}
+              
             </div>
           </div>
           <div className="flex flex-col gap-3 mt-6 w-full">
