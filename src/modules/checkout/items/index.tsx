@@ -163,6 +163,7 @@ const CheckoutItems: React.FC<CheckoutItemsProps> = ({
       ))}
 
       <Button
+      disabled={orderLoading}
         onClick={placeOrder}
         className="mt-3 flex items-center justify-center"
       >

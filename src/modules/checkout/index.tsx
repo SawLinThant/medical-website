@@ -21,6 +21,7 @@ import { clearCart } from "@/lib/features/cart/cartSlice";
 import { useUploadToS3 } from "@/lib/hooks/useFileUpload";
 import { toast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
+import { updateProductQuantity } from "@/lib/apolloClient/services/product";
 
 export interface SessionData {
   userId: string;
@@ -181,6 +182,14 @@ const CheckoutForm: React.FC = () => {
           })
         )
       );
+      await Promise.all(
+        cartItems.map((cartItem) =>
+          updateProductQuantity(serverApolloClient, {
+            id: cartItem.id, 
+            quantity: cartItem.quantity, 
+          })
+        )
+      );
       localStorage.setItem("success","success-order")
       localStorage.setItem("orderID",JSON.stringify(orderId))
       localStorage.setItem("paymentID",JSON.stringify(paymentId))
@@ -188,6 +197,9 @@ const CheckoutForm: React.FC = () => {
       localStorage.setItem("BillingAddress",JSON.stringify(billingAddress))
       localStorage.setItem("ordered items",JSON.stringify(cartItems))
       dispatch(clearCart());
+      toast({
+        description:"Order successfully placed"
+      })
       router.push("/order-success")
     } catch (error) {
       console.log("Error creating order:", error);

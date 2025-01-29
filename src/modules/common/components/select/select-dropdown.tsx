@@ -9,6 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Category } from "@/lib/apolloClient/services/category";
 
 interface SelectItemType {
   id: string;
@@ -16,7 +17,7 @@ interface SelectItemType {
 }
 
 interface SelectDropdownProps {
-  options: SelectItemType[];
+  options: Category[];
   label: string;
   setOption: (option: string) => void;
 }

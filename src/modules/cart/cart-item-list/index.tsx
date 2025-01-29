@@ -14,6 +14,8 @@ import { ProductReel } from "@/modules/common/product-reel";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useRouter } from "next/navigation";
 import { removeOrderSuccessData } from "@/lib/utils";
+import { useGetSession } from "@/lib/hooks/useGetSession";
+import { toast } from "@/hooks/use-toast";
 
 export const calculateTotalPrice = (cartItems: CartItem[]) => {
   return cartItems.reduce((total, item) => {
@@ -31,25 +33,31 @@ const CartItems: React.FC = () => {
   const router = useRouter();
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const cartItems = useSelector((state: RootState) => state.cart.cartItems);
+  const {sessionData} = useGetSession();
   const allSelected =
     cartItems.length > 0 && selectedItems.length === cartItems.length;
-  
   const handleSelectAll = (checked: boolean) => {
     if (checked) {
-      // Select all items
       setSelectedItems(cartItems.map((item) => item.id));
     } else {
-      // Deselect all items
       setSelectedItems([]);
     }
   };
 
+  const handleCheckout = () => {
+    if(sessionData){
+      router.push("/checkout")
+    }else{
+      toast({
+        description: "Please Login First"
+      })
+    }
+  }
+
   const handleSelectItem = (id: string, checked: boolean) => {
     if (checked) {
-      // Add the item to the selected list
       setSelectedItems((prev) => [...prev, id]);
     } else {
-      // Remove the item from the selected list
       setSelectedItems((prev) => prev.filter((itemId) => itemId !== id));
     }
   };
@@ -186,7 +194,7 @@ const CartItems: React.FC = () => {
         </div>
         <Separator className="my-4 border-t border-gray-400" />
         <div className="flex items-center justify-center mt-8">
-          <Button onClick={() => router.push("/checkout")} className="rounded-md min-h-6 min-w-10 bg-secondary_color text-white">
+          <Button onClick={handleCheckout} className="rounded-md min-h-6 min-w-10 bg-secondary_color text-white">
             Proceed to checkout (
             {isClient && cartItems.length > 0 ? cartItems.length : 0})
           </Button>

@@ -178,3 +178,12 @@ export const GET_FILTERED_PRODUCTS = gql`
     }
   }
 `;
+
+export const GET_PRODUCT_QUANTITY_BY_ID = gql`
+  query getProductById($id: uuid!) {
+    products_by_pk(id: $id) {
+      id
+      quantity
+    }
+  }
+`;
