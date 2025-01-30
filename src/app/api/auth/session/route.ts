@@ -5,11 +5,22 @@ import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
-  const session = await getIronSession<IronSessionData>(await cookies(), sessionOptions);
-  if (session.user) {
-    return NextResponse.json({ userId: session.user.userId, role: session.user.role,token: session.user.token, isLoggedIn: session.user.isLoggedIn });
-  } else {
-    return NextResponse.json({ message: "No session found" }, { status: 401 });
+  try {
+    const session = await getIronSession<IronSessionData>(await cookies(), sessionOptions);
+
+    if (session.user) {
+      return NextResponse.json({
+        userId: session.user.userId,
+        role: session.user.role,
+        token: session.user.token,
+        isLoggedIn: session.user.isLoggedIn,
+      });
+    } else {
+      return NextResponse.json({ message: "No session found", token: null });
+    }
+  } catch (error) {
+    console.error("Error while retrieving session:", error);
+    return NextResponse.json({ message: "Internal Server Error", token: null }, { status: 500 });
   }
 }
 
@@ -17,6 +28,7 @@ export async function DELETE(req: NextRequest) {
   const res = NextResponse.next();
 
   try {
+    console.log(sessionOptions.password)
     const session = await getIronSession<IronSessionData>(await cookies(), sessionOptions);
     session.destroy();
     res.headers.set(
