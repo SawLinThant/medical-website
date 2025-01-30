@@ -11,8 +11,8 @@ export const getSessionData = async () => {
     return null;
   }
   try {
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-    const res = await fetch(`${baseUrl}/api/auth/session`, {
+    //const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+    const res = await fetch(`/api/auth/session`, {
       headers: {
         'Content-Type': 'application/json',
       },
