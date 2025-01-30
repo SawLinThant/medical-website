@@ -8,9 +8,9 @@ export async function generateMetadata(){
         openGraph: {
           title: "Nat Say Myanmar - Products",
           description: "Check cart and prceed to checkout",
-          url: `${
-            process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
-          }/home`,
+          // url: `${
+          //   process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
+          // }/home`,
           images: "/images/logo.png",
         },
       };     

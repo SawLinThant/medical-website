@@ -5,7 +5,7 @@ import { getSessionData } from '../utils';
 
 const getTokenFromSession = async () => {
   const sessionData = await getSessionData();
-  return sessionData?.token || null; // Return the token if available
+  return sessionData?.token || null; 
 };
 const token = await getTokenFromSession();
 const serverApolloClient = new ApolloClient({

@@ -23,10 +23,10 @@ export const metadata = {
   openGraph: {
     title: "Nat Say Myanmar - Your Online Shopping Destination",
     description: "Find exclusive offers and great deals on medical products!",
-    url: `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/home`,
+    url: `${process.env.NEXT_PUBLIC_BASE_URL}/home`,
     images: [
       {
-        url: `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/images/logo.png`,
+        url: `${process.env.NEXT_PUBLIC_BASE_URL}/images/logo.png`,
         width: 1200,
         height: 630,
         alt: "Nat Say Myanmar Banner",
