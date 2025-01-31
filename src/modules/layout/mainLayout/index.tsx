@@ -9,7 +9,7 @@ const Layout: LayoutWithChildren = ({ children }) => {
       <NavBar />
       <MobileNav/>
       <main className="w-full flex items-center justify-center px-4 pb-0 bg-slate-100">
-        <div className="w-full flex flex-col min-h-[43vh]">
+        <div className="w-full flex flex-col min-h-[55vh]">
           {children}
         </div>
       </main>

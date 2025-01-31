@@ -9,6 +9,7 @@ export const GET_PRODUCTS = gql`
       bulk_price
       quantity
       description
+      discount_price
       dosage
       usage
       storage
@@ -41,6 +42,7 @@ export const GET_TOP_SAVER_PRODUCTS = gql`
       name
       price
       bulk_price
+      discount_price
       quantity
       description
       dosage
@@ -77,6 +79,7 @@ export const GET_PRODUCT_BY_ID = gql`
       bulk_price
       quantity
       description
+      discount_price
       dosage
       usage
       storage
@@ -111,6 +114,7 @@ export const GET_PRODUCT_BY_CATEGORY_ID = gql`
       bulk_price
       quantity
       description
+      discount_price
       dosage
       usage
       storage
@@ -152,6 +156,7 @@ export const GET_FILTERED_PRODUCTS = gql`
       name
       price
       bulk_price
+      discount_price
       quantity
       description
       dosage
@@ -174,6 +179,11 @@ export const GET_FILTERED_PRODUCTS = gql`
       images {
         id
         image_url
+      }
+    }
+    products_aggregate(where: $where) {
+      aggregate {
+        count
       }
     }
   }

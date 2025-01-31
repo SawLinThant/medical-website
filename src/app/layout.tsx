@@ -37,9 +37,9 @@ export const metadata = {
     card: "summary_large_image",
     title: "Nat Say Myanmar - Shop Smart",
     description: "Find exclusive offers and great deals on medical products!",
-    images: [
-      `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/images/logo.png`,
-    ],
+    // images: [
+    //   `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/images/logo.png`,
+    // ],
   },
 };
 

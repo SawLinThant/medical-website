@@ -32,8 +32,8 @@ const CheckoutItems: React.FC<CheckoutItemsProps> = ({
   const calculateTotalPrice = (cartItems: CartItem[]) => {
     return cartItems.reduce((total, item) => {
       const applicablePrice =
-        item && item.bulk_price && item.bulk_price > 0
-          ? item.bulk_price
+        item && item.discount_price && item.discount_price > 0
+          ? item.discount_price
           : item.price;
       return total + applicablePrice * item.quantity;
     }, 0);
@@ -87,7 +87,7 @@ const CheckoutItems: React.FC<CheckoutItemsProps> = ({
               <div className="h-full col-span-1 flex items-center justify-center">
                 <span className="text-sm">
                   MMK{" "}
-                  {(item.quantity * (item.bulk_price || 0)).toLocaleString()}
+                  {(item.quantity * (item.discount_price > 0 ? item.discount_price : item.price)).toLocaleString()}
                 </span>
               </div>
             </div>

@@ -2,13 +2,14 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Star from "../icons/star";
 import { Heart } from "lucide-react";
-import { Product, ProductImage } from "@/lib/types/global";
+import {  ProductImage } from "@/lib/types/global";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { addToCart } from "@/lib/features/cart/cartSlice";
 import { toast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import clsx from "clsx";
+import { Product } from "@/lib/apolloClient/services/product";
 
 interface ProductCardprops {
     product: Product

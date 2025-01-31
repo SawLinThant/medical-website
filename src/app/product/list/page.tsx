@@ -1,0 +1,60 @@
+import serverApolloClient from "@/lib/apolloClient/serverApolloClient";
+import { getFilteredProducts } from "@/lib/apolloClient/services/product";
+import ProductList from "@/modules/product/product-list";
+import { Divide } from "lucide-react";
+
+type SearchParams = {
+  category?: string;
+  name?: string;
+  offset?: string;
+};
+
+const Products = async ({ searchParams }: { searchParams: SearchParams }) => {
+  const itemPerPage = 15;
+  const { category, name, offset } = await Promise.resolve(searchParams);
+  const currentPage = Number(offset) / itemPerPage || 0;
+  const page = Math.floor(currentPage) + 1;
+  try {
+    const where: Record<string, any> = {};
+
+    if (category && category!== "all") {
+      where.category_id = { _eq: category };
+    }
+
+    if (name) {
+      where.name = { _ilike: `%${name}%` };
+    }
+
+    const response = await getFilteredProducts(serverApolloClient, {
+      where,
+      offset: Number(offset) || 0,
+      limit: itemPerPage,
+    });
+    const totalPages = Math.ceil(response.count / itemPerPage);
+    if(response.products.length <1)return(
+        <div className="w-full min-h28 flex items-center justify-center mt-14">
+            <h2 className="text-subheading text-red-400">No Product Found</h2>
+        </div>
+    )
+
+    return (
+      <section className="w-full h-full flex flex-col items-center">
+        <div className="w-full max-w-[1300px] py-8 flex flex-col gap-4 items-center justify-center">
+          <ProductList
+            name={name || ""}
+            category={response.products?.[0].category.name || ""}
+            products={response.products}
+            totalPages={totalPages}
+            currentPage={page}
+            itemPerPage={itemPerPage}
+          />
+        </div>
+      </section>
+    );
+  } catch (error) {
+    console.error("Error fetching product list", error);
+    return <div>Error Loading Products</div>;
+  }
+};
+
+export default Products;

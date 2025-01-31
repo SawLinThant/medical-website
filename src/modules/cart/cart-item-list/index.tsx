@@ -44,8 +44,10 @@ const CartItems: React.FC = () => {
     }
   };
 
+  console.log("cart session data",sessionData)
+
   const handleCheckout = () => {
-    if(sessionData){
+    if(sessionData?.token){
       router.push("/checkout")
     }else{
       toast({

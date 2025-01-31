@@ -1,3 +1,5 @@
+import { Category } from "../apolloClient/services/category";
+
 export type Payment = {
     id: string;
     name: string;
@@ -127,5 +129,12 @@ export const ORDER_STATUS:OrderStatus[] = [
         id:"5",
         name: "Delivered",
         value: "Delivered"
+    },
+]
+
+export const MATCH_FILTER:Category[] = [
+    {
+        id: "Best Match",
+        name: "Best Match"
     },
 ]

@@ -11,8 +11,8 @@ import {
 import { cn } from "@/lib/utils";
 import ProductCard from "@/modules/common/product-card";
 import { ChevronRight } from "lucide-react";
-import { Product } from "@/lib/types/global";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Product } from "@/lib/apolloClient/services/product";
 
 interface BestSellerProps {
     products: Product[] | null

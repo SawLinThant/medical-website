@@ -1,4 +1,5 @@
-import { Product } from '@/lib/types/global';
+
+import { Product } from '@/lib/apolloClient/services/product';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface CartItem extends Product {

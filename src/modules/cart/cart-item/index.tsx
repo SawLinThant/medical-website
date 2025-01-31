@@ -8,6 +8,7 @@ import {
 } from "@/lib/features/cart/cartSlice";
 import { useGetProductById } from "@/lib/hooks/getQuery/useGetproduct";
 import { cn } from "@/lib/utils";
+import clsx from "clsx";
 import Image from "next/image";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
@@ -87,10 +88,15 @@ const IndividualCartItem = ({
           </div>
           <span className="w-28 max-w-28 text-muted-foreground text-lg">
             <div className="w-full flex items-center justify-start gap-2 text-muted-foreground">
-              <span className="text-sm">
-                MMK {item.bulk_price?.toLocaleString()}
-              </span>
-              <span className="line-through  text-xs">
+              {item.discount_price > 0 && (
+                 <span className="text-sm">
+                 MMK {item.discount_price?.toLocaleString()}
+               </span>
+              )}
+             
+              <span className={clsx("text-xs",{
+                "line-through": item.discount_price > 0
+              })}>
                 MMK {item.price.toLocaleString()}
               </span>
             </div>
@@ -119,8 +125,8 @@ const IndividualCartItem = ({
           <span className="min-w-28 text-muted-foreground text-sm">
             MMK{" "}
             {(
-              (item.bulk_price && item.bulk_price > 0
-                ? item.bulk_price
+              (item.discount_price && item.discount_price > 0
+                ? item.discount_price
                 : item.price) * item.quantity
             ).toLocaleString()}
           </span>
@@ -163,8 +169,8 @@ const IndividualCartItem = ({
             <span className="text-sm">
               Total MMK {" "}
               {(
-                (item.bulk_price && item.bulk_price > 0
-                  ? item.bulk_price
+                (item.discount_price && item.discount_price > 0
+                  ? item.discount_price
                   : item.price) * item.quantity
               ).toLocaleString()}
             </span>

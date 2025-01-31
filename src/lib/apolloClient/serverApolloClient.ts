@@ -20,4 +20,5 @@ const serverApolloClient = new ApolloClient({
   cache: new InMemoryCache(), 
 });
 
+
 export default serverApolloClient;

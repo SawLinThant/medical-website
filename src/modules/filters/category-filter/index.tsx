@@ -1,3 +1,5 @@
+"use client"
+
 import * as React from "react";
 
 import {
@@ -12,12 +14,15 @@ import { cn } from "@/lib/utils";
 import { ChevronRight } from "lucide-react";
 import { CategoryImage } from "@/lib/types/global";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useRouter } from "next/navigation";
 
 interface CategoryProps {
   category: CategoryImage[];
+  
 }
 
 export function BrowseByCategory(category: CategoryProps) {
+  const router = useRouter()
   return (
     <Carousel className="w-full h-full flex flex-col gap-4">
       <div className="w-full min-h-16 flex flex-row items-center justify-between">
@@ -46,6 +51,7 @@ export function BrowseByCategory(category: CategoryProps) {
           {category.category.map((category, index) => (
             <CarouselItem
               key={index}
+              onClick={() =>router.push(`/product/list?category=${category.id}`) }
               className="md:basis-[20%] lg:basis-[12.5%] basis-1/2"
             >
               <div className="p-3">

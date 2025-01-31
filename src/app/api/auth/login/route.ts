@@ -13,13 +13,14 @@ interface CustomJwtPayload extends JwtPayload {
 export async function POST(req: NextRequest) {
   const { phone, password } = await req.json();
   const res = NextResponse.next();
-  const session = await getIronSession<IronSessionData>(await cookies(), sessionOptions);
+
   try {
     const result = await handleLogin({ phone, password });
     const decodedToken = jwtDecode<CustomJwtPayload>(result.token)
 
     if (result.success) {
      try {
+      const session = await getIronSession<IronSessionData>(await cookies(), sessionOptions);
       session.user = {
         token: result.token,
         userId: decodedToken.user_id || "",
