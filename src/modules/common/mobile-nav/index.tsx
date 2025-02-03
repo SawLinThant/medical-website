@@ -13,12 +13,24 @@ import { useRouter } from "next/navigation";
 const MobileNav: React.FC = () => {
   const [isSearch, setIsSearch] = useState<boolean>(false);
   const [isClient, setIsClient] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
   const router = useRouter();
   const cartItems = useSelector((state: RootState) => state.cart.cartItems);
   useEffect(() => {
     setIsClient(true);
   }, []);
   const cartItemCount = cartItems.length;
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const queryParams = new URLSearchParams();
+    
+    if (searchTerm.trim()) {
+      queryParams.append("name", searchTerm.trim());
+    }
+
+    const queryString = queryParams.toString();
+    router.push(`/product/list${queryString ? `?${queryString}` : ""}`);
+  };
   return (
     <nav className="w-full h-full px-4 pt-5 pb-4 lg:hidden block bg-secondary_color">
       <div className="w-full md:flex hidden flex-row items-center justify-between gap-3">
@@ -60,10 +72,11 @@ const MobileNav: React.FC = () => {
           <div className="w-full flex flex-row items-center justify-between gap-3">
             <div className="relative block w-full md:hidden">
               <Input
+               onChange={(e) => setSearchTerm(e.target.value)}
                 className="h-11 w-full pl-12 border rounded-md focus-visible:ring-0 focus-visible:ring-offset-0"
                 placeholder="Search Products "
               />
-              <div className="absolute top-2 left-3">
+              <div onClick={handleSubmit} className="absolute top-2 left-3">
                 <Search size={25} />
               </div>
             </div>

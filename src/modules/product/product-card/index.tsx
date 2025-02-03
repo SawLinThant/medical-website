@@ -12,7 +12,7 @@ interface ProductcardProps {
 
 const ProductCard:React.FC<ProductcardProps> = ({name,price,image, addToCart}) => {
   return <div className="w-full min-h-28 border rounded-md p-4 flex flex-col gap-3 bg-white">
-    <div className="h-44 w-full relative">
+    <div className="lg:h-44 md:h-40 h-36 w-full relative">
         <Image src={image} layout="fill" alt="product" objectFit="contain"/>
     </div>
     <div className="flex flex-col gap-2">
