@@ -76,6 +76,7 @@ interface GetProductsParams {
   where?: Record<string, any>;
   offset?: number;
   limit?: number;
+  orderBy?: Record<string, any>
 }
 
 export const getFilteredProducts = async(
@@ -83,7 +84,7 @@ export const getFilteredProducts = async(
   params: GetProductsParams
 ):Promise<{products:Product[]; count:number}> => {
   try {
-        const { where, offset, limit } = params;
+        const { where, offset, limit, orderBy } = params;
     
         if (!GET_FILTERED_PRODUCTS) {
           throw new Error("GraphQL query GET_FILTERED_PRODUCTS is not defined.");
@@ -92,7 +93,7 @@ export const getFilteredProducts = async(
         const { data } = await client.query({
           query: GET_FILTERED_PRODUCTS,
           fetchPolicy: "no-cache",
-          variables: { where, offset, limit },
+          variables: { where, offset, limit, orderBy },
         });
     
         if (!data) {

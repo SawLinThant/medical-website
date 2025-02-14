@@ -26,9 +26,9 @@ const ProductList: React.FC<ProductListProps> = ({
   products,
   totalPages,
   currentPage,
-  itemPerPage
+  itemPerPage,
 }) => {
-  const [sortFilter, setSortFilter] = useState<string>("");
+  
   const router = useRouter();
   const searchParams = useSearchParams();
   const dispatch = useDispatch();
@@ -40,6 +40,12 @@ const ProductList: React.FC<ProductListProps> = ({
       description:"Item added to the cart"
     })
   }
+
+  const handleSortChange = (sort: string) => {
+    const params = new URLSearchParams(searchParams);
+    params.set("sort", sort);
+    router.push(`?${params.toString()}`);
+  };
 
   const handlePageChange = (newPage: number) => {
     const params = new URLSearchParams(searchParams);
@@ -74,11 +80,11 @@ const ProductList: React.FC<ProductListProps> = ({
           <span className="text-sm text-muted-foreground w-[70px]">
             Sort By
           </span>
-          <div className="w-32">
+          <div className="min-w-32">
             <Dropdown
               options={MATCH_FILTER}
-              setCategory={setSortFilter}
-              label="Sort"
+              setCategory={handleSortChange}
+              label="Best Match"
             />
           </div>
         </div>

@@ -36,16 +36,20 @@ const HomePage: React.FC = async () => {
   try {
     const { data: productsData } = await serverApolloClient.query({
       query: GET_PRODUCTS,
+      fetchPolicy:"no-cache"
     });
     const { data: topSaverData } = await serverApolloClient.query({
       query: GET_TOP_SAVER_PRODUCTS,
+      fetchPolicy:"no-cache"
     });
     // const { data: categoryData } = await serverApolloClient.query({ query: GET_CATEGORY });
     const { data: categoryImageData } = await serverApolloClient.query({
       query: GET_CATEGORY_IMAGE,
+      fetchPolicy:"no-cache"
     });
     const { data: brandData } = await serverApolloClient.query({
       query: GET_BRANDS,
+      fetchPolicy:"no-cache"
     });
 
     return (

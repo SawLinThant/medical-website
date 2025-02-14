@@ -134,7 +134,11 @@ export const ORDER_STATUS:OrderStatus[] = [
 
 export const MATCH_FILTER:Category[] = [
     {
-        id: "Best Match",
-        name: "Best Match"
+        id: "Highest to Lowest",
+        name: "Highest to Lowest"
+    },
+    {
+        id: "Lowest to Highest",
+        name: "Lowest to Highest"
     },
 ]

@@ -145,10 +145,11 @@ export const GET_FILTERED_PRODUCTS = gql`
     $where: products_bool_exp
     $offset: Int
     $limit: Int
+    $orderBy: [products_order_by!]
   ) {
     products(
       where: $where
-      order_by: { created_at: desc }
+      order_by: $orderBy
       offset: $offset
       limit: $limit
     ) {

@@ -1,10 +1,35 @@
-import { ApolloClient, InMemoryCache, HttpLink, ApolloLink } from "@apollo/client";
+import {
+  ApolloClient,
+  InMemoryCache,
+  HttpLink,
+  ApolloLink,
+  split,
+} from "@apollo/client";
 import { onError } from "@apollo/client/link/error";
 import { setContext } from "@apollo/client/link/context";
+import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
+import { createClient } from "graphql-ws";
+import { getMainDefinition } from "@apollo/client/utilities";
 
 const httpLink = new HttpLink({
   uri: process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT,
 });
+
+const wsLink = new GraphQLWsLink(
+  createClient({
+    url:
+      process.env.NEXT_PUBLIC_GRAPHQL_WS_ENDPOINT ||
+      "wss://api.natsay.com.mm/v1/graphql",
+    connectionParams: () => {
+      const token = localStorage.getItem("token"); // Get token from localStorage
+      return {
+        headers: {
+          Authorization: token ? `Bearer ${token}` : "",
+        },
+      };
+    },
+  })
+);
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors) {
@@ -23,8 +48,9 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
 });
 
 const authLink = setContext((_, { headers }) => {
-  const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
-  console.log("token in apollo client",token)
+  const token =
+    typeof window !== "undefined" ? localStorage.getItem("token") : null;
+  console.log("token in apollo client", token);
   return {
     headers: {
       ...headers,
@@ -33,8 +59,24 @@ const authLink = setContext((_, { headers }) => {
   };
 });
 
+const httpLinkWithMiddleware = ApolloLink.from([errorLink, authLink, httpLink]);
+
+const splitLink = split(
+  ({ query }) => {
+    const definition = getMainDefinition(query);
+    return (
+      definition.kind === "OperationDefinition" &&
+      definition.operation === "subscription"
+    );
+  },
+  wsLink, 
+  httpLinkWithMiddleware 
+);
+
 export const createApolloClient = () =>
   new ApolloClient({
-    link: ApolloLink.from([errorLink, authLink, httpLink]),
+    // link: ApolloLink.from([errorLink, authLink, httpLink]),
+    link: splitLink,
     cache: new InMemoryCache(),
   });
+

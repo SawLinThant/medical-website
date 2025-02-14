@@ -14,14 +14,16 @@ interface CheckoutItemsProps {
   placeOrder: () => void;
   orderLoading: boolean;
   setTotalPrice: (price: number) => void;
-  setImage: (file:File) => void
+  setImage: (file:File) => void;
+  isCOD: boolean
 }
 
 const CheckoutItems: React.FC<CheckoutItemsProps> = ({
   placeOrder,
   orderLoading,
   setTotalPrice,
-  setImage
+  setImage,
+  isCOD
 }) => {
   const [isClient, setIsClient] = useState(false);
   const [file, setFile] = useState<File[]>([]);
@@ -140,7 +142,7 @@ const CheckoutItems: React.FC<CheckoutItemsProps> = ({
         </span>
       </div>
       <div className="h-6"></div>
-      {file.length < 1?(
+      {file.length < 1 && !isCOD?(
          <div className="w-full h-28">
          <FileuploadField
            className="w-full h-full"

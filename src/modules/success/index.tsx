@@ -22,7 +22,6 @@ const OrderSuccess = () => {
   }, [router]);
 
   const downloadInvoice = async () => {
-    console.log("downoad invoice called");
     const element = document.querySelector(".order-success-content");
     if (element && element instanceof HTMLElement) {
       const canvas = await html2canvas(element);
@@ -54,11 +53,9 @@ const OrderSuccess = () => {
   useEffect(() => {
     const paymentId = localStorage.getItem("paymentID");
     if (paymentId) {
-      console.log("pymentId:", paymentId);
       const filteredPayment = PAYMENT.find(
         (payment) => payment.id === JSON.parse(paymentId)
       );
-      console.log("filteredPayment:", filteredPayment);
       if (filteredPayment) setPayment(filteredPayment);
     }
   }, []);

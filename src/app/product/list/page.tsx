@@ -7,15 +7,17 @@ type SearchParams = {
   category?: string;
   name?: string;
   offset?: string;
+  sort?: string
 };
 
 const Products = async ({ searchParams }: { searchParams: SearchParams }) => {
   const itemPerPage = 15;
-  const { category, name, offset } = await Promise.resolve(searchParams);
+  const { category, name, offset, sort } = await Promise.resolve(searchParams);
   const currentPage = Number(offset) / itemPerPage || 0;
   const page = Math.floor(currentPage) + 1;
   try {
     const where: Record<string, any> = {};
+    const orderBy: Record<string, any> = { created_at: "desc" };
 
     if (category && category!== "all") {
       where.category_id = { _eq: category };
@@ -24,11 +26,17 @@ const Products = async ({ searchParams }: { searchParams: SearchParams }) => {
     if (name) {
       where.name = { _ilike: `%${name}%` };
     }
+    if (sort === "desc") {
+      orderBy.price = "Highest to Lowest";
+    } else if (sort === "Lowest to Highest") {
+      orderBy.price = "asc";
+    }
 
     const response = await getFilteredProducts(serverApolloClient, {
       where,
       offset: Number(offset) || 0,
       limit: itemPerPage,
+      orderBy
     });
     const totalPages = Math.ceil(response.count / itemPerPage);
     if(response.products.length <1)return(
