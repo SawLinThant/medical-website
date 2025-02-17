@@ -1,18 +1,23 @@
 import serverApolloClient from "@/lib/apolloClient/serverApolloClient";
 import { getFilteredProducts } from "@/lib/apolloClient/services/product";
 import ProductList from "@/modules/product/product-list";
-import { Divide } from "lucide-react";
 
-type SearchParams = {
-  category?: string;
-  name?: string;
-  offset?: string;
-  sort?: string
-};
 
-const Products = async ({ searchParams }: { searchParams: SearchParams }) => {
+interface IPageProps {
+  searchParams: Promise<{
+    category?: string;
+    name?: string;
+    offset?: string;
+    sort?: string
+  }>;
+}
+
+
+const Products = async (searchParams : IPageProps) => {
   const itemPerPage = 15;
-  const { category, name, offset, sort } = await Promise.resolve(searchParams);
+  //const { category, name, offset, sort } = await Promise.resolve(searchParams);
+  const { category, name, offset, sort } = await searchParams.searchParams;
+  console.log("search param category",category)
   const currentPage = Number(offset) / itemPerPage || 0;
   const page = Math.floor(currentPage) + 1;
   try {

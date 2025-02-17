@@ -48,6 +48,8 @@ export const GET_TOP_SAVER_PRODUCTS = gql`
       dosage
       usage
       storage
+      category_id
+      updated_at
       shop {
         id
         name

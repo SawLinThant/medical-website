@@ -1,7 +1,16 @@
 {
-  "/favicon.ico/route": "app/favicon.ico/route.js",
+  "/_not-found/page": "app/_not-found/page.js",
   "/api/auth/session/route": "app/api/auth/session/route.js",
+  "/api/auth/login/route": "app/api/auth/login/route.js",
+  "/favicon.ico/route": "app/favicon.ico/route.js",
   "/page": "app/page.js",
+  "/cart/page": "app/cart/page.js",
+  "/checkout/page": "app/checkout/page.js",
+  "/home/page": "app/home/page.js",
+  "/order-success/page": "app/order-success/page.js",
+  "/login/page": "app/login/page.js",
+  "/register/page": "app/register/page.js",
+  "/order-history/page": "app/order-history/page.js",
   "/product/list/page": "app/product/list/page.js",
-  "/home/page": "app/home/page.js"
+  "/product/detail/[productId]/page": "app/product/detail/[productId]/page.js"
 }

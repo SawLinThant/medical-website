@@ -9,9 +9,9 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { cn } from "@/lib/utils";
-import { Product } from "@/lib/types/global";
 import { Skeleton } from "@/components/ui/skeleton";
 import ProductCard from "../related-prduct-card";
+import { Product } from "@/lib/apolloClient/services/product";
 
 interface BestSellerProps {
   products: Product[] | null;

@@ -26,6 +26,10 @@ export interface Product {
   bulk_price?: number;
   quantity: number;
   description?: string;
+  discount_price: number
+  dosage: string;
+  usage: string;
+  storage: string;
   shop?: Shop;
   category?: ProductCategory;
   images?: ProductImage[];

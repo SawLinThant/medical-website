@@ -2,8 +2,8 @@
 
 import { Button } from "@/components/ui/button"
 import { toast } from "@/hooks/use-toast";
+import { Product } from "@/lib/apolloClient/services/product";
 import { addToCart } from "@/lib/features/cart/cartSlice";
-import { Product } from "@/lib/types/global";
 import { ShoppingCart } from "lucide-react"
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";

@@ -1,5 +1,5 @@
 import { GET_FILTERED_PRODUCTS, GET_PRODUCT_BY_ID } from "@/lib/apolloClient/query/productQuery";
-import { Product } from "@/lib/types/global";
+import { Product } from "@/lib/apolloClient/services/product";
 import { useQuery } from "@apollo/client";
 import { useMemo, useState } from "react";
 
