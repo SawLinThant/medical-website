@@ -15,6 +15,11 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
+        hostname: 'api.natsay.com.mm/v1/graphql',
+        pathname: '**',
+      },
+      {
+        protocol: 'https',
         hostname: 'natsay.com.mm',
         pathname: '**',
       },
