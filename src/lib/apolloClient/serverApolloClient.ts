@@ -3,11 +3,11 @@ import { getCookie } from 'cookies-next';
 import fetch from 'cross-fetch';
 import { getSessionData } from '../utils';
 
-const getTokenFromSession = async () => {
-  const sessionData = await getSessionData();
-  return sessionData?.token || null; 
-};
-const token = await getTokenFromSession();
+// const getTokenFromSession = async () => {
+//   const sessionData = await getSessionData();
+//   return sessionData?.token || null; 
+// };
+const token = null;
 const serverApolloClient = new ApolloClient({
   ssrMode: true,
   link: new HttpLink({
