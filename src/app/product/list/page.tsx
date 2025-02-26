@@ -55,7 +55,7 @@ const Products = async (searchParams : IPageProps) => {
         <div className="w-full max-w-[1300px] py-8 flex flex-col gap-4 items-center justify-center">
           <ProductList
             name={name || ""}
-            category={response.products?.[0].category.name || ""}
+            category={category? response.products?.[0].category.name:""}
             products={response.products}
             totalPages={totalPages}
             currentPage={page}

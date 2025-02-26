@@ -117,18 +117,18 @@ export const ORDER_STATUS:OrderStatus[] = [
     },
     {
         id:"3",
-        name: "Processing",
-        value: "Processing"
+        name: "Delivering",
+        value: "Delivering"
     },
     {
         id:"4",
-        name: "Shipped",
-        value: "Shipped"
+        name: "Completed",
+        value: "Completed"
     },
     {
         id:"5",
-        name: "Delivered",
-        value: "Delivered"
+        name: "Cancelled",
+        value: "Cancelled"
     },
 ]
 

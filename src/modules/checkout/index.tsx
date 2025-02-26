@@ -24,7 +24,7 @@ import { clearCart } from "@/lib/features/cart/cartSlice";
 import { useUploadToS3 } from "@/lib/hooks/useFileUpload";
 import { toast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
-import { updateProductQuantity } from "@/lib/apolloClient/services/product";
+import { checkProductAvailability, updateProductQuantity } from "@/lib/apolloClient/services/product";
 import { InsertNotification } from "@/lib/apolloClient/services/notification";
 
 export interface SessionData {
@@ -152,8 +152,26 @@ const CheckoutForm: React.FC = () => {
   }, [isAddressExist, handleCreateAddress, handleUpdateAddress]);
 
   const handleCreateOrder = useCallback(async () => {
+    
     try {
       setCreateOrderLoading(true);
+      const availabilityChecks = await Promise.all(
+        cartItems.map((cartItem) =>
+          checkProductAvailability(serverApolloClient, {
+            id: cartItem.id,
+            requestedQuantity: cartItem.quantity,
+          })
+        )
+      );
+
+      const allAvailable = availabilityChecks.every((isAvailable) => isAvailable);
+      if (!allAvailable) {
+        toast({
+          description: "Some items in your cart are out of stock. Please review your cart.",
+          variant: "destructive", // Optional: Use a variant for error if your toast supports it
+        });
+        return; // Stop the order creation process
+      }
 
       await handleAddressSubmit();
 
@@ -197,9 +215,9 @@ const CheckoutForm: React.FC = () => {
               product_id: cartItem.id,
               shop_id: cartItem.shop?.id,
               quantity: cartItem.quantity,
-              price: cartItem.bulk_price,
-              subtotal: cartItem.bulk_price
-                ? cartItem.bulk_price * cartItem.quantity
+              price: (cartItem.discount_price && cartItem.discount_price > 0)?cartItem.discount_price:cartItem.price,
+              subtotal: cartItem.discount_price
+                ? cartItem.discount_price * cartItem.discount_price
                 : 0,
             },
           })

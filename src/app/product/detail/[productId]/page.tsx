@@ -4,46 +4,63 @@ import {
 } from "@/lib/apolloClient/query/productQuery";
 import serverApolloClient from "@/lib/apolloClient/serverApolloClient";
 import { getOrders } from "@/lib/apolloClient/services/order";
+import { calculateAverageRating } from "@/lib/apolloClient/services/productRating";
+import { getSessionData } from "@/lib/utils";
 import AddToCart from "@/modules/common/add-to-cart";
 import Star from "@/modules/common/icons/star";
 import ImageShowcase from "@/modules/common/image-showcase";
 import ProductDetailSkeleton from "@/modules/common/product-detail-skeleton";
+import { RatingDialog } from "@/modules/common/product-rating-popup";
 import { ProductReel } from "@/modules/common/product-reel";
 import Rating from "@/modules/common/rating";
 import { ScrollText } from "lucide-react";
-
 
 type paramsType = Promise<{ productId: string }>;
 
 const ProductDetail = async (props: { params: paramsType }) => {
   const { productId } = await props.params;
   try {
-    const { data } = await serverApolloClient.query({
+    const { data: productData } = await serverApolloClient.query({
       query: GET_PRODUCT_BY_ID,
       variables: { id: productId },
     });
 
-    const product = data?.products?.[0];
+    const product = productData?.products?.[0];
+    const roundedRating = Math.round(product.average_rating|| 0);
+    const reviewCount = Math.round(product.review_count|| 0);
+    if (!product) return <ProductDetailSkeleton />;
 
-    const { data: productsByCategory } = await serverApolloClient.query({
-      query: GET_PRODUCT_BY_CATEGORY_ID,
-      "fetchPolicy":"no-cache",
-      variables: { category_id: product.category.id || "" },
-    });
-    const { orders, count } = await getOrders(serverApolloClient, {
-      where: { order_items: { product_id: { _eq: productId } } },
-      offset: 0,
-      limit: 10,
-    });
-    const relatedProducts = productsByCategory.products.filter((relatedProducts:{id: string}) => relatedProducts.id !== productId)
-    if(!product || !orders)return<ProductDetailSkeleton/>
+    const [
+      { data: productsByCategory },
+      { orders, count },
+    ] = await Promise.all([
+      serverApolloClient.query({
+        query: GET_PRODUCT_BY_CATEGORY_ID,
+        fetchPolicy: "no-cache",
+        variables: { category_id: product.category.id || "" },
+      }),
+      getOrders(serverApolloClient, {
+        where: { order_items: { product_id: { _eq: productId } } },
+        offset: 0,
+        limit: 10,
+      }),
+      getSessionData(),
+    ]);
+
+    if (!orders) return <ProductDetailSkeleton />;
+
+    const relatedProducts = productsByCategory.products.filter(
+      (relatedProduct: { id: string }) => relatedProduct.id !== productId
+    );
+
+    //const { averageRating, reviewCount } = await calculateAverageRating(serverApolloClient, productId);
 
     return (
       <section className="w-full h-full flex flex-col items-center">
         <div className="w-full max-w-[1300px] py-8 flex flex-col gap-4 items-center justify-center">
           <div className="w-full grid lg:gap-4 lg:grid-cols-5 md:grid-cols-5 grid-cols-1">
             <div className="col-span-2 flex flex-col gap-0 w-full md:max-h-[27rem] lg:max-h-[30rem]">
-              <ImageShowcase images={product.images}/>
+              <ImageShowcase images={product.images} />
             </div>
             <div className="col-span-3 lg:p-4 md:p-3 py-3 px-0 lg:min-h-[35rem] flex flex-col gap-6">
               <div className="flex flex-row items-center gap-4">
@@ -57,14 +74,19 @@ const ProductDetail = async (props: { params: paramsType }) => {
               <div className="min-h-6 flex lg:flex-row flex-col gap-6">
                 <div className="flex flex-row gap-4 items-center">
                   <div className="flex flex-row items-center gap-1 min-w-[7rem]">
-                    <Star height="20px" width="20px" color="#cfda31" />
-                    <Star height="20px" width="20px" color="#cfda31" />
-                    <Star height="20px" width="20px" color="#cfda31" />
-                    <Star height="20px" width="20px" color="#cfda31" />
-                    <Star height="20px" width="20px" color="gray" />
+                  {Array(5)
+                .fill(0)
+                .map((_, index) => (
+                  <Star
+                    key={index}
+                    height="20"
+                    width="20"
+                    color={index < roundedRating ? "#cfda31" : "gray"}
+                  />
+                ))}
                   </div>
                   <span className="text-xs text-muted-foreground">
-                    124 reviews
+                    {reviewCount} reviews
                   </span>
                 </div>
                 <div className="flex flex-row gap-2 items-center">
@@ -84,9 +106,7 @@ const ProductDetail = async (props: { params: paramsType }) => {
                 </div>
               </div>
               <div className="text-muted-foreground text-sm">
-                <p>
-                {product.description || "N/A"}
-                </p>
+                <p>{product.description || "N/A"}</p>
               </div>
               <div className="flex flex-col gap-3 mt-3">
                 <div className="flex flex-row gap-4 items-start rounded-md px-4 py-1 bg-secondary_color/10">
@@ -95,7 +115,7 @@ const ProductDetail = async (props: { params: paramsType }) => {
                   </div>
                   <div className="w-full h-full">
                     <span className="text-sm">
-                    {product.dosage || "No Instruction"}
+                      {product.dosage || "No Instruction"}
                     </span>
                   </div>
                 </div>
@@ -105,7 +125,7 @@ const ProductDetail = async (props: { params: paramsType }) => {
                   </div>
                   <div className="w-full h-full">
                     <span className="text-sm">
-                    {product.usage || "No Instruction"}
+                      {product.usage || "No Instruction"}
                     </span>
                   </div>
                 </div>
@@ -115,19 +135,22 @@ const ProductDetail = async (props: { params: paramsType }) => {
                   </div>
                   <div className="w-full h-full">
                     <span className="text-sm">
-                    {product.storage || "No Instruction"}
+                      {product.storage || "No Instruction"}
                     </span>
                   </div>
                 </div>
               </div>
-              {product.quantity < 1 ? (<span className="text-red-500 font-semibold">Out of stock</span>):<AddToCart product={product}/>}
-              
+              {product.quantity < 1 ? (
+                <span className="text-red-500 font-semibold">Out of stock</span>
+              ) : (
+                <AddToCart product={product} />
+              )}
             </div>
           </div>
           <div className="flex flex-col gap-3 mt-6 w-full">
             <h2 className="text-xl font-semibold">Product Details</h2>
             <p className="text-muted-foreground text-sm leading-8">
-            {product.description || "N/A"}
+              {product.description || "N/A"}
             </p>
           </div>
           <div className="flex flex-col gap-4 mt-6 items-start w-full">
@@ -145,7 +168,14 @@ const ProductDetail = async (props: { params: paramsType }) => {
               <span className="">100011232_MM</span>
             </div>
             <div className="w-full mt-6">
-              <Rating />
+              <Rating productId={productId}/>
+               <div className="w-full mt-6">
+                 <RatingDialog
+                   productId={productId}
+                   productName={product.name}
+                 />
+               </div>
+             
             </div>
             <div className="w-full h-6"></div>
             <ProductReel products={relatedProducts} />

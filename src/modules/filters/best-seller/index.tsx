@@ -13,13 +13,15 @@ import ProductCard from "@/modules/common/product-card";
 import { ChevronRight } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Product } from "@/lib/apolloClient/services/product";
+import { useRouter } from "next/navigation";
 
 interface BestSellerProps {
     products: Product[] | null
 }
 
 export function BestSeller({products}:BestSellerProps) {
-    const [productList,setProductList] = React.useState<Product[] | null>(null)
+    const [productList,setProductList] = React.useState<Product[] | null>(null);
+    const router = useRouter()
     React.useEffect(() => {
         if(products){
             setProductList(products)
@@ -30,7 +32,7 @@ export function BestSeller({products}:BestSellerProps) {
       <div className="w-full min-h-16 flex flex-row items-center justify-between">
         <div className="flex flex-row gap-4 items-center">
           <h1 className="font-semibold text-lg">Best Sellers</h1>
-          <span className="text-sm text-secondary_color mt-1 flex flex-row items-center">All Products <ChevronRight size={15}/></span>
+          <span onClick={() => router.push("/product/list")} className="text-sm text-secondary_color mt-1 flex flex-row items-center hover:cursor-pointer">All Products <ChevronRight size={15}/></span>
         </div>
         <div className="flex flex-row gap-2 h-full items-center">
           <div className="">

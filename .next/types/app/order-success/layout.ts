@@ -1,4 +1,4 @@
-// File: D:\NextJS\medical website\medical-clinic\src\app\order-success\layout.tsx
+// File: D:\NextJS\new medical web\natsay_web_client\src\app\order-success\layout.tsx
 import * as entry from '../../../../src/app/order-success/layout.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

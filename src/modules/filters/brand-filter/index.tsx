@@ -48,7 +48,7 @@ export function BrowseByBrand({brands}:BrowseByBrandProps) {
                     layout="fill"
                     src={brand.image_url}
                     alt="category"
-                    className="object-cover hover:border-none rounded bg-white"
+                    className="object-contain hover:border-none rounded bg-white"
                   />
                 </div>
                 <div className="flex flex-col text-left items-start">

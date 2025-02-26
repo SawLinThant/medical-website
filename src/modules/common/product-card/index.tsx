@@ -48,6 +48,8 @@ const ProductCard: React.FC<ProductCardprops> = (product:ProductCardprops) => {
         description:"Item added to the cart"
       })
     }
+    const roundedRating = Math.round(product.product.average_rating|| 0);
+    const reviewCount = Math.round(product.product.review_count|| 0);
 
   return (
     <div className={clsx("w-full p-4 border bg-white rounded-md group lg:h-[21.5rem] h-full scale-95 hover:h-full hover:shadow-lg transition-all overflow-hidden",{
@@ -67,12 +69,18 @@ const ProductCard: React.FC<ProductCardprops> = (product:ProductCardprops) => {
           <h2 className="font-bold">{product.product.name}</h2>
           <div className="flex lg:flex-row md:flex-row flex-col gap-3">
             <div className="flex flex-row items-center gap-1 min-w-[7rem]">
-              <Star height="20px" width="20px" color="#cfda31"/>
-              <Star height="20px" width="20px" color="#cfda31"/>
-              <Star height="20px" width="20px" color="#cfda31"/>
-              <Star height="20px" width="20px" color="#cfda31"/>
+            {Array(5)
+                .fill(0)
+                .map((_, index) => (
+                  <Star
+                    key={index}
+                    height="20"
+                    width="20"
+                    color={index < roundedRating ? "#cfda31" : "gray"}
+                  />
+                ))}
             </div>
-            <span className="text-sm text-muted-foreground">125 reviews</span>
+            <span className="text-sm text-muted-foreground">{reviewCount} reviews</span>
           </div>
         </div>
         <div className="flex flex-col gap-3">

@@ -40,7 +40,7 @@ const OrderLists = () => {
         const response = await getOrders(serverApolloClient, {
           where,
           offset: 0,
-          limit: 10,
+          limit: 100,
         });
   
         if (response) {

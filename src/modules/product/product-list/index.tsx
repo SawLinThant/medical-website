@@ -71,9 +71,9 @@ const ProductList: React.FC<ProductListProps> = ({
     <div className="w-full flex flex-col mt-6">
       <div className="w-full flex lg:flex-row md:flex-row flex-col gap-4 min-h-28 items-center justify-between pb-4 border-b border-gray-300">
         <div className="flex flex-col gap-3">
-          <h1 className="font-semibold text-subheading">{name === "" ? category : name}</h1>
+          <h1 className="font-semibold text-subheading">{category === "" ? "" : category}</h1>
           <span className="text-muted-foreground text-sm">
-            {products.length} item(s) found for {name === "" ? category : name}
+            {products.length} item(s) found  {name === "" ? "" : `for ${name}`}
           </span>
         </div>
         <div className="min-w-32 flex flex-row items-center w-full justify-end">

@@ -41,10 +41,12 @@ const CheckoutItems: React.FC<CheckoutItemsProps> = ({
     }, 0);
   };
   const subTotalPrice = calculateTotalPrice(cartItems);
-  const discount = 100;
+  const discount = 0;
+  const tax = parseInt((subTotalPrice * 0.03).toString());
+  const totalPrice = (subTotalPrice+tax) - discount
   useEffect(() => {
     setIsClient(true);
-    setTotalPrice(subTotalPrice - discount);
+    setTotalPrice(totalPrice);
   }, [cartItems]);
   const handleFileUpload = (files: FileList) => {
     setFile((prev) => [...prev, ...Array.from(files)]);
@@ -126,10 +128,10 @@ const CheckoutItems: React.FC<CheckoutItemsProps> = ({
           <div className="flex flex-row gap-2 items-center">
             <span className="">Tax</span>
             <span className="text-xs text-muted-foreground">
-              PDV 20% (included)
+              PDV 3% (included)
             </span>
           </div>
-          <span className="text-sm text-muted-foreground">MMK 0,000</span>
+          <span className="text-sm text-muted-foreground">MMK {tax}</span>
         </div>
       </div>
       <Separator className="my-4" />
@@ -138,7 +140,7 @@ const CheckoutItems: React.FC<CheckoutItemsProps> = ({
           <span className="">Total:</span>
         </div>
         <span className="text-muted-foreground font-bold">
-          MMK {isClient ? (subTotalPrice - discount).toLocaleString() : "0,000"}
+          MMK {isClient ? totalPrice.toLocaleString() : "0,000"}
         </span>
       </div>
       <div className="h-6"></div>

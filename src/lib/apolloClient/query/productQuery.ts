@@ -1,8 +1,11 @@
 import { gql } from "@apollo/client";
 
 export const GET_PRODUCTS = gql`
-  query getProducts {
-    products(order_by: { created_at: desc }) {
+  query getProducts($today: timestamptz!) {
+    products(
+      where: { created_at: { _lte: $today } }
+      order_by: { created_at: desc }
+    ) {
       id
       name
       price
@@ -12,6 +15,9 @@ export const GET_PRODUCTS = gql`
       discount_price
       dosage
       usage
+      average_rating
+      review_count
+      created_at
       storage
       shop {
         id
@@ -36,8 +42,12 @@ export const GET_PRODUCTS = gql`
 `;
 
 export const GET_TOP_SAVER_PRODUCTS = gql`
-  query getProducts {
-    products(order_by: { price: asc }, limit: 5) {
+  query getTopSaverProducts($today: timestamptz!) {
+    products(
+      where: { created_at: { _lte: $today } }
+      order_by: { price: asc }
+      limit: 5
+    ) {
       id
       name
       price
@@ -48,6 +58,8 @@ export const GET_TOP_SAVER_PRODUCTS = gql`
       dosage
       usage
       storage
+      average_rating
+      review_count
       category_id
       updated_at
       shop {
@@ -83,6 +95,8 @@ export const GET_PRODUCT_BY_ID = gql`
       description
       discount_price
       dosage
+      average_rating
+      review_count
       usage
       storage
       shop {
@@ -119,6 +133,8 @@ export const GET_PRODUCT_BY_CATEGORY_ID = gql`
       discount_price
       dosage
       usage
+      average_rating
+      review_count
       storage
       shop {
         id
@@ -144,13 +160,14 @@ export const GET_PRODUCT_BY_CATEGORY_ID = gql`
 
 export const GET_FILTERED_PRODUCTS = gql`
   query getFilteredProducts(
-    $where: products_bool_exp
+    $where: products_bool_exp!
     $offset: Int
+    $today: timestamptz!
     $limit: Int
     $orderBy: [products_order_by!]
   ) {
     products(
-      where: $where
+      where: { _and: [{ created_at: { _lte: $today } }, $where] }
       order_by: $orderBy
       offset: $offset
       limit: $limit
@@ -162,6 +179,8 @@ export const GET_FILTERED_PRODUCTS = gql`
       discount_price
       quantity
       description
+      average_rating
+      review_count
       dosage
       usage
       storage

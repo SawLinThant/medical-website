@@ -55,7 +55,7 @@ export function BrowseByCategory(category: CategoryProps) {
               className="md:basis-[20%] lg:basis-[12.5%] basis-1/2"
             >
               <div className="p-3">
-                <div className=" h-[13rem] hover:scale-105 hover:shadow-md hover:bg-white transition-all border rounded-md bg-slate-200 p-3 hover:cursor-pointer flex flex-col items-center justify-center gap-3">
+                <div className=" h-[13rem] bg-gradient-to-b from-[#18A5A7] to-[#BFFFC7] hover:scale-105 hover:shadow-md hover:from-[#77a7a7] hover:to-[#e3fae6] transition-all border rounded-md bg-slate-200 p-3 hover:cursor-pointer flex flex-col items-center justify-center gap-3">
                   <div className="w-full relative h-[7rem]">
                     <Image
                       layout="fill"

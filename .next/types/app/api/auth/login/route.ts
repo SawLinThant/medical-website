@@ -1,4 +1,4 @@
-// File: D:\NextJS\medical website\medical-clinic\src\app\api\auth\login\route.ts
+// File: D:\NextJS\new medical web\natsay_web_client\src\app\api\auth\login\route.ts
 import * as entry from '../../../../../../src/app/api/auth/login/route.js'
 import type { NextRequest } from 'next/server.js'
 

@@ -1,4 +1,4 @@
-// File: D:\NextJS\medical website\medical-clinic\src\app\checkout\page.tsx
+// File: D:\NextJS\new medical web\natsay_web_client\src\app\checkout\page.tsx
 import * as entry from '../../../../src/app/checkout/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

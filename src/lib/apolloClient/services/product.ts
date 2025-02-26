@@ -1,6 +1,9 @@
 import { ApolloClient, NormalizedCacheObject } from "@apollo/client";
 import { UPDATE_PRODUCT } from "../mutation/productMutation";
-import { GET_FILTERED_PRODUCTS, GET_PRODUCT_QUANTITY_BY_ID } from "../query/productQuery";
+import {
+  GET_FILTERED_PRODUCTS,
+  GET_PRODUCT_QUANTITY_BY_ID,
+} from "../query/productQuery";
 import { Category } from "./category";
 import { Shop } from "@/lib/types/global";
 
@@ -11,15 +14,17 @@ export interface Product {
   bulk_price: number;
   quantity: number;
   description: string;
-  discount_price: number
+  discount_price: number;
   dosage: string;
   usage: string;
   storage: string;
   category_id: string;
   updated_at: string;
+  average_rating: number;
+  review_count: number;
   images: ProductImage[];
-  category: Category
-  shop?: Shop
+  category: Category;
+  shop?: Shop;
 }
 
 export interface ProductImage {
@@ -28,7 +33,7 @@ export interface ProductImage {
 }
 
 export interface UpdateProductInput {
-  id: string; 
+  id: string;
   quantity: number;
 }
 
@@ -40,7 +45,7 @@ export const updateProductQuantity = async (
     const { data: productData } = await client.query({
       query: GET_PRODUCT_QUANTITY_BY_ID,
       variables: { id: input.id },
-      fetchPolicy: "network-only", 
+      fetchPolicy: "network-only",
     });
 
     if (!productData?.products_by_pk) {
@@ -76,36 +81,78 @@ interface GetProductsParams {
   where?: Record<string, any>;
   offset?: number;
   limit?: number;
-  orderBy?: Record<string, any>
+  orderBy?: Record<string, any>;
 }
 
-export const getFilteredProducts = async(
+export const getFilteredProducts = async (
   client: ApolloClient<NormalizedCacheObject>,
   params: GetProductsParams
-):Promise<{products:Product[]; count:number}> => {
+): Promise<{ products: Product[]; count: number }> => {
   try {
-        const { where, offset, limit, orderBy } = params;
-    
-        if (!GET_FILTERED_PRODUCTS) {
-          throw new Error("GraphQL query GET_FILTERED_PRODUCTS is not defined.");
-        }
-    
-        const { data } = await client.query({
-          query: GET_FILTERED_PRODUCTS,
-          fetchPolicy: "no-cache",
-          variables: { where, offset, limit, orderBy },
-        });
-    
-        if (!data) {
-          throw new Error("No data returned from GraphQL query.");
-        }
-        console.log("filterd products",data)
-        return {
-          products: data.products || [],
-          count: data.products_aggregate?.aggregate?.count || 0,
-        };
-      } catch (error: any) {
-        console.error("Error fetching orders:", error.message || error);
-        return { products: [], count: 0 };
-      }
+    const { where, offset, limit, orderBy } = params;
+
+    if (!GET_FILTERED_PRODUCTS) {
+      throw new Error("GraphQL query GET_FILTERED_PRODUCTS is not defined.");
+    }
+
+    const today = new Date().toISOString().split("T")[0] + "T23:59:59Z";
+
+    const { data } = await client.query({
+      query: GET_FILTERED_PRODUCTS,
+      fetchPolicy: "no-cache",
+      variables: { where, offset, limit, orderBy, today },
+    });
+
+    if (!data) {
+      throw new Error("No data returned from GraphQL query.");
+    }
+    console.log("filterd products", data);
+    return {
+      products: data.products || [],
+      count: data.products_aggregate?.aggregate?.count || 0,
+    };
+  } catch (error: any) {
+    console.error("Error fetching orders:", error.message || error);
+    return { products: [], count: 0 };
+  }
+};
+
+export interface CheckQuantityInput {
+  id: string;
+  requestedQuantity: number;
 }
+
+export const checkProductAvailability = async (
+  client: ApolloClient<NormalizedCacheObject>,
+  input: CheckQuantityInput
+): Promise<boolean> => {
+  try {
+    const { data: productData } = await client.query({
+      query: GET_PRODUCT_QUANTITY_BY_ID,
+      variables: { id: input.id },
+      fetchPolicy: "no-cache",
+    });
+
+    if (!productData?.products_by_pk) {
+      console.error(`Product with ID ${input.id} not found`);
+      return false;
+    }
+
+    const currentQuantity = productData.products_by_pk.quantity;
+
+    if (currentQuantity >= input.requestedQuantity) {
+      return true;
+    } else {
+      console.warn(
+        `Insufficient stock for product ID ${input.id}. Current: ${currentQuantity}, Requested: ${input.requestedQuantity}`
+      );
+      return false;
+    }
+  } catch (error: any) {
+    console.error(
+      "Error checking product availability:",
+      error.message || error
+    );
+    return false;
+  }
+};

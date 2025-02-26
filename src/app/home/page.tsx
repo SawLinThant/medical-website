@@ -33,13 +33,16 @@ export async function generateMetadata() {
 }
 
 const HomePage: React.FC = async () => {
+  const today = new Date().toISOString().split("T")[0] + "T23:59:59Z";
   try {
     const { data: productsData } = await serverApolloClient.query({
       query: GET_PRODUCTS,
+      variables:{today},
       fetchPolicy:"no-cache"
     });
     const { data: topSaverData } = await serverApolloClient.query({
       query: GET_TOP_SAVER_PRODUCTS,
+      variables:{today},
       fetchPolicy:"no-cache"
     });
     // const { data: categoryData } = await serverApolloClient.query({ query: GET_CATEGORY });
@@ -60,7 +63,7 @@ const HomePage: React.FC = async () => {
         <div className="w-full min-h-40 bg-slate-100 flex items-center justify-center p-4 bg-[url('/images/banner-background.jpg')] bg-cover bg-center">
           <div className="w-full max-w-[1300px] grid lg:grid-cols-5 md:grid-cols-5 grid-cols-1 gap-6 py-6">
             <div className="lg:col-span-3 md:col-span-3 col-span-1 min-h-[10rem] rounded-md overflow-hidden">
-              <ImageCarousel />
+              <ImageCarousel/>
             </div>
             <div className="relative lg:col-span-2 md:col-span-2 col-span-1 w-full lg:h-[20rem] md:h-[15rem] h-[13rem]">
               <Image
@@ -79,12 +82,12 @@ const HomePage: React.FC = async () => {
           <BrowseByBrand brands={brandData?.brands} />
         </div>
         <div className="w-full max-w-[1300px] mt-20 flex lg:flex-row md:flex-col flex-col gap-4 lg:justify-between">
-          <div className="lg:w-[75%] md:w-full w-full">
+          <div className="lg:w-full md:w-full w-full">
             <TopSaver products={topSaverData?.products} />
           </div>
-          <div className="lg:w-[1/4] lg:max-w-[21rem] lg:flex w-full md:flex md:items-center lg:justify-start md:justify-center">
+          {/* <div className="lg:w-[1/4] lg:max-w-[21rem] lg:flex w-full md:flex md:items-center lg:justify-start md:justify-center">
             <Subscribe />
-          </div>
+          </div> */}
         </div>
 
         <div className="w-full max-w-[1300px] mt-16">

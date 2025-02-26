@@ -46,7 +46,7 @@ const IndividualOrder: React.FC<IndividualOrderProps> = ({ orders }) => {
                 Delivered On
               </span>
               <span className="text-sm text-black font-semibold">
-                {order?.updated_date?(new Date(order?.updated_date).toLocaleDateString()):"Pending"}
+                {order?.updated_date?(new Date(order?.updated_date).toLocaleDateString()):""}
               </span>
             </div>
             <div className="col-span-1 pl-3 flex flex-col gap-2 items-start">
@@ -59,7 +59,7 @@ const IndividualOrder: React.FC<IndividualOrderProps> = ({ orders }) => {
             <div className="lg:col-span-3 md:col-span-3 col-span-2 flex flex-row items-center text-sm">
               <div className="w-1/2 flex items-center lg:justify-center md:justify-center justify-start">
                 <span className="px-4 py-1 rounded-md border bg-white">
-                  Pending
+                  {order.status}
                 </span>
               </div>
               <div className="w-1/2 flex items-center justify-center">
@@ -119,7 +119,7 @@ const IndividualOrder: React.FC<IndividualOrderProps> = ({ orders }) => {
                 <div className="lg:col-span-3 md:col-span-3 col-span-2 flex lg:flex-row md:flex-row flex-col items-start">
                   <div className="lg:w-1/2 md:w-1/2 w-full px-4 lg:flex lg:flex-row md:flex md:flex-row grid grid-cols-2 justify-end">
                   <div className="col-span-1 lg:hidden md:hidden"></div>
-                    <span className="w-full lg:text-right md:text-right text-left text-muted-foreground flex flex-row items-center lg:justify-end md:justify-end">
+                    <span className="w-full lg:text-right md:text-right text-left text-muted-foreground flex flex-row items-center lg:justify-center md:justify-end">
                       <X size={14}/>{orderItem.quantity}
                     </span>
                   </div>

@@ -20,6 +20,11 @@ const geistMono = localFont({
 export const metadata = {
   title: "Nat Say Myanmar - Shop Smart",
   description: "Discover the best deals on top medical products from trusted brands.",
+  icons: {
+    icon: "/images/logo.png", 
+    shortcut: "/images/logo.png",
+    apple: "/images/logo.png", 
+  },
   openGraph: {
     title: "Nat Say Myanmar - Your Online Shopping Destination",
     description: "Find exclusive offers and great deals on medical products!",
