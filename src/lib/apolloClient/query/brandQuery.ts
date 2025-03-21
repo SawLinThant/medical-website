@@ -7,6 +7,7 @@ export const GET_BRANDS= gql`
       name
       image_url
       website_link
+      shop_id
     }
   }
 `;

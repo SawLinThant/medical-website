@@ -69,21 +69,23 @@ const MobileNav: React.FC = () => {
             </div>
           </div>
         ) : (
-          <div className="w-full flex flex-row items-center justify-between gap-3">
+          <form onSubmit={handleSubmit} className="w-full flex flex-row items-center justify-between gap-3">
             <div className="relative block w-full md:hidden">
               <Input
                onChange={(e) => setSearchTerm(e.target.value)}
                 className="h-11 w-full pl-12 border rounded-md focus-visible:ring-0 focus-visible:ring-offset-0"
                 placeholder="Search Products "
               />
-              <div onClick={handleSubmit} className="absolute top-2 left-3">
+              <div 
+              //onClick={handleSubmit} 
+              className="absolute top-2 left-3">
                 <Search size={25} />
               </div>
             </div>
             <Button onClick={() => setIsSearch(!isSearch)} variant="outline" className="font-semibold border-none bg-transparent text-white">
               Cancel
             </Button>
-          </div>
+          </form>
         )}
       </div>
     </nav>

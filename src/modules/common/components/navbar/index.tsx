@@ -9,6 +9,7 @@ import { RootState } from "@/lib/store";
 import { useEffect, useState } from "react";
 import AuthPopUp from "../../auth-popup";
 import { ProfileHoverCard } from "../../hover/profile";
+import Home from "../../icons/home";
 //import { clearToken, initializeFromLocalStorage} from "@/lib/features/account/accountSlice";
 
 const NavBar: React.FC = () => {
@@ -72,9 +73,11 @@ const NavBar: React.FC = () => {
             </div>
           )}
 
-          <div className="flex flex-row gap-2 items-center min-w-[7rem] h-full justify-end">
-            <Heart size={20} />
-            <div className="text-sm h-full mt-1">Favourites</div>
+          <div
+          onClick={() => router.push("/")}
+          className="flex flex-row gap-2 items-center min-w-[7rem] h-full justify-center hover:cursor-pointer">
+            <Home height="20" width="20" color="black" />
+            <div className="text-sm h-full mt-1">Home</div>
           </div>
           <div
             onClick={() => router.push("/cart")}

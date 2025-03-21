@@ -56,7 +56,7 @@ const HomePage: React.FC = async () => {
     });
 
     return (
-      <div className="w-full flex flex-col items-center">
+      <main className="w-full flex flex-col items-center">
         {/* <div className="w-full max-w-[1300px] lg:block md:block hidden">
           <CategoryFilter />
         </div> */}
@@ -94,7 +94,7 @@ const HomePage: React.FC = async () => {
           <BestSeller products={productsData?.products} />
         </div>
 
-      </div>
+      </main>
     );
   } catch (error) {
     console.error("Error fetching data:", error);

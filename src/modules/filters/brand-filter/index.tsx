@@ -1,5 +1,4 @@
 import * as React from "react";
-
 import {
   Carousel,
   CarouselContent,
@@ -11,18 +10,22 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { ChevronRight } from "lucide-react";
 import { Brand } from "@/lib/types/global";
+import Link from "next/link";
 
 interface BrowseByBrandProps {
-  brands: Brand[]
+  brands: Brand[];
 }
 
-export function BrowseByBrand({brands}:BrowseByBrandProps) {
+export function BrowseByBrand ({ brands }: BrowseByBrandProps)  {
+  console.log("brands",brands)
   return (
     <Carousel className="w-full h-full flex flex-col gap-4">
       <div className="w-full min-h-16 flex flex-row items-center justify-between">
         <div className="flex flex-row gap-4 items-center">
           <h1 className="font-semibold text-lg">Featured Brand</h1>
-          <span className="text-sm text-secondary_color mt-1 flex flex-row items-center">All Brands <ChevronRight size={15}/></span>
+          <span className="text-sm text-secondary_color mt-1 flex flex-row items-center">
+            All Brands <ChevronRight size={15} />
+          </span>
         </div>
         <div className="flex flex-row gap-2 h-full items-center">
           <div className="">
@@ -39,29 +42,34 @@ export function BrowseByBrand({brands}:BrowseByBrandProps) {
         </div>
       </div>
       <CarouselContent className="w-full h-full">
-        {brands.map((brand, index) => (
+        {brands && brands.map((brand, index) => (
           <CarouselItem key={index} className="md:basis-1/3 lg:basis-[25%]">
             <div className="p-0">
-              <div className=" min-h-[13rem] hover:scale-105 rounded hover:shadow-md hover:bg-white transition-all flex flex-col items-start justify-start gap-3 p-4">
-                <div className="w-full relative h-[13rem]">
-                  <Image
-                    layout="fill"
-                    src={brand.image_url}
-                    alt="category"
-                    className="object-contain hover:border-none rounded bg-white"
-                  />
+              <Link href={`/shop/shop-profile/${brand.shop_id}`} passHref>
+                <div className=" min-h-[13rem] hover:scale-105 rounded hover:shadow-md hover:bg-white transition-all flex flex-col items-start justify-start gap-3 p-4">
+                  <div className="w-full relative h-[13rem]">
+                    <Image
+                      layout="fill"
+                      src={brand.image_url}
+                      alt="category"
+                      className="object-contain hover:border-none rounded bg-white"
+                    />
+                  </div>
+                  <div className="flex flex-col text-left items-start">
+                    <span className="text-sm text-muted-foreground">
+                      {brand.website_link}
+                    </span>
+                    <span className="font-semibold">
+                      {brand.name} Compnay.Ltd
+                    </span>
+                  </div>
                 </div>
-                <div className="flex flex-col text-left items-start">
-                  <span className="text-sm text-muted-foreground">
-                    {brand.website_link}
-                  </span>
-                  <span className="font-semibold">{brand.name} Compnay.Ltd</span>
-                </div>
-              </div>
+              </Link>
             </div>
           </CarouselItem>
         ))}
       </CarouselContent>
     </Carousel>
   );
-}
+};
+

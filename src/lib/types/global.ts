@@ -45,6 +45,7 @@ export interface Brand {
   name: string;
   image_url: string;
   website_link: string;
+  shop_id: string
 }
 
 export interface CategoryImage {

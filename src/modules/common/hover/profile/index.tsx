@@ -1,4 +1,4 @@
-"ise client"
+"use client"
 
 import {
   CalendarDays,
@@ -8,7 +8,6 @@ import {
   User,
 } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
 import {
   HoverCard,
   HoverCardContent,
@@ -22,9 +21,9 @@ import { SessionData } from "@/modules/checkout";
 import { FindAccountById, UserType } from "@/lib/apolloClient/services/users";
 import serverApolloClient from "@/lib/apolloClient/serverApolloClient";
 
+
 export function ProfileHoverCard() {
   const router = useRouter();
-  const name = "Saw Lin Thant";
   const [user,setUser] = useState<UserType>()
     const [sessionData, setSessionData] = useState<SessionData | null>(null);
     useEffect(() => {
@@ -78,10 +77,10 @@ export function ProfileHoverCard() {
         <div className="flex flex-row items-center gap-3">
           <div className="w-10 h-10 relative rounded-full border">
             <Image
-              src={"/images/placeholder.jpg"}
+              src={user?.profile_url|| "/images/placeholder.jpg"}
               alt="profile"
               layout="fill"
-              objectFit="cover"
+              objectFit="contain"
               className="rounded-full"
             />
           </div>
@@ -93,7 +92,9 @@ export function ProfileHoverCard() {
       <HoverCardContent className="w-50">
         <div className="flex flex-col gap-2 px-2">
           <div className="flex flex-col gap-5 text-sm font-light pb-4 border-b">
-            <div className="flex flex-row gap-2 items-center justify-start hover:cursor-pointer">
+            <div
+            onClick={() => router.push(`/profile/${user?.id}`)}
+            className="flex flex-row gap-2 items-center justify-start hover:cursor-pointer">
               <User size={17} />
               <span>Profile Management</span>
             </div>

@@ -21,17 +21,32 @@ export const GET_SHOP_BY_ID = gql`
   query getShopById($id: uuid!) {
     shops_by_pk(id: $id) {
       id
-      name
-      logo
-      description
-      address
       phone
-      category_id
+      address
+      description
+      logo
+      name
       remark
       shop_admin_name
+      created_at
+      updated_at
+      category_id
+      shop_images {
+        image_url
+        shop_id
+      }
+      brands {
+        image_url
+        name
+        website_link
+      }
       shop_category {
         id
         name
+      }
+      products{
+       id
+       name
       }
     }
   }

@@ -19,6 +19,7 @@ export type UserType = {
   username: string;
   email: string;
   phone: string
+  profile_url?: string
 }
 
 export interface FindAccountByIdResponse {

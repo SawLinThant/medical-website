@@ -1,20 +1,9 @@
 import { gql } from "@apollo/client";
 
-export const GET_USER_BY_PHONE = gql`
-  query getUsersByShopId($phone: String!) {
-    users(where: { phone: { _eq: $phone } }) {
+export const UPDATE_USER_BY_ID = gql`
+  mutation UpdateUserById($id: uuid!, $input: users_set_input!) {
+    update_users_by_pk(pk_columns: { id: $id }, _set: $input) {
       id
-      username
-      email
-      phone
-    }
-  }
-`;
-
-export const GET_USER_BY_ID = gql`
-  query getUserById($id: uuid!) {
-    users(where: { id: { _eq: $id } }) {
-     id
       username
       email
       phone

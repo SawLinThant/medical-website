@@ -31,7 +31,7 @@ const Footer:React.FC = () => {
             </div>
             <div className="w-full bg-white min-h-4 lg:mt-2 mt-4 py-3">
                <div className="text-xs text-center">
-                    Powered By <span className="font-bold ml-1 text-sm">All results by Natsay Myanmar</span>
+               All results by <span className="font-bold ml-1 text-sm"> Natsay Myanmar</span>
                </div> 
             </div>
         </footer>

@@ -24,15 +24,14 @@ const retryLink = setContext(async (_, { headers }) => {
   }
 });
 
-// Apollo Client with retry logic
 const serverApolloClient = new ApolloClient({
   link: retryLink.concat(httpLink),
   cache: new InMemoryCache(),
   ssrMode: typeof window === "undefined",
   defaultOptions: {
     query: {
-      errorPolicy: 'all', // Allows partial data even if some queries fail
-      fetchPolicy: 'network-only', // Always fetch fresh data
+      errorPolicy: 'all', 
+      fetchPolicy: 'network-only', 
     },
   },
 });
