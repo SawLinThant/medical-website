@@ -47,11 +47,13 @@ const MobileNav: React.FC = () => {
                 onClick={() => router.push("/home")}
                 className="text-white font-bold text-lg"
               >
-                NatSay
+                NatSay.com.mm
               </h2>
             </div>
             <div className="flex flex-row items-center gap-6">
-                <div onClick={() => setIsSearch(!isSearch)} className="">
+                <div 
+                onClick={() => setIsSearch(!isSearch)}
+                 className="">
                     <Search size={20} color="white"/>
                 </div>
               <div
@@ -77,7 +79,11 @@ const MobileNav: React.FC = () => {
                 placeholder="Search Products "
               />
               <div 
-              //onClick={handleSubmit} 
+              
+              
+              
+              
+              onClick={handleSubmit} 
               className="absolute top-2 left-3">
                 <Search size={25} />
               </div>

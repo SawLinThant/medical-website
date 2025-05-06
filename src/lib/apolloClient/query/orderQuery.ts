@@ -38,12 +38,14 @@ export const GET_ORDERS = gql`
       payment_id
       payment_proof
       created_date
-      updated_date
+      updated_at
       order_items {
+        id
         quantity
         subtotal
         price
         shop_id
+        product_id
         product {
           id
           name

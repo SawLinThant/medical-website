@@ -50,6 +50,8 @@ const ProductCard: React.FC<ProductCardprops> = (product:ProductCardprops) => {
     }
     const roundedRating = Math.round(product.product.average_rating|| 0);
     const reviewCount = Math.round(product.product.review_count|| 0);
+    const discountPercentage = product.product.discount_price ? 
+      Math.round(((product.product.price - product.product.discount_price) / product.product.price) * 100) : 0;
 
   return (
     <div className={clsx("w-full p-4 border bg-white rounded-md group lg:h-[21.5rem] h-full scale-95 hover:h-full hover:shadow-lg transition-all overflow-hidden",{
@@ -58,12 +60,14 @@ const ProductCard: React.FC<ProductCardprops> = (product:ProductCardprops) => {
       <div className="w-full h-full flex flex-col gap-3 group">
         <div onClick={() => router.push(`/product/detail/${product.product.id}`)} className="relative w-full min-h-[10rem] hover:cursor-pointer">
           <Image layout="fill" alt="product.img" src={images?.[0].image_url || "/image_placeholder.jpg"} className="object-contain"/>
-          <div className="absolute top-0 right-0 opacity-0 group-hover:opacity-100 transition-all">
+          {/* <div className="absolute top-0 right-0 opacity-0 group-hover:opacity-100 transition-all">
             <Heart/>
-          </div>
-          <div className="absolute top-0 left-0 opacity-0 group-hover:opacity-100 transition-all min-w-16 bg-secondary_color text-white rounded flex items-center justify-center text-center py-1">
-            <span className="w-full h-full text-sm font-extralight">30% off</span>
-          </div>
+          </div> */}
+          {discountPercentage > 0 && (
+            <div className="absolute top-0 left-0 bg-secondary_color text-white rounded flex items-center justify-center text-center py-1 px-2">
+              <span className="text-sm font-extralight">{discountPercentage}% off</span>
+            </div>
+          )}
         </div>
         <div className="flex flex-col gap-2">
           <h2 className="font-bold">{product.product.name}</h2>
@@ -84,9 +88,20 @@ const ProductCard: React.FC<ProductCardprops> = (product:ProductCardprops) => {
           </div>
         </div>
         <div className="flex flex-col gap-3">
-          <h1 className="text-secondary_color">
-            MMK {product.product.price.toLocaleString()}
-          </h1>
+          {product.product.discount_price ? (
+            <div className="flex flex-row items-center gap-2">
+              <h1 className="text-secondary_color">
+                MMK {product.product.discount_price.toLocaleString()}
+              </h1>
+              <span className="text-sm text-muted-foreground line-through">
+                MMK {product.product.price.toLocaleString()}
+              </span>
+            </div>
+          ) : (
+            <h1 className="text-secondary_color">
+              MMK {product.product.price.toLocaleString()}
+            </h1>
+          )}
           <div className="w-full h-1 border border-gray-300">
             <div className="h-full w-2/3 bg-yellow-300"></div>
           </div>

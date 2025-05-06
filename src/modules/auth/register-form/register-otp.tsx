@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
+import { useVerifyRegisterOtp } from "@/lib/hooks/useMutation/useOTP";
 import OTPInput from "@/modules/common/otp-input";
 import { Loader, MoveLeft } from "lucide-react";
 import { useState } from "react";
@@ -16,19 +17,33 @@ const RegisterOTPForm: React.FC<OTPFormProps> = ({
   handleRegister,
 }) => {
   const [value, setValue] = useState<any>();
-  const handleSubmit = () => {
+  const { verifyRegisterOtp, loading, error } = useVerifyRegisterOtp();
+  const handleSubmit = async() => {
     const otpValue = value.toString();
-    if (otpValue.length === 6) {
-      if (otpValue === "239827") {
-        handleRegister();
+    if (!otpValue || otpValue.length !== 6) {
+      toast({
+        variant: "destructive",
+        description: "Please enter a 6-digit OTP",
+      });
+      return;
+    }
+    const phone = localStorage.getItem("registerphone") || "";
+    try {
+      const result = await verifyRegisterOtp(phone, otpValue);
+      if (result) {
+        localStorage.removeItem("resetphone");
+        handleRegister(); 
       } else {
         toast({
-          description: "Invalid OTP !",
+          variant: "destructive",
+          description: "Invalid OTP",
         });
       }
-    } else {
+    } catch (err) {
+      console.error("Error verifying OTP:", err);
       toast({
-        description: "please fill all fields",
+        variant: "destructive",
+        description: "Failed to verify OTP",
       });
     }
   };

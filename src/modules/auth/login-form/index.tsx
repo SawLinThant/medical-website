@@ -26,11 +26,15 @@ const LoginForm: React.FC<LoginFormProps> = ({ setIsForgotPasword,closeDialog })
   
     setLoginLoading(true);
     try {
-      const response = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ phone, password }),
-      });
+      const token = localStorage.getItem("token");
+      if(token){
+        localStorage.removeItem("token");
+      }
+        const response = await fetch("/api/auth/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ phone, password }),
+        });
   
       const result = await response.json();
       if (result.success) {

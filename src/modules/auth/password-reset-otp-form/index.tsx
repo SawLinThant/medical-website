@@ -1,7 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
+import { useVerifyOtp } from "@/lib/hooks/useMutation/useOTP";
 import OTPInput from "@/modules/common/otp-input";
-import { MoveLeft } from "lucide-react";
+import { Loader, MoveLeft } from "lucide-react";
 import { useState } from "react";
 
 interface OTPFormProps {
@@ -11,22 +12,42 @@ interface OTPFormProps {
 
 const OTPForm: React.FC<OTPFormProps> = ({ setIsForgotPasword,setCurrentPage }) => {
   const [value, setValue] = useState<any>();
-    const handleSubmit = () => {
-       const otpValue = value.toString();
-       if (otpValue.length === 6) {
-         if (otpValue === "239827") {
-           setCurrentPage("Enter New Password")
-         } else {
-           toast({
-             description: "Invalid OTP !",
-           });
-         }
-       } else {
-         toast({
-           description: "please fill all fields",
-         });
-       }
+  const { verifyOtp, loading, error } = useVerifyOtp();
+  const handleSubmit = async () => {
+    const otpValue = value?.toString();
+    if (!otpValue || otpValue.length !== 6) {
+      toast({
+        variant: "destructive",
+        description: "Please enter a 6-digit OTP",
+      });
+      return;
     }
+    const phone = localStorage.getItem("resetphone") || "";
+    try {
+      const result = await verifyOtp(phone, otpValue);
+      if (result) {
+        localStorage.removeItem("resetphone");
+        setCurrentPage("Enter New Password");
+      } else {
+        toast({
+          variant: "destructive",
+          description: "Invalid OTP",
+        });
+      }
+    } catch (err) {
+      console.error("Error verifying OTP:", err);
+      toast({
+        variant: "destructive",
+        description: "Failed to verify OTP",
+      });
+    }
+  };
+  if (error) {
+    toast({
+      variant: "destructive",
+      description: error.message || "An error occurred while verifying OTP",
+    });
+  }
   return (
     <div className="flex flex-col w-full h-full gap-4">
       <div>
@@ -45,8 +66,8 @@ const OTPForm: React.FC<OTPFormProps> = ({ setIsForgotPasword,setCurrentPage }) 
         className="flex flex-col gap-2 items-center mt-4"
       >
         <OTPInput setValue={setValue} />
-        <Button onClick={handleSubmit} type="button" className="mt-5 h-9 w-full">
-          Reset Password
+        <Button disabled={loading} onClick={handleSubmit} type="button" className="mt-5 h-9 w-full flex items-center justify-center">
+          {loading?<Loader className="animate-spin"/>:"Reset Password"}
         </Button>
         <div
           onClick={() => {setIsForgotPasword(false);setCurrentPage("Enter Phone")}}

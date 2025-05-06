@@ -28,18 +28,18 @@ const ProductList: React.FC<ProductListProps> = ({
   currentPage,
   itemPerPage,
 }) => {
-  
   const router = useRouter();
   const searchParams = useSearchParams();
   const dispatch = useDispatch();
 
-  const handleAddToCart = (product:Product) => {
-    const quantity = 1
-    dispatch(addToCart({...product,quantity}))
+  const handleAddToCart = (product: Product) => {
+    const quantity = 1;
+    dispatch(addToCart({ ...product, quantity }));
     toast({
-      description:"Item added to the cart"
-    })
-  }
+      description: "Item added to the cart",
+    });
+  };
+
 
   const handleSortChange = (sort: string) => {
     const params = new URLSearchParams(searchParams);
@@ -56,24 +56,34 @@ const ProductList: React.FC<ProductListProps> = ({
     if (totalPages <= 3) {
       return Array.from({ length: totalPages }, (_, i) => i + 1);
     }
-    
+
     if (currentPage <= 2) {
-      return [1, 2, 3, '...', totalPages];
+      return [1, 2, 3, "...", totalPages];
     }
-    
+
     if (currentPage >= totalPages - 1) {
-      return [1, '...', totalPages - 2, totalPages - 1, totalPages];
+      return [1, "...", totalPages - 2, totalPages - 1, totalPages];
     }
-    
-    return [1, '...', currentPage - 1, currentPage, currentPage + 1, '...', totalPages];
+
+    return [
+      1,
+      "...",
+      currentPage - 1,
+      currentPage,
+      currentPage + 1,
+      "...",
+      totalPages,
+    ];
   };
   return (
     <div className="w-full flex flex-col mt-6">
       <div className="w-full flex lg:flex-row md:flex-row flex-col gap-4 min-h-28 items-center justify-between pb-4 border-b border-gray-300">
         <div className="flex flex-col gap-3">
-          <h1 className="font-semibold text-subheading">{category === "" ? "" : category}</h1>
+          <h1 className="font-semibold text-subheading">
+            {category === "" ? "" : category}
+          </h1>
           <span className="text-muted-foreground text-sm">
-            {products.length} item(s) found  {name === "" ? "" : `for ${name}`}
+            {products.length} item(s) found {name === "" ? "" : `for ${name}`}
           </span>
         </div>
         <div className="min-w-32 flex flex-row items-center w-full justify-end">
@@ -97,7 +107,9 @@ const ProductList: React.FC<ProductListProps> = ({
           >
             <div className="w-full hover:scale-105 transition-all duration-200">
               <ProductCard
-              addToCart={() =>handleAddToCart(product)}
+              average_rating={product.average_rating}
+                id={product.id}
+                addToCart={() => handleAddToCart(product)}
                 name={product.name}
                 price={product.price}
                 image={product.images?.[0].image_url}
@@ -112,28 +124,28 @@ const ProductList: React.FC<ProductListProps> = ({
           disabled={currentPage === 1}
           className="px-2 py-2 border rounded-md hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          <ChevronLeft/>
+          <ChevronLeft />
         </button>
 
         {getVisiblePages().map((page, index) => {
-          if (page === '...') {
+          if (page === "...") {
             return (
-              <span 
-                key={`ellipsis-${index}`} 
+              <span
+                key={`ellipsis-${index}`}
                 className="px-4 py-2 cursor-default"
               >
                 ...
               </span>
             );
           }
-          
+
           return (
             <button
               key={page}
               onClick={() => handlePageChange(Number(page))}
               className={`px-4 py-2 border rounded-md ${
-                currentPage === page 
-                  ? "bg-secondary_color/90 text-white" 
+                currentPage === page
+                  ? "bg-secondary_color/90 text-white"
                   : "hover:bg-gray-100"
               }`}
             >
@@ -147,7 +159,7 @@ const ProductList: React.FC<ProductListProps> = ({
           disabled={currentPage === totalPages}
           className="px-2 py-2 border rounded-md hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-         <ChevronRight/>
+          <ChevronRight />
         </button>
       </div>
     </div>

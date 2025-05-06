@@ -1,57 +1,3 @@
-// "use client";
-
-// import * as React from "react";
-// import Image from "next/image";
-// import "slick-carousel/slick/slick.css";
-// import "slick-carousel/slick/slick-theme.css";
-// import Slider from "react-slick";
-
-// const IMAGES = [
-//   {
-//     id: 1,
-//     url: "/images/slide.jpg",
-//   },
-//   {
-//     id: 2,
-//     url: "/images/slide.jpg",
-//   },
-//   {
-//     id: 3,
-//     url: "/images/slide.jpg",
-//   },
-// ];
-
-// export function ImageCarousel() {
-//   const settings = {
-//     dots: false,
-//     infinite: true,
-//     speed: 500,
-//     slidesToShow: 1,
-//     slidesToScroll: 1,
-//     autoplay: true,
-//     autoplaySpeed: 3000,
-//     pauseOnHover: true,
-//   };
-//   return (
-//     <div className="w-full">
-//       <Slider {...settings}>
-//         {IMAGES.map((image) => (
-//           <div key={image.id} className="w-full h-full">
-//             <div className="relative w-full lg:h-[20rem] md:h-[15rem] h-[13rem]">
-//               <Image
-//                 className="object-cover rounded-md"
-//                 layout="fill"
-//                 alt={`carousel-image-${image.id}`}
-//                 src={image.url}
-//               />
-//             </div>
-//           </div>
-//         ))}
-//       </Slider>
-//     </div>
-//   );
-// }
-
 "use client";
 
 import * as React from "react";
@@ -84,7 +30,7 @@ export function ImageCarousel() {
   }, []);
 
   const settings = {
-    dots: false,
+    dots: true,
     infinite: true,
     speed: 500,
     slidesToShow: 1,
@@ -92,10 +38,37 @@ export function ImageCarousel() {
     autoplay: true,
     autoplaySpeed: 3000,
     pauseOnHover: true,
+    appendDots: (dots: React.ReactNode) => (
+      <div
+        style={{
+          position: "absolute",
+          bottom: "10px",
+          width: "100%",
+          padding: "10px",
+          listStyle: "none",
+          textAlign: "center",
+        }}
+      >
+        <ul style={{ margin: "0px" }}>{dots}</ul>
+      </div>
+    ),
+    customPaging: () => (
+      <div
+        style={{
+          width: "10px",
+          height: "10px",
+          border: "1px solid white",
+          borderRadius: "50%",
+          display: "inline-block",
+          background: "white",
+          opacity: 0.6,
+        }}
+      />
+    ),
   };
 
   if (loading) {
-    return <div>Loading advertisements...</div>;
+    return <div></div>;
   }
 
   if (!advertisements.length) {
@@ -103,14 +76,14 @@ export function ImageCarousel() {
   }
 
   return (
-    <div className="w-full">
+    <div className="w-full relative">
       <Slider {...settings}>
         {advertisements.map((ad) =>
           ad.ad_images.map((image) => (
             <div key={image.id} className="w-full h-full">
               <div className="relative w-full lg:h-[20rem] md:h-[15rem] h-[13rem]">
                 <Image
-                  className="object-cover rounded-md"
+                  className="object-contain rounded-md"
                   layout="fill"
                   alt={`advertisement-${ad.id}-image-${image.id}`}
                   src={image.url}

@@ -17,8 +17,12 @@ export const GET_PRODUCTS = gql`
       usage
       average_rating
       review_count
+      age_group
       created_at
       storage
+      order_items{
+       status
+      }
       shop {
         id
         name
@@ -41,10 +45,107 @@ export const GET_PRODUCTS = gql`
   }
 `;
 
+export const GET_BEST_SELLER_PRODUCTS = gql`
+  query getProducts($today: timestamptz!) {
+    products(
+      where: { 
+        created_at: { _lte: $today }
+        order_items: { status: { _eq: "Completed" } }
+      }
+      order_by: { order_items_aggregate: { count: desc } }
+      limit: 10
+    ) {
+      id
+      name
+      price
+      bulk_price
+      quantity
+      description
+      discount_price
+      dosage
+      usage
+      average_rating
+      review_count
+      age_group
+      created_at
+      storage
+      order_items {
+        status
+      }
+      shop {
+        id
+        name
+        logo
+        description
+        address
+        phone
+        remark
+        shop_admin_name
+      }
+      category {
+        id
+        name
+      }
+      images {
+        id
+        image_url
+      }
+    }
+  }
+`;
+
+// export const GET_TOP_SAVER_PRODUCTS = gql`
+//   query getTopSaverProducts($today: timestamptz!) {
+//     products(
+//       where: { created_at: { _lte: $today } }
+//       order_by: { price: asc }
+//       limit: 5
+//     ) {
+//       id
+//       name
+//       price
+//       bulk_price
+//       discount_price
+//       quantity
+//       description
+//       dosage
+//       usage
+//       storage
+//       average_rating
+//       review_count
+//       category_id
+//       updated_at
+//       shop {
+//         id
+//         name
+//         logo
+//         description
+//         address
+//         phone
+//         remark
+//         shop_admin_name
+//       }
+//       category {
+//         id
+//         name
+//       }
+//       images {
+//         id
+//         image_url
+//       }
+//     }
+//   }
+// `;
 export const GET_TOP_SAVER_PRODUCTS = gql`
   query getTopSaverProducts($today: timestamptz!) {
     products(
-      where: { created_at: { _lte: $today } }
+      where: { 
+        created_at: { _lte: $today }
+        _and: [
+          { discount_price: { _is_null: false } }
+          { discount_price: { _neq: 0 } }
+        ]
+      }
       order_by: { price: asc }
       limit: 5
     ) {
@@ -98,6 +199,7 @@ export const GET_PRODUCT_BY_ID = gql`
       average_rating
       review_count
       usage
+      age_group
       storage
       shop {
         id

@@ -3,6 +3,7 @@ import { Input } from "@/components/ui/input";
 import { toast } from "@/hooks/use-toast";
 import serverApolloClient from "@/lib/apolloClient/serverApolloClient";
 import { FindAccount } from "@/lib/apolloClient/services/users";
+import { useSendOtp } from "@/lib/hooks/useMutation/useOTP";
 import { Loader, MoveLeft } from "lucide-react";
 import { useState } from "react";
 
@@ -18,25 +19,37 @@ const ResetPasswordForm: React.FC<ResetFormProps> = ({
   setResetPhone
 }) => {
   const [laoding, setLoading] = useState<boolean>(false);
+  const { sendOtp, loading: sendOtpLoading, error: sendOtpError } = useSendOtp();
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const phone = formData.get("phone") as string;
     try {
       setLoading(true);
-      const result = await FindAccount(serverApolloClient, {
-        phone: phone,
-      });
-      console.log(result);
-      if (result.success && !result.isExist) {
+
+      const result = await FindAccount(serverApolloClient, { phone });
+      if (!result.success || !result.isExist) {
         toast({
           variant: "destructive",
           description: "Invalid Phone Number",
         });
-      } else {
-        setResetPhone(phone)
-        setCurrentPage("Enter OTP")
+        return;
       }
+      if(result.isExist) {
+        localStorage.setItem("resetphone", phone);
+      }
+
+      const sendOtpResult = await sendOtp(phone);
+      if (!sendOtpResult) {
+        toast({
+          variant: "destructive",
+          description: "Failed to send OTP",
+        });
+        return;
+      }
+
+      setResetPhone(phone);
+      setCurrentPage("Enter OTP");
     } catch (error) {
       console.log("Error registering:", error);
       setLoading(false);
@@ -79,7 +92,7 @@ const ResetPasswordForm: React.FC<ResetFormProps> = ({
             className="h-9 focus-visible:ring-offset-0 focus-visible:ring-0 placeholder:opacity-[0.6] placeholder:text-[12px]"
           />
         </div>
-        <Button type="submit" className="mt-5 h-9 flex items-center justify-center">
+        <Button disabled={laoding} type="submit" className="mt-5 h-9 flex items-center justify-center">
         {laoding ? (
             <Loader className="animate-spin" />
           ) : "Send OTP"}

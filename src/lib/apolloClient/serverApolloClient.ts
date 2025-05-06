@@ -31,7 +31,7 @@ const serverApolloClient = new ApolloClient({
   defaultOptions: {
     query: {
       errorPolicy: 'all', 
-      fetchPolicy: 'network-only', 
+      fetchPolicy: 'no-cache', 
     },
   },
 });

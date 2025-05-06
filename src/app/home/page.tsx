@@ -1,9 +1,11 @@
 import { GET_BRANDS } from "@/lib/apolloClient/query/brandQuery";
 import { GET_CATEGORY_IMAGE } from "@/lib/apolloClient/query/categoryQuery";
 import {
+  GET_BEST_SELLER_PRODUCTS,
   GET_PRODUCTS,
   GET_TOP_SAVER_PRODUCTS,
 } from "@/lib/apolloClient/query/productQuery";
+import { GET_SHOPS } from "@/lib/apolloClient/query/shopQuery";
 import serverApolloClient from "@/lib/apolloClient/serverApolloClient";
 import { ImageCarousel } from "@/modules/common/carousel";
 //import CategoryFilter from "@/modules/common/category-filter";
@@ -36,7 +38,7 @@ const HomePage: React.FC = async () => {
   const today = new Date().toISOString().split("T")[0] + "T23:59:59Z";
   try {
     const { data: productsData } = await serverApolloClient.query({
-      query: GET_PRODUCTS,
+      query: GET_BEST_SELLER_PRODUCTS,
       variables:{today},
       fetchPolicy:"no-cache"
     });
@@ -54,6 +56,11 @@ const HomePage: React.FC = async () => {
       query: GET_BRANDS,
       fetchPolicy:"no-cache"
     });
+    const { data: shops } = await serverApolloClient.query({
+      query: GET_SHOPS,
+      fetchPolicy:"no-cache"
+    });
+    console.log("shops", shops)
 
     return (
       <main className="w-full flex flex-col items-center">
@@ -61,25 +68,25 @@ const HomePage: React.FC = async () => {
           <CategoryFilter />
         </div> */}
         <div className="w-full min-h-40 bg-slate-100 flex items-center justify-center p-4 bg-[url('/images/banner-background.jpg')] bg-cover bg-center">
-          <div className="w-full max-w-[1300px] grid lg:grid-cols-5 md:grid-cols-5 grid-cols-1 gap-6 py-6">
-            <div className="lg:col-span-3 md:col-span-3 col-span-1 min-h-[10rem] rounded-md overflow-hidden">
+          <div className="w-full max-w-[1300px] gap-6 py-6">
+            <div className="w-full min-h-[10rem] rounded-md overflow-hidden">
               <ImageCarousel/>
             </div>
-            <div className="relative lg:col-span-2 md:col-span-2 col-span-1 w-full lg:h-[20rem] md:h-[15rem] h-[13rem]">
+            {/* <div className="relative lg:col-span-2 md:col-span-2 col-span-1 w-full lg:h-[20rem] md:h-[15rem] h-[13rem]">
               <Image
                 className="object-cover"
                 layout="fill"
                 alt="ad"
                 src="/images/ad.jpg"
               />
-            </div>
+            </div> */}
           </div>
         </div>
         <div className="w-full mt-16 max-w-[1300px] flex items-center justify-center">
           <BrowseByCategory category={categoryImageData?.categories} />
         </div>
         <div className="w-full max-w-[1300px] mt-16">
-          <BrowseByBrand brands={brandData?.brands} />
+          <BrowseByBrand brands={shops?.shops} />
         </div>
         <div className="w-full max-w-[1300px] mt-20 flex lg:flex-row md:flex-col flex-col gap-4 lg:justify-between">
           <div className="lg:w-full md:w-full w-full">

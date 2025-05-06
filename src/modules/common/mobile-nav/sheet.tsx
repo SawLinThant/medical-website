@@ -21,6 +21,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { RootState } from "@/lib/store";
 import AuthPopUp from "../auth-popup";
+import Home from "../icons/home";
 
 export function MobileNavSheet() {
   const dispatch = useDispatch();
@@ -109,9 +110,9 @@ export function MobileNavSheet() {
           >
             <div className="flex flex-row gap-4">
               <div>
-                <Heart size={20} />
+              <Home height="20" width="20" color="black" />
               </div>
-              <span>Favourites</span>
+              <span>Home</span>
             </div>
             <div>
               <ChevronRight size={20} />

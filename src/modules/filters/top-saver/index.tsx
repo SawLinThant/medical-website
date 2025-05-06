@@ -38,7 +38,7 @@ export function TopSaver({ products }: TopSaverProps) {
           <div className="flex flex-row items-center gap-4">
             <h1 className="font-semibold text-lg">Top Saver Today</h1>
             <span onClick={() => router.push("/product/list")} className="text-sm text-secondary_color mt-1 flex flex-row items-center hover:cursor-pointer">
-              All Offers <ChevronRight size={15} />
+              All Products <ChevronRight size={15} />
             </span>
           </div>
           {/* <div className="min-w-32 rounded-md bg-secondary_color text-white text-sm flex flex-row items-center font-extralight gap-3 py-2 px-3 lg:ml-4 md:ml-4 ml-0">

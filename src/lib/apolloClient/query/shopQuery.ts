@@ -1,18 +1,12 @@
 import { gql } from "@apollo/client";
 
-export const GET_PRODUCTS = gql`
+export const GET_SHOPS = gql`
   query getShops {
     shops(order_by: { created_at: desc }) {
       id
       name
       logo
-      category
       description
-      address
-      phone
-      category_id
-      remark
-      shop_admin_name
     }
   }
 `;

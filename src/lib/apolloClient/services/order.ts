@@ -90,22 +90,40 @@ export interface InsertOrderItemInput {
         throw new Error("GraphQL query GET_ORDERS is not defined.");
       }
   
-      const { data } = await client.query({
+      console.log("Executing query with variables:", { where, offset, limit });
+  
+      const response = await client.query({
         query: GET_ORDERS,
         fetchPolicy: "no-cache",
         variables: { where, offset, limit },
+        errorPolicy: "all" 
       });
   
-      if (!data) {
-        throw new Error("No data returned from GraphQL query.");
+      console.log("Full Apollo response:", response);
+  
+      if (response.error) {
+        console.error("Apollo Client Error:", response.error);
+        return { orders: [], count: 0 };
       }
   
+      if (!response.data) {
+        console.warn("No data in response, returning empty array");
+        return { orders: [], count: 0 };
+      }
+  
+      const orders = response.data.orders || [];
+      const count = response.data.orders_aggregate?.aggregate?.count || 0;
+  
       return {
-        orders: data.orders || [],
-        count: data.orders_aggregate?.aggregate?.count || 0,
+        orders,
+        count,
       };
     } catch (error: any) {
-      console.error("Error fetching orders:", error.message || error);
+      console.error("Error in getOrders:", {
+        message: error.message,
+        stack: error.stack,
+        error: error
+      });
       return { orders: [], count: 0 };
     }
   };

@@ -101,8 +101,8 @@ const ProductDetail = async (props: { params: paramsType }) => {
                   MMK {product.price.toLocaleString()}
                 </h2>
                 <div className="flex flex-row items-center gap-1">
-                  <span className="text-lg text-muted-foreground">/</span>
-                  <span className="text-xs text-muted-foreground">package</span>
+                  {/* <span className="text-lg text-muted-foreground">/</span>
+                  <span className="text-xs text-muted-foreground">package</span> */}
                 </div>
               </div>
               <div className="text-muted-foreground text-sm">
@@ -156,17 +156,17 @@ const ProductDetail = async (props: { params: paramsType }) => {
           <div className="flex flex-col gap-4 mt-6 items-start w-full">
             <h2 className="text-xl font-semibold">Medication Sepcification</h2>
             <div className="flex flex-col gap-1 items-start text-left">
-              <span className="text-xs text-muted-foreground">Brand</span>
-              <span className="">No Brand</span>
+              <span className="text-xs text-muted-foreground">Shop</span>
+              <span className="">{product.shop?.name || "No shop"}</span>
             </div>
             <div className="flex flex-col gap-1 items-start text-left">
               <span className="text-xs text-muted-foreground">Age group</span>
-              <span className="">No age group</span>
+              <span className="">{product.age_group || "No age group restriction"}</span>
             </div>
-            <div className="flex flex-col gap-1 items-start text-left">
+            {/* <div className="flex flex-col gap-1 items-start text-left">
               <span className="text-xs text-muted-foreground">SKU</span>
               <span className="">100011232_MM</span>
-            </div>
+            </div> */}
             <div className="w-full mt-6">
               <Rating productId={productId}/>
                <div className="w-full mt-6">

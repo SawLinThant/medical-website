@@ -1,3 +1,5 @@
+"use client";
+
 import * as React from "react";
 import {
   Carousel,
@@ -11,20 +13,21 @@ import { cn } from "@/lib/utils";
 import { ChevronRight } from "lucide-react";
 import { Brand } from "@/lib/types/global";
 import Link from "next/link";
-
+import { Shop } from "@/domain/entities/shop.entity";
+import { useRouter } from "next/navigation";
 interface BrowseByBrandProps {
-  brands: Brand[];
+  brands: Shop[];
 }
 
 export function BrowseByBrand ({ brands }: BrowseByBrandProps)  {
-  console.log("brands",brands)
+  const router = useRouter();
   return (
     <Carousel className="w-full h-full flex flex-col gap-4">
       <div className="w-full min-h-16 flex flex-row items-center justify-between">
         <div className="flex flex-row gap-4 items-center">
-          <h1 className="font-semibold text-lg">Featured Brand</h1>
-          <span className="text-sm text-secondary_color mt-1 flex flex-row items-center">
-            All Brands <ChevronRight size={15} />
+          <h1 className="font-semibold text-lg">Featured Shops</h1>
+          <span onClick={() => router.push("/shop/all")} className="text-sm text-secondary_color mt-1 flex flex-row items-center hover:cursor-pointer">
+            All Shops <ChevronRight size={15} />
           </span>
         </div>
         <div className="flex flex-row gap-2 h-full items-center">
@@ -42,25 +45,25 @@ export function BrowseByBrand ({ brands }: BrowseByBrandProps)  {
         </div>
       </div>
       <CarouselContent className="w-full h-full">
-        {brands && brands.map((brand, index) => (
+        {brands && brands.map((shop, index) => (
           <CarouselItem key={index} className="md:basis-1/3 lg:basis-[25%]">
             <div className="p-0">
-              <Link href={`/shop/shop-profile/${brand.shop_id}`} passHref>
+              <Link href={`/shop/shop-profile/${shop.id}`} passHref>
                 <div className=" min-h-[13rem] hover:scale-105 rounded hover:shadow-md hover:bg-white transition-all flex flex-col items-start justify-start gap-3 p-4">
                   <div className="w-full relative h-[13rem]">
                     <Image
                       layout="fill"
-                      src={brand.image_url}
+                      src={shop.logo || ""}
                       alt="category"
                       className="object-contain hover:border-none rounded bg-white"
                     />
                   </div>
                   <div className="flex flex-col text-left items-start">
                     <span className="text-sm text-muted-foreground">
-                      {brand.website_link}
+                      {shop.description}
                     </span>
                     <span className="font-semibold">
-                      {brand.name} Compnay.Ltd
+                      {shop.name} 
                     </span>
                   </div>
                 </div>

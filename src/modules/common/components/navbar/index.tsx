@@ -45,10 +45,10 @@ const NavBar: React.FC = () => {
   return (
     <header className="w-full h-[6rem] border-b border-gray-300 md:hidden hidden lg:flex items-center justify-center px-4 py-6">
       <div className="w-full min-h-[4rem] max-w-[1300px] md:hidden hidden lg:flex flex-row items-center justify-between">
-        <div className="min-w-[10rem] h-full flex flex-row items-center gap-2">
+        <div className="min-w-[10rem] flex flex-col justify-center items-center">
           <div
             onClick={() => router.push("/")}
-            className="min-w-28 relative bg-transparent rounded-md h-16 flex items-center justify-center hover:cursor-pointer"
+            className="min-w-28 relative bg-transparent rounded-md h-10 flex items-center justify-center hover:cursor-pointer"
           >
             <Image
               width={60}
@@ -58,7 +58,7 @@ const NavBar: React.FC = () => {
               className="object-contain"
             />
           </div>
-          <h2 className="font-bold text-lg">Natsay.com.mm</h2>
+          <h2 className="font-bold">Natsay.com.mm</h2>
         </div>
         <div className="rounded-md border-r h-[2.5rem]">
           <SearchForm />

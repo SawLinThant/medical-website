@@ -12,6 +12,7 @@ import { CircleAlert, Loader } from "lucide-react";
 import { useState } from "react";
 import RegisterOTPForm from "./register-otp";
 import { FindAccount } from "@/lib/apolloClient/services/users";
+import { useSendRegisterOtp } from "@/lib/hooks/useMutation/useOTP";
 
 const passwordRegex =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/;
@@ -22,6 +23,7 @@ interface RegisterFormProps {
 
 const RegisterForm: React.FC<RegisterFormProps> = ({setCurrentSuccessPage}) => {
   const [registerLoading, setRegisterLoading] = useState<boolean>(false);
+    const { sendRegisterOtp, loading: sendOtpLoading, error: sendOtpError } = useSendRegisterOtp();
   const [registerPage,setRegsiterPage] = useState<string>("Register Form");
   const [registerCredentials, setRegisterCredentials] =
     useState<RegisterUserInput>({
@@ -70,6 +72,15 @@ const RegisterForm: React.FC<RegisterFormProps> = ({setCurrentSuccessPage}) => {
           role: "customer",
           shop_id: null,
         });
+        const sendOtpResult = await sendRegisterOtp(phone);
+        if (!sendOtpResult) {
+          toast({
+            variant: "destructive",
+            description: "Failed to send OTP",
+          });
+          return;
+        }
+        localStorage.setItem("registerphone",phone)
         setRegsiterPage("Register OTP Form")
       } else {
         toast({

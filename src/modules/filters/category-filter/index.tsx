@@ -33,10 +33,10 @@ export function BrowseByCategory(category: CategoryProps) {
           </span>
         </div>
         <div className="flex flex-row gap-2 h-full items-center">
-          <div className="">
+          <div className="md:hidden lg:hidden">
             <CarouselPrevious className="bg-gray-300 rounded-md hover:bg-gray-400 transition"></CarouselPrevious>
           </div>
-          <div className="">
+          <div className="md:hidden lg:hidden">
             <CarouselNext
               className={cn(
                 " bg-gray-300 rounded-md hover:bg-gray-400 transition",
