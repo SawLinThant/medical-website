@@ -33,7 +33,7 @@ const ShopProfile:React.FC<ShopProfileProps> = ({shopId}) => {
     },[])
     console.log("shop-profile",shop)
     return(
-        <section className="w-full  flex flex-col items-center">
+        <section className="w-full flex flex-col items-center">
             <div
             style={{
                 backgroundImage: shop?.shop_images?.[0] ? `url(${shop.shop_images[0].image_url})` : 'none',
@@ -42,7 +42,7 @@ const ShopProfile:React.FC<ShopProfileProps> = ({shopId}) => {
                 backgroundRepeat: 'no-repeat', 
                 backgroundColor: shop?.shop_images?.[0] ? 'transparent' : '#d1d5db', 
               }}
-            className="w-full flex items-center justify-center h-[40vh] lg:min-h-[50vh] border bg-gray-300">
+            className="w-full flex items-center justify-center h-[40vh] lg:min-h-[65vh] border bg-gray-300">
                 <div className="w-full h-full lg:min-h-[50vh] flex flex-col justify-end max-w-[1300px] p-4">
                     <div className="lg:min-w-[18rem] lg:max-w-[25rem] md:min-w-[17rem] min-h-[5rem] rounded-lg border bg-white border-gray-300 mb-5 p-4">
                         <div className="w-full flex flex-row gap-4">
