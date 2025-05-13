@@ -7,7 +7,7 @@ import { RootState } from "@/lib/store";
 import FileuploadField from "@/modules/common/fileupload-field";
 import { Loader, X } from "lucide-react";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 interface CheckoutItemsProps {
@@ -30,6 +30,9 @@ const CheckoutItems: React.FC<CheckoutItemsProps> = ({
   const dispatch = useDispatch();
   const cartItems = useSelector((state: RootState) => state.cart.cartItems);
   const totalItems = cartItems.length;
+    const [cuponType, setCuponType] = useState<string | null>(null);
+  const [cuponValue, setCuponValue] = useState<string | null>(null);
+  const [storageTotalPrice, setStorageTotalPrice] = useState<string | null>(null);
 
   const calculateTotalPrice = (cartItems: CartItem[]) => {
     return cartItems.reduce((total, item) => {
@@ -40,13 +43,22 @@ const CheckoutItems: React.FC<CheckoutItemsProps> = ({
       return total + applicablePrice * item.quantity;
     }, 0);
   };
+  useEffect(() => {
+    const cuponType = localStorage.getItem("cuponType");
+    const cuponValue = localStorage.getItem("cuponDiscount");
+    const storageTotalPrice = localStorage.getItem("totalPrice");
+    setCuponType(cuponType);
+    setCuponValue(cuponValue);
+    setStorageTotalPrice(storageTotalPrice);
+  })
   const subTotalPrice = calculateTotalPrice(cartItems);
-  const discount = 0;
+  const discount = cuponType === "percentage" ? `${cuponValue}%` : `${cuponValue} MMK`;
   const tax = parseInt((subTotalPrice * 0.03).toString());
-  const totalPrice = (subTotalPrice+tax) - discount
+  //const totalPrice = (subTotalPrice+tax) - discount
+  const totalPrice = parseInt(storageTotalPrice || "0")
   useEffect(() => {
     setIsClient(true);
-    setTotalPrice(totalPrice);
+    setTotalPrice(totalPrice || 0);
   }, [cartItems]);
   const handleFileUpload = (files: FileList) => {
     setFile((prev) => [...prev, ...Array.from(files)]);
@@ -115,7 +127,7 @@ const CheckoutItems: React.FC<CheckoutItemsProps> = ({
             <span className="">Discount</span>
           </div>
           <span className="text-sm text-muted-foreground">
-            MMK {discount.toLocaleString()}
+             {discount?.toLocaleString()}
           </span>
         </div>
         <div className="w-full flex flex-row items-center justify-between">

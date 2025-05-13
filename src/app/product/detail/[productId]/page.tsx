@@ -101,8 +101,8 @@ const ProductDetail = async (props: { params: paramsType }) => {
                   MMK {product.price.toLocaleString()}
                 </h2>
                 <div className="flex flex-row items-center gap-1">
-                  {/* <span className="text-lg text-muted-foreground">/</span>
-                  <span className="text-xs text-muted-foreground">package</span> */}
+                  <span className="text-lg text-muted-foreground">/</span>
+                  <span className="text-xs text-muted-foreground">{product.unit_price || ""}</span>
                 </div>
               </div>
               <div className="text-muted-foreground text-sm">

@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { CartItem, clearCart } from "@/lib/features/cart/cartSlice";
 import { RootState } from "@/lib/store";
-import { ArrowLeft, TicketPercent, X } from "lucide-react";
+import { ArrowLeft, Loader, TicketPercent, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import IndividualCartItem from "../cart-item";
@@ -16,24 +16,52 @@ import { useRouter } from "next/navigation";
 import { removeOrderSuccessData } from "@/lib/utils";
 import { useGetSession } from "@/lib/hooks/useGetSession";
 import { toast } from "@/hooks/use-toast";
+import { useGetCuponsByCuponNumber } from "@/lib/hooks/getQuery/useGetCupon";
 
-export const calculateTotalPrice = (cartItems: CartItem[]) => {
-  return cartItems.reduce((total, item) => {
+export const calculateTotalPrice = (
+  cartItems: CartItem[],
+  cuponNumber: string,
+  cuponType: string,
+  cuponDiscount: number
+): number => {
+  const baseTotal = cartItems.reduce((total, item) => {
     const applicablePrice =
       item && item.discount_price && item.discount_price > 0
         ? item.discount_price
         : item.price;
     return total + applicablePrice * item.quantity;
   }, 0);
-};
 
+  const taxedTotal = baseTotal + baseTotal * 0.03;
+
+  let finalTotal: number;
+
+  if (cuponNumber && cuponDiscount > 0) {
+    if (cuponType === "percentage") {
+      finalTotal = taxedTotal - (taxedTotal * cuponDiscount) / 100;
+    } else if (cuponType === "fixed") {
+      finalTotal = taxedTotal - cuponDiscount;
+    } else {
+      finalTotal = taxedTotal;
+    }
+  } else {
+    finalTotal = taxedTotal;
+  }
+
+  return Math.round(Math.max(0, finalTotal));
+};
 const CartItems: React.FC = () => {
   const [isClient, setIsClient] = useState(false);
   const dispatch = useDispatch();
   const router = useRouter();
+  const [cuponeNumber, setCuponNumber] = useState<string>("");
+  const [cuponType, setCuponType] = useState<string>("");
+  const [loadingCupon, setLoadingCupon] = useState(false);
+  const [cuponDiscount, setCuponDiscount] = useState<number>(0);
+  const { getCupon } = useGetCuponsByCuponNumber();
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const cartItems = useSelector((state: RootState) => state.cart.cartItems);
-  const {sessionData} = useGetSession();
+  const { sessionData } = useGetSession();
   const allSelected =
     cartItems.length > 0 && selectedItems.length === cartItems.length;
   const handleSelectAll = (checked: boolean) => {
@@ -44,17 +72,69 @@ const CartItems: React.FC = () => {
     }
   };
 
-  console.log("cart session data",sessionData)
+  console.log("cupon discount", cuponDiscount);
 
-  const handleCheckout = () => {
-    if(sessionData?.token){
-      router.push("/checkout")
+  const handleCupon = async (cupon_number: string) => {
+    if(cartItems.length < 1){
+      toast({
+        description: "Please add items to the cart first",
+      })
+      return;
+    }
+    try {
+      setLoadingCupon(true);
+      console.log("begin fetching cupon");
+      const cupon = await getCupon(cupon_number);
+      if (cupon) {
+        if(cupon.expired_date < new Date().toISOString()){
+          toast({
+            description: "Cupon is expired",
+            variant: "destructive",
+          });
+      }else {
+          setCuponDiscount(cupon.value);
+          setCuponType(cupon.type);
+          const storageDiscount = localStorage.getItem("cuponDiscount");
+          if (storageDiscount) {
+            localStorage.removeItem("cuponDiscount");
+            localStorage.setItem("cuponDiscount", JSON.stringify(cupon.value));
+          }else{
+            localStorage.setItem("cuponDiscount", JSON.stringify(cupon.value));
+          }
+          const storageDiscountType = localStorage.getItem("cuponType");
+          if (storageDiscountType) {
+            localStorage.removeItem("cuponType");
+            localStorage.setItem("cuponType", cupon.type);
+          }else{
+            localStorage.setItem("cuponType", cupon.type);
+          }
+      }
     }else{
       toast({
-        description: "Please Login First"
+        description: "Invalid cupon",
+        variant: "destructive",
       })
     }
-  }
+    } catch (err) {
+      console.error("Error fetching cupon:", err);
+      toast({
+        description: "Failed to apply cupon",
+        variant: "destructive",
+      });
+    } finally {
+      setLoadingCupon(false);
+    }
+  };
+
+  const handleCheckout = () => {
+    if (sessionData?.token) {
+      router.push("/checkout");
+    } else {
+      toast({
+        description: "Please Login First",
+      });
+    }
+  };
 
   const handleSelectItem = (id: string, checked: boolean) => {
     if (checked) {
@@ -63,7 +143,7 @@ const CartItems: React.FC = () => {
       setSelectedItems((prev) => prev.filter((itemId) => itemId !== id));
     }
   };
-  const totalPrice = calculateTotalPrice(cartItems);
+  const totalPrice = calculateTotalPrice(cartItems, cuponeNumber, cuponType, cuponDiscount);
   const relatedcategoryId =
     cartItems && cartItems[0] ? cartItems[0].category?.id : null;
   const takeCount = 10;
@@ -71,6 +151,16 @@ const CartItems: React.FC = () => {
   const relatedProducts = products?.filter(
     (product) => !cartItems.find((cartItem) => cartItem.id === product.id)
   );
+
+    useEffect(() => {
+      const storageTotalPrice = localStorage.getItem("totalPrice");
+     if(storageTotalPrice){
+      localStorage.removeItem("totalPrice");
+      localStorage.setItem("totalPrice", JSON.stringify(totalPrice));
+     }else{
+      localStorage.setItem("totalPrice", JSON.stringify(totalPrice));
+     }
+  }, [cartItems,totalPrice]);
 
   useEffect(() => {
     setTake(takeCount);
@@ -83,7 +173,7 @@ const CartItems: React.FC = () => {
 
   useEffect(() => {
     setIsClient(true);
-    removeOrderSuccessData()
+    removeOrderSuccessData();
   }, [cartItems]);
 
   return (
@@ -106,17 +196,16 @@ const CartItems: React.FC = () => {
           </div>
         </div>
         <div className="w-full flex lg:hidden md:hidden flex-row items-center justify-start px-3">
-        <div className="min-w-12 min-h-14 flex flex-row items-center justify-center">
+          <div className="min-w-12 min-h-14 flex flex-row items-center justify-center">
             <Checkbox
               checked={allSelected}
               onCheckedChange={(checked) => handleSelectAll(checked as boolean)}
               id="select-all"
             />
-            
           </div>
           <span>All</span>
         </div>
-        
+
         <div className="w-full mt-4 flex flex-col border shadow-lg rounded-md lg:h-[70vh] overflow-auto scrollbar-thin">
           {isClient &&
             cartItems.length > 0 &&
@@ -130,20 +219,26 @@ const CartItems: React.FC = () => {
                 />
               );
             })}
-            {isClient &&
-            cartItems.length < 1 ? (
+          {isClient && cartItems.length < 1 ? (
             <div className="w-full lg:h-full md:h-full h-20 flex lg:flex-row md:flex-row flex-col items-center justify-center lg:gap-3 md:gap-3">
-               <h2 className="text-secondary_color">No item in the cart!</h2>
-               <span onClick={() => router.push("/home")} className="underline text-blue-500 hover:cursor-pointer">Shop Now</span>
+              <h2 className="text-secondary_color">No item in the cart!</h2>
+              <span
+                onClick={() => router.push("/home")}
+                className="underline text-blue-500 hover:cursor-pointer"
+              >
+                Shop Now
+              </span>
             </div>
-            ):(null)
-         }
+          ) : null}
         </div>
         <div className="h-6"></div>
         <Separator className="my-4 border-t border-gray-400" />
         <div className="min-h-16 flex lg:flex-row md:flex-row flex-col items-center justify-between lg:gap-0 md:gap-0 gap-6">
           <div className="flex lg:flex-row md:flex-row flex-col lg:gap-4 md:gap-4 gap-2">
-            <Button onClick={() => router.push("/home")} className="flex flex-row h-8 gap-2 items-center bg-secondary_color text-white rounded-md">
+            <Button
+              onClick={() => router.push("/home")}
+              className="flex flex-row h-8 gap-2 items-center bg-secondary_color text-white rounded-md"
+            >
               <ArrowLeft />
               continue shopping
             </Button>
@@ -160,8 +255,7 @@ const CartItems: React.FC = () => {
             <span className="text-secondary_color text-sm">Subtotal:</span>
             {isClient && (
               <span className="font-semibold">
-                MMK{" "}
-                {totalPrice.toLocaleString()}
+                MMK {totalPrice.toLocaleString()}
               </span>
             )}
           </div>
@@ -175,8 +269,13 @@ const CartItems: React.FC = () => {
               for any expiration dates or specific terms associated with your
               coupon!{" "}
             </p>
+            <div className="w-full text-center text-green-600">
+              {(cuponeNumber !== "" && cuponDiscount > 0) ? `${cuponeNumber} is Applied`: ""}
+            </div>
             <div className="w-full relative lg:mt-8 md:mt-8 mt-4">
               <Input
+                onChange={(e) => setCuponNumber(e.target.value)}
+                value={cuponeNumber}
                 className="w-full h-10 rounded-md bg-secondary_color/20 pr-24 pl-4 focus-visible:ring-offset-0 focus-visible:ring-0"
                 placeholder="Enter cupon code"
               />
@@ -185,10 +284,15 @@ const CartItems: React.FC = () => {
                   <TicketPercent color="black" strokeWidth={1.25} />
                 </div>
                 <Button
-                  className="rounded-lg border-none h-6 text-sm text-secondary_color"
+                  onClick={() => handleCupon(cuponeNumber)}
+                  className="rounded-lg min-w-[5rem] border-none h-6 text-sm text-secondary_color"
                   variant="outline"
                 >
-                  Apply Cupon
+                  {loadingCupon ? (
+                    <Loader className="animate-spin" />
+                  ) : (
+                    "Apply Cupon"
+                  )}
                 </Button>
               </div>
             </div>
@@ -196,7 +300,10 @@ const CartItems: React.FC = () => {
         </div>
         <Separator className="my-4 border-t border-gray-400" />
         <div className="flex items-center justify-center mt-8">
-          <Button onClick={handleCheckout} className="rounded-md min-h-6 min-w-10 bg-secondary_color text-white">
+          <Button
+            onClick={handleCheckout}
+            className="rounded-md min-h-6 min-w-10 bg-secondary_color text-white"
+          >
             Proceed to checkout (
             {isClient && cartItems.length > 0 ? cartItems.length : 0})
           </Button>

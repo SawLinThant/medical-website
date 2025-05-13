@@ -198,6 +198,7 @@ export const GET_PRODUCT_BY_ID = gql`
       dosage
       average_rating
       review_count
+      unit_price
       usage
       age_group
       storage

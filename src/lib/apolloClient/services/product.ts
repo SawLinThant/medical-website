@@ -20,6 +20,7 @@ export interface Product {
   storage: string;
   category_id: string;
   updated_at: string;
+  unit_price: string;
   average_rating: number;
   review_count: number;
   images: ProductImage[];
