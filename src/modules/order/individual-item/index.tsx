@@ -41,15 +41,15 @@ const IndividualOrder: React.FC<IndividualOrderProps> = ({ orders }) => {
                 {new Date(order?.created_date || "").toLocaleDateString()}
               </span>
             </div>
-            <div className="col-span-1 lg:pl-3 md:pl-3 pl-0 flex flex-col gap-2 items-start border-r border-gray-300">
+            {/* <div className="col-span-1 lg:pl-3 md:pl-3 pl-0 flex flex-col gap-2 items-start border-r border-gray-300">
               <span className="text-muted-foreground text-sm">
                 Delivered On
               </span>
               <span className="text-sm text-black font-semibold">
                 {order?.updated_date?(new Date(order?.updated_date).toLocaleDateString()):""}
               </span>
-            </div>
-            <div className="col-span-1 pl-3 flex flex-col gap-2 items-start">
+            </div> */}
+            <div className="col-span-1 lg:pl-3 md:pl-3 pl-0 flex flex-col gap-2 items-start">
               <span className="text-muted-foreground text-sm">Shipped To</span>
               <span className="text-sm text-black font-semibold">
                 {order.shipping_address}

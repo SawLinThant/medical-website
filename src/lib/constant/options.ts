@@ -122,8 +122,8 @@ export const ORDER_STATUS:OrderStatus[] = [
     },
     {
         id:"4",
-        name: "Completed",
-        value: "Completed"
+        name: "Complete",
+        value: "Complete"
     },
     {
         id:"5",

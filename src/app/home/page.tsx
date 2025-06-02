@@ -7,6 +7,7 @@ import {
 } from "@/lib/apolloClient/query/productQuery";
 import { GET_SHOPS } from "@/lib/apolloClient/query/shopQuery";
 import serverApolloClient from "@/lib/apolloClient/serverApolloClient";
+import { CategoryList } from "@/modules/category";
 import { ImageCarousel } from "@/modules/common/carousel";
 //import CategoryFilter from "@/modules/common/category-filter";
 import Footer from "@/modules/common/components/footer";
@@ -60,35 +61,31 @@ const HomePage: React.FC = async () => {
       query: GET_SHOPS,
       fetchPolicy:"no-cache"
     });
-    console.log("shops", shops)
 
     return (
       <main className="w-full flex flex-col items-center">
         {/* <div className="w-full max-w-[1300px] lg:block md:block hidden">
           <CategoryFilter />
         </div> */}
-        <div className="w-full min-h-40 bg-slate-100 flex items-center justify-center p-4 bg-[url('/images/banner-background.jpg')] bg-cover bg-center">
+        <div className="w-full bg-slate-100 flex items-center justify-center p-4">
           <div className="w-full max-w-[1300px] gap-6 py-6">
-            <div className="w-full min-h-[10rem] rounded-md overflow-hidden">
+            <div className="w-full min-h-[10rem] rounded-md grid md:grid-cols-5 lg:grid-cols-5 grid-cols-1 gap-1">
+              <div className="relative order-2 md:order-1 lg:col-span-2 md:col-span-2 col-span-1 grid-cols-2 lg:min-h-[20rem] md:min-h-[15rem] min-h-[13rem]">
+                <CategoryList categories={categoryImageData?.categories}/>
+              </div>
+             <div className="order-1 md:order-2 lg:col-span-3 md:col-span-3 col-span-1">
               <ImageCarousel/>
+              </div> 
             </div>
-            {/* <div className="relative lg:col-span-2 md:col-span-2 col-span-1 w-full lg:h-[20rem] md:h-[15rem] h-[13rem]">
-              <Image
-                className="object-cover"
-                layout="fill"
-                alt="ad"
-                src="/images/ad.jpg"
-              />
-            </div> */}
           </div>
         </div>
-        <div className="w-full mt-16 max-w-[1300px] flex items-center justify-center">
+        {/* <div className="w-full mt-16 max-w-[1300px] flex items-center justify-center">
           <BrowseByCategory category={categoryImageData?.categories} />
-        </div>
-        <div className="w-full max-w-[1300px] mt-16">
+        </div> */}
+        <div className="w-full max-w-[1300px] mt-6">
           <BrowseByBrand brands={shops?.shops} />
         </div>
-        <div className="w-full max-w-[1300px] mt-20 flex lg:flex-row md:flex-col flex-col gap-4 lg:justify-between">
+        <div id="top-saver-section" className="w-full max-w-[1300px] mt-20 flex lg:flex-row md:flex-col flex-col gap-4 lg:justify-between">
           <div className="lg:w-full md:w-full w-full">
             <TopSaver products={topSaverData?.products} />
           </div>

@@ -100,24 +100,24 @@ const SearchForm: React.FC = () => {
   };
 
   return (
-    <div className="w-full h-full rounded-md border border-gray-300 bg-slate-100 py-2">
+    <div className="w-full h-full rounded-md border border-gray-300 py-2 bg-[#E7E7E7]">
       <div className="w-full h-full flex flex-row gap-2">
-        <div className="h-full w-[130px] border-r border-gray-500">
+        {/* <div className="h-full w-[130px] border-r border-gray-500">
           <SelectDropdown
             options={categories}
             setOption={setSelectedCategory}
             label="Category"
           />
-        </div>
+        </div> */}
         <form onSubmit={handleSubmit} className="w-full h-full">
           <div className="relative w-full h-full">
             <Input 
-              placeholder="Search in shop" 
+              placeholder="Search" 
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="rounded-r-md pb-1 rounded-l-none pr-10 h-5 bg-transparent border-none min-w-[17rem] focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-none" 
+              className="rounded-r-md pb-1 pt-1 rounded-l-none pr-10 h-7 bg-transparent border-none min-w-[17rem] focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-none" 
             />
-            <button type="submit" className="absolute top-0 right-3">
+            <button type="submit" className="absolute top-1 right-3">
               <Search className="cursor-pointer" />
             </button>
           </div>

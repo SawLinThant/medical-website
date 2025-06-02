@@ -40,11 +40,15 @@
     "next-iron-session": "^4.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-fast-marquee": "^1.6.5",
     "react-hook-form": "^7.54.0",
+    "react-marquee-slider": "^1.1.5",
+    "react-qr-code": "^2.0.15",
     "react-redux": "^9.2.0",
     "react-slick": "^0.30.3",
     "slick-carousel": "^1.8.1",
     "tailwind-merge": "^2.5.5",
+    "tailwind-scrollbar-hide": "^2.0.0",
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {

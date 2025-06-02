@@ -36,7 +36,7 @@ const AuthPopUp =() => {
           onClick={() => setIsDialogOpen(true)}
           className="border-none bg-transparent hover:cursor-pointer"
         >
-          Login/Sign Up
+          Login
         </div>
       </DialogTrigger>
       {currentSuccessPage === "" && (

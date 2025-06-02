@@ -39,7 +39,9 @@ const ShopFilteredProducts: React.FC<ShopFilteredProductsProps> = ({
       try {
         setLoading(true);
         const result = await getCategories(serverApolloClient);
-        setCategories(result.categories);
+        const allCategory = { id: "", name: "All" }; 
+        setCategories([allCategory, ...result.categories]);
+        //setCategories(result.categories);
       } catch (err: any) {
         setError(err.message || "Failed to fetch categories");
       } finally {
@@ -141,11 +143,11 @@ const ShopFilteredProducts: React.FC<ShopFilteredProductsProps> = ({
 
   return (
     <section className="w-full flex flex-col">
-      <div className="w-full px-4">
+      <div className="w-full px-0">
         <div className="w-full flex flex-col">
           <div className="flex md:flex-row lg:flex-row flex-col justify-between gap-4">
             <div className="flex lg:flex-row md:flex-row flex-col gap-4 order-2 md:order-1 lg:order-1">
-              <h2 className="font-semibold min-w-[7rem]">Filtered By</h2>
+              {/* <h2 className="font-semibold min-w-[7rem]">Filtered By</h2> */}
               <div className="flex flex-wrap gap-4">
                 {loading && !categories.length ? (
                   <span className="text-muted-foreground text-sm">Loading categories...</span>
@@ -155,9 +157,9 @@ const ShopFilteredProducts: React.FC<ShopFilteredProductsProps> = ({
                   categories.map((category) => (
                     <span
                       onClick={() => handleCategorySelect(category.id)}
-                      key={category.id}
-                      className={`text-muted-foreground text-sm hover:cursor-pointer ${
-                        selectedCategory === category.id ? "font-bold text-black" : ""
+                      key={category.id || "all"}
+                      className={` text-sm hover:cursor-pointer text-muted-foreground ${
+                        selectedCategory === category.id ? "font-bold border shadow-md p-2 rounded-md -translate-y-2" : ""
                       }`}
                     >
                       {category.name}

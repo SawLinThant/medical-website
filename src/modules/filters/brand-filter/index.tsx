@@ -1,78 +1,84 @@
 "use client";
 
 import * as React from "react";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
+import Marquee from "react-fast-marquee";
 import Image from "next/image";
-import { cn } from "@/lib/utils";
 import { ChevronRight } from "lucide-react";
-import { Brand } from "@/lib/types/global";
-import Link from "next/link";
 import { Shop } from "@/domain/entities/shop.entity";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
+
 interface BrowseByBrandProps {
   brands: Shop[];
 }
 
-export function BrowseByBrand ({ brands }: BrowseByBrandProps)  {
+export function BrowseByBrand({ brands }: BrowseByBrandProps) {
   const router = useRouter();
+
   return (
-    <Carousel className="w-full h-full flex flex-col gap-4">
+    <div className="w-full h-full flex flex-col gap-4">
       <div className="w-full min-h-16 flex flex-row items-center justify-between">
         <div className="flex flex-row gap-4 items-center">
           <h1 className="font-semibold text-lg">Featured Shops</h1>
-          <span onClick={() => router.push("/shop/all")} className="text-sm text-secondary_color mt-1 flex flex-row items-center hover:cursor-pointer">
+          {/* <span
+            onClick={() => router.push("/shop/all")}
+            className="text-sm text-secondary_color mt-1 flex flex-row items-center hover:cursor-pointer"
+          >
             All Shops <ChevronRight size={15} />
-          </span>
-        </div>
-        <div className="flex flex-row gap-2 h-full items-center">
-          <div className="">
-            <CarouselPrevious className="bg-gray-300 rounded-md hover:bg-gray-400 transition"></CarouselPrevious>
-          </div>
-          <div className="">
-            <CarouselNext
-              className={cn(
-                " bg-gray-300 rounded-md hover:bg-gray-400 transition",
-                {}
-              )}
-            />
-          </div>
+          </span> */}
         </div>
       </div>
-      <CarouselContent className="w-full h-full">
-        {brands && brands.map((shop, index) => (
-          <CarouselItem key={index} className="md:basis-1/3 lg:basis-[25%]">
-            <div className="p-0">
+      {brands && brands.length > 0 ? (
+        <Marquee
+          speed={50} 
+          gradient={false} 
+          pauseOnHover 
+          className="w-full h-[18rem] overflow-hidden bg-transparent"
+        >
+          {brands.map((shop, index) => (
+            <div
+              key={index}
+              className="mx-2"
+              style={{ width: "16rem" }} // Fixed width for consistent spacing
+            >
               <Link href={`/shop/shop-profile/${shop.id}`} passHref>
-                <div className=" min-h-[13rem] hover:scale-105 rounded hover:shadow-md hover:bg-white transition-all flex flex-col items-start justify-start gap-3 p-4">
+                <div className="min-h-[13rem] rounded transition-all flex flex-col items-start justify-start gap-3 p-4">
                   <div className="w-full relative h-[13rem]">
                     <Image
                       layout="fill"
-                      src={shop.logo || ""}
-                      alt="category"
-                      className="object-contain hover:border-none rounded bg-white"
+                      src={shop.logo || "/placeholder.png"} // Fallback for missing logo
+                      alt={shop.name}
+                      className="object-contain hover:border-none rounded bg-transparent"
                     />
                   </div>
-                  <div className="flex flex-col text-left items-start">
+                  {/* <div className="flex flex-col text-left items-start">
                     <span className="text-sm text-muted-foreground">
                       {shop.description}
                     </span>
-                    <span className="font-semibold">
-                      {shop.name} 
-                    </span>
-                  </div>
+                    <span className="font-semibold">{shop.name}</span>
+                  </div> */}
                 </div>
               </Link>
             </div>
-          </CarouselItem>
-        ))}
-      </CarouselContent>
-    </Carousel>
+          ))}
+        </Marquee>
+      ) : (
+        <div className="w-full h-[18rem] flex flex-row gap-2">
+          {Array.from({ length: 4 }).map((_, index) => (
+            <div
+              key={index}
+              className="min-h-[13rem] rounded bg-slate-200 flex flex-col items-start justify-start gap-3 p-4"
+              style={{ width: "16rem" }}
+            >
+              <div className="w-full relative h-[13rem] bg-gray-300 rounded animate-pulse"></div>
+              <div className="flex flex-col text-left items-start gap-2">
+                <div className="w-3/4 h-4 bg-gray-300 rounded animate-pulse"></div>
+                <div className="w-1/2 h-4 bg-gray-300 rounded animate-pulse"></div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
   );
-};
-
+}

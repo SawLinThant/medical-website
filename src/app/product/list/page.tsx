@@ -1,5 +1,6 @@
 import serverApolloClient from "@/lib/apolloClient/serverApolloClient";
 import { getFilteredProducts } from "@/lib/apolloClient/services/product";
+import ItemNotFound from "@/modules/common/icons/item-not-found";
 import ProductList from "@/modules/product/product-list";
 
 interface IPageProps {
@@ -45,7 +46,8 @@ const Products = async (searchParams: IPageProps) => {
     if (response.products.length < 1)
       return (
         <div className="w-full min-h28 flex items-center justify-center mt-14">
-          <h2 className="text-subheading text-red-400">No Product Found</h2>
+          {/* <h2 className="text-subheading text-red-400">No Product Found</h2> */}
+          <ItemNotFound width="717" height="400"/>
         </div>
       );
 

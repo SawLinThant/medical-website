@@ -1,3 +1,7 @@
+import Facebook from "../../icons/facebook"
+import Instagram from "../../icons/instagram"
+import Telegram from "../../icons/telegram"
+import QRCode from "react-qr-code";
 
 const Footer:React.FC = () => {
     return(
@@ -10,12 +14,6 @@ const Footer:React.FC = () => {
                     <span className="text-sm lg:ml-0 md:ml-0 ml-3 text-secondary_color">Refer a friend</span>
                 </div>
                 <div className="flex flex-col gap-4">
-                    <h1 className="font-semibold text-lg">Company</h1>
-                    <span className="text-sm lg:ml-0 md:ml-0 ml-3 text-secondary_color">About Us</span>
-                    <span className="text-sm lg:ml-0 md:ml-0 ml-3 text-secondary_color">Carriers</span>
-                    <span className="text-sm lg:ml-0 md:ml-0 ml-3 text-secondary_color">Locations</span>
-                </div>
-                <div className="flex flex-col gap-4">
                     <h1 className="font-semibold text-lg">Terms and Policies</h1>
                     <span className="text-sm lg:ml-0 md:ml-0 ml-3 text-secondary_color">Duties and Taxes</span>
                     <span className="text-sm lg:ml-0 md:ml-0 ml-3 text-secondary_color">Privacy and Policies</span>
@@ -23,15 +21,29 @@ const Footer:React.FC = () => {
                 </div>
                 <div className="flex flex-col gap-4">
                     <h1 className="font-semibold text-lg">Follow Us</h1>
-                    <span className="text-sm lg:ml-0 md:ml-0 ml-3 text-secondary_color">X.com</span>
-                    <span className="text-sm lg:ml-0 md:ml-0 ml-3 text-secondary_color">Instagram</span>
-                    <span className="text-sm lg:ml-0 md:ml-0 ml-3 text-secondary_color">Facebook</span>
-                    <span className="text-sm lg:ml-0 md:ml-0 ml-3 text-secondary_color">Telegram</span>
+                    <span className="text-sm lg:ml-0 md:ml-0 ml-3 text-secondary_color flex flex-row items-center gap-2">
+                        <Facebook height="25" width="25" />
+                        <div>Facebook</div>
+                    </span>
+                    <span className="text-sm lg:ml-0 md:ml-0 ml-3 text-secondary_color flex flex-row items-center gap-2">
+                        <Instagram height="25" width="25" />
+                        <div>Instagram</div>
+                    </span>
+                    <span className="text-sm lg:ml-0 md:ml-0 ml-3 text-secondary_color flex flex-row items-center gap-2">
+                        <Telegram height="25" width="25" />
+                        <div>Telegram</div>
+                    </span>
                 </div>
+                <div className="flex flex-col gap-4">
+                     <h1 className="font-semibold text-lg">Natsay Myanmar</h1>
+                     <QRCode value="https://natsaymyanmar.com" size={100} />
+                    {/* qr code here */}
+                </div>
+                    
             </div>
             <div className="w-full bg-white min-h-4 lg:mt-2 mt-4 py-3">
                <div className="text-xs text-center">
-               All results by <span className="font-bold ml-1 text-sm"> Natsay Myanmar</span>
+               All Reserved By <span className="font-bold ml-1 text-sm"> Natsay Myanmar</span>
                </div> 
             </div>
         </footer>
